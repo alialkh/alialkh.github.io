@@ -1,0 +1,223 @@
+/*
+Author: Ali Al-Khaz'Aly
+All the CSS in here is intended to support my personal website from the design side of things.
+Work in here is original, feel free to use any part of it so long as you contact me first and cite me on anything that is used.
+*/
+
+/* Globals */
+*{
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+body{
+    width:100%;
+    height:100%;
+}
+.theme-color{
+    color: orange;
+}
+p,h1,h2,h3,h4,h5,h6{
+    color:white;
+}
+.clickable:hover{
+    cursor:pointer;
+    color:orange;
+    text-decoration: underline;
+}
+.page-section{
+    padding: 5vh 18vw 5vh 18vw;
+}
+.page-section-wide{
+    padding: 5vh 10vw 5vh 10vw;
+}
+.grayOverlay{       /* For the backgrounds */
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+.parallax-image { /* Background image */
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url("../assets/imgs/grandCanyon.jpg") repeat-x;
+    background-size: cover;
+    background-repeat: repeat;
+}
+
+.bottomDivider{
+    border-bottom: 1.5px solid orange;
+    padding-bottom:1.5vh;
+}
+/* fonts */
+.quicksand{
+    font-family: 'Quicksand', serif;
+}
+.roboto {
+    font-family: 'Roboto Slab', serif;
+}
+.gabarito{
+    font-family: 'Gabarito', 'serif'
+}
+
+/* Main Landing Page */
+.index-body {
+    height:100vh;
+    width:100vw;
+    overflow: hidden;
+}
+.index-contentDiv {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 110;
+    margin-top: 20vh;
+}
+@media (max-device-width: 800px) {
+    .index-contentDiv {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 110;
+        margin-top: 15vh;
+    }
+}
+
+section.star{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url("../assets/imgs/grandCanyon.jpg");
+    background-size: cover;
+    animation: animateBg 50s linear infinite;
+}
+@keyframes animateBg{
+    0%,100%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(1.2);
+    }
+}
+
+/* Typewriter and blinking effect on landing page */
+.typewriter {
+    border-right: .15em solid orange; /* The typwriter cursor */
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    width:0;
+    animation: typing 2s steps(25) 2s 1 forwards, blink-caret .5s step-end infinite alternate;
+    white-space: nowrap;
+    padding-bottom:0.3vh;
+}
+.typewriter-div{
+    /*This part is important for centering*/
+    display: grid;
+    place-items: center;
+}
+/* The typing effect */
+@keyframes typing {
+
+    from { width: 0;}
+    to { width: 20.5ch;}
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: orange; }
+}
+
+/* Contact us Page  */
+.contact-selfie-img{
+    display: block;
+    max-width: 100%;
+    max-height:30vh;
+    width: auto;
+    height: auto;
+    margin-left:auto;
+    margin-right:auto;
+}
+.contact-selfie-img-small{
+    display: block;
+    max-width: 50%;
+    max-height:30vh;
+    width: auto;
+    height: auto;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom: 1vh;
+}
+.contactIcon{
+    font-size:4em; margin-bottom:4vh; margin-top:3vh;
+    /*text-shadow: 0px 0px 4px #6173f4;*/
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: #6173f4;
+    color:transparent;
+}
+.contactIcon:hover{
+    color: #ffffff;
+    transition: color 0.5s ease-in-out
+}
+.contactBox{
+    background-color: rgba(0, 0, 0, 0.25); margin-bottom:1em; padding-bottom:2em;
+}
+.contact-hover:hover {
+    color:#6173f4;
+    transition: color 0.5s ease-in-out;
+    cursor:pointer;
+}
+
+/* Icon Support */
+.iconContainer{
+    /*This part is important for centering*/
+    display: flex;
+    justify-content:center;
+}
+.containerIcon:hover{
+    color: #ffffff;
+    transition: color 0.5s ease-in-out;
+    cursor:pointer;
+}
+/*change from  border-bottom to  just color  if you want to color the writing*/
+
+.containerIcon{
+    margin-right:2vw;
+    margin-left: 2vw;
+    color:#6173f4;
+    font-size:4em; margin-bottom:4vh; position:relative;
+}
+/* Header Support */
+.header {
+    display:flex;
+    justify-content: center;
+    flex-wrap:wrap;
+    padding-top:0.5vh;
+    margin-bottom:5vh
+}
+.header-child:hover {
+    color:orange;
+    transition: color 0.5s ease-in-out;
+    cursor:pointer;
+}
+.header-active{
+    color:orange;
+}
+
+
+/*
+For interests tab
+*/
+.interestList{
+    color:white;
+    font-size: 1.25em;
+}
+.interestProgrammingIcons{
+    font-size:3em; margin-bottom:4vh; margin-top:3vh;
+    color:orange;
+}
+.interestProgrammingIcons:hover{
+    color: #ffffff;
+    transition: color 0.5s ease-in-out
+}

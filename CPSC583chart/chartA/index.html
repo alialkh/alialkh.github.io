@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <link rel="stylesheet" href="../darkster.css"/>
+    <script src="../lib/http_d3js.org_d3.v4.js"></script>
+    <script src = "../countryData.js" type="text/javascript"></script>
+
+    <!-- Function for radial charts -->
+    <script src="../lib/http_cdn.jsdelivr.net_gh_holtzy_D3-graph-gallery@master_LIB_d3-scale-radial.js"></script>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+    <!-- Jumbotron -->
+    <div class="jumbotron text-center" style="color:red; padding-bottom:2em; margin-bottom:0">
+        <h1 class="alert-heading"> Children up to age 5 - Mortality Rates by Country </h1>
+        <br>
+        <h4 style="margin-bottom: 0; padding-bottom: 0"> Display: Overlapping Circular Barplot</h4>
+    </div>
+
+<!--    TODO: Remove (This is for testing)-->
+    <div class='text-center sticky-top'>
+        <label class='radio-inline'>
+            <h5 style="display:inline; color:red"><b> Sort: </b></h5>
+            <input type="radio" name="ordering" value="alphabetical" onclick='updateDataSortMethod(this.value)' checked> Alphabetical
+        </label>
+        <label class='radio-inline'>
+            <input type="radio" name="ordering" value="region" onclick='updateDataSortMethod(this.value)'> Region - Alphabetical
+        </label>
+        <label class='radio-inline'>
+            <input type="radio" name="ordering" value="development" onclick='updateDataSortMethod(this.value)'> Development
+        </label>
+        <label class='radio-inline'>
+            <input type="radio" name="ordering" value="child_mortality_rate" onclick='updateDataSortMethod(this.value)'> Child Mortality
+        </label>
+        <label class='radio-inline'>
+            <input type="radio" name="ordering" value="infant_mortality_rate" onclick='updateDataSortMethod(this.value)'> Infant Mortality
+        </label>
+        <label class='radio-inline'>
+            <input type="radio" name="ordering" value="neonatal_mortality_rate" onclick='updateDataSortMethod(this.value)'> Neonatal Mortality
+        </label>
+
+        <br>
+        <label>
+            <h5 style="display:inline; color:red"><b> Filter to keep only: </b></h5>
+            <input type="checkbox" class="myCheckbox" value="Measure 1 - Expanded Coverage of comprehensive prenatal care"> Measure 1
+        </label>
+        <label>
+            <input type="checkbox" class="myCheckbox" value="Measure  2 - Expanded Coverage of obstetric care" > Measure 2
+        </label>
+        <label>
+            <input type="checkbox" class="myCheckbox" value="Measure 3 - Expanded Coverage of Essential post-partum and Newborn care"> Measure 3
+        </label>
+        <label>
+            <input type="checkbox" class="myCheckbox" value="Measure 4 - Expanded access to effective contraception" > Measure 4
+        </label>
+        <label>
+            <input type="checkbox" class="myCheckbox" value="Measure 5 - Expanded Access to safe abortion care, including Post-Abortion care" > Measure 5
+        </label>
+        <label>
+            <input type="checkbox" class="myCheckbox" value="Measure 6 - Expanded Recruitment and Training of Skilled Birth Attendants"> Measure 6
+        </label>
+    </div>
+    <div class="float-left" style="position:absolute; width:25%; padding-top:25em; font-size:12px">
+        <b>Measure 1</b> - Expanded Coverage of comprehensive prenatal care <br><br><br>
+        <b>Measure 2</b> - Expanded Coverage of obstetric care <br><br><br>
+        <b>Measure 3 </b>- Expanded Coverage of Essential post-partum and Newborn care <br><br><br>
+        <b>Measure 4 </b>- Expanded access to effective contraception <br><br><br>
+        <b>Measure 5 </b>- Expanded Access to safe abortion care, including Post-Abortion care <br><br><br>
+        <b>Measure 6</b> - Expanded Recruitment and Training of Skilled Birth Attendants <br><br>
+</div>
+    <!-- Create a div where the graph will take place -->
+    <div id="my_dataviz" class="datadis"></div>
+    <script src = "chartA.js" type="text/javascript"></script>
+
+
+    <!-- Navbar -->
+    <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark">
+        <a class="navbar-brand" href="#">CPSC583</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="../index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="../chartA/index.html">View-1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../chartB/index.html">View-2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../chartC/index.html">View-3</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
