@@ -1,24 +1,25 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseRoute } from './route.js';
+import { resolveRoute } from './route.js';
 
-const screens = new Map([['', {}], ['atlas', {}], ['cases', {}], ['quiz', {}]]);
+const ids = ['plax-normal', 'a4c-normal', 'plax-effusion'];
 
-test('known routes parse, with and without an id', () => {
-  assert.deepEqual(parseRoute('', screens), { id: '', arg: undefined });
-  assert.deepEqual(parseRoute('#/', screens), { id: '', arg: undefined });
-  assert.deepEqual(parseRoute('#/atlas', screens), { id: 'atlas', arg: undefined });
-  assert.deepEqual(parseRoute('#/atlas/plax', screens), { id: 'atlas', arg: 'plax' });
-  assert.deepEqual(parseRoute('#/cases/a%20b', screens), { id: 'cases', arg: 'a b' });
+test('#/<id> selects that case', () => {
+  assert.deepEqual(resolveRoute('#/a4c-normal', ids), { id: 'a4c-normal', notice: false });
+  assert.deepEqual(resolveRoute('#/plax-effusion', ids), { id: 'plax-effusion', notice: false });
 });
 
-test('a trailing slash means no id, not an empty one', () => {
-  assert.deepEqual(parseRoute('#/atlas/', screens), { id: 'atlas', arg: undefined });
-  assert.deepEqual(parseRoute('#/cases/', screens), { id: 'cases', arg: undefined });
+test('an empty hash selects the first case quietly', () => {
+  for (const hash of ['', '#', '#/']) assert.deepEqual(resolveRoute(hash, ids), { id: 'plax-normal', notice: false }, hash);
 });
 
-test('unknown, inherited and malformed routes are null', () => {
-  for (const hash of ['#/nope', '#/constructor', '#/__proto__', '#/toString', '#/atlas/%E0', '#/cases/%']) {
-    assert.equal(parseRoute(hash, screens), null, hash);
-  }
+test('unknown, malformed, inherited and old screen routes select the first case with a notice', () => {
+  const old = ['#/atlas', '#/atlas/plax', '#/cases/pericardial-effusion', '#/quiz'];
+  const odd = ['#/ghost', '#/plax-normal/', '#/a4c-normal/x', '#/%E0', '#/%', '#/constructor', '#/__proto__', '#/PLAX-NORMAL'];
+  for (const hash of [...old, ...odd]) assert.deepEqual(resolveRoute(hash, ids), { id: 'plax-normal', notice: true }, hash);
+});
+
+test('with no cases there is nothing to select and nothing to explain', () => {
+  assert.deepEqual(resolveRoute('#/ghost', []), { id: null, notice: false });
+  assert.deepEqual(resolveRoute('', []), { id: null, notice: false });
 });

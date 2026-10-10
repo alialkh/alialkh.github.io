@@ -94,6 +94,28 @@ test('rejects a wrong shape with the field named', () => {
     ['clips["plax-1"].markers[0].r must be a fraction of frame width above 0']);
 });
 
+test('pins and notes are optional, and valid ones pass', () => {
+  assert.deepEqual(problemsAfter(t => {
+    t.clips[0].pins = [{ at: [0, 1], text: 'x'.repeat(90) }];
+    t.clips[0].notes = 'A single beat from a healthy volunteer.';
+  }), []);
+});
+
+test('rejects a pin off the frame, without text or with text over 90 characters', () => {
+  const pinProblems = pin => problemsAfter(t => { t.clips[0].pins = [{ at: [0.5, 0.5], text: 'Fluid.' }, pin]; });
+  assert.deepEqual(pinProblems({ at: [0.5, 1.2], text: 'Fluid.' }), ['clips["plax-1"].pins[1].at must be [x, y] with each between 0 and 1']);
+  assert.deepEqual(pinProblems({ at: [0.5], text: 'Fluid.' }), ['clips["plax-1"].pins[1].at must be [x, y] with each between 0 and 1']);
+  const badText = ['clips["plax-1"].pins[1].text must be non-empty text of 90 characters or fewer'];
+  assert.deepEqual(pinProblems({ at: [0.5, 0.5], text: ' ' }), badText);
+  assert.deepEqual(pinProblems({ at: [0.5, 0.5] }), badText);
+  assert.deepEqual(pinProblems({ at: [0.5, 0.5], text: 'x'.repeat(91) }), badText);
+});
+
+test('rejects pins that are not a list and notes that are not a string', () => {
+  assert.deepEqual(problemsAfter(t => { t.clips[0].pins = { at: [0.5, 0.5], text: 'Fluid.' }; }), ['clips["plax-1"].pins must be a list']);
+  assert.deepEqual(problemsAfter(t => { t.clips[0].notes = ['Two', 'sentences.']; }), ['clips["plax-1"].notes must be a string']);
+});
+
 test('a missing table is reported, not thrown', () => {
   assert.deepEqual(problemsAfter(t => { delete t.clips; }), ['clips must be a list']);
 });

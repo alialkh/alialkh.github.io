@@ -1,0 +1,120 @@
+/* The info panel. A side panel on wide screens, a bottom sheet collapsed to a handle on phones. */
+.stage { --handle-h: 44px; }
+.info {
+  position: absolute;
+  z-index: 4;
+  top: var(--gutter);
+  right: var(--gutter);
+  bottom: var(--gutter);
+  width: var(--panel-w);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+}
+.info.open { display: flex; animation: panel-in var(--slow) var(--ease); }
+@keyframes panel-in { from { opacity: 0; transform: translateX(10px); } }
+.app.testing .info { display: none; }
+
+.info-head { display: flex; align-items: center; gap: 4px; padding: 6px 6px 0 8px; border-bottom: 1px solid var(--glass-border); }
+.tabs { display: flex; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.tabs [role="tab"] {
+  min-height: 2.5rem;
+  padding: 0 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.tabs [role="tab"]:hover { color: var(--text); }
+.tabs [role="tab"][aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); }
+.tabs [role="tab"]:focus-visible { outline-offset: -3px; border-radius: var(--r-sm); }
+.panel-close { flex: none; width: 2.25rem; height: 2.25rem; }
+
+.tab-body { flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 20px; font-size: var(--fs-md); line-height: 1.6; scrollbar-width: thin; scrollbar-color: var(--surface-3) transparent; }
+.tab-body:focus-visible { outline-offset: -3px; }
+.tab-body section + section, .tab-body p + section, .tab-body ol + section { margin-top: 18px; }
+.tab-body h3 { margin: 0 0 6px; font-size: var(--fs-xs); font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.tab-body p { margin: 0 0 8px; }
+.tab-body ul, .tab-body ol { margin: 0 0 8px; padding-left: 1.2rem; }
+.tab-body li { margin-bottom: 6px; }
+.tab-body li::marker { color: var(--muted); }
+.tab-body .hint { color: var(--muted); font-size: var(--fs-sm); }
+.tab-body .sources { font-size: var(--fs-xs); color: var(--muted); }
+
+.structures { list-style: none; padding: 0 !important; }
+.structures li { display: grid; gap: 1px; margin-bottom: 10px; }
+.structures li > span { color: var(--muted); font-size: var(--fs-sm); }
+.label-link {
+  justify-self: start;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--marker);
+  font-weight: 650;
+  text-align: left;
+  text-decoration: underline dotted rgb(255 224 102 / 0.6);
+  text-underline-offset: 3px;
+}
+.label-link:hover { text-decoration-style: solid; }
+.pin-list { list-style: none; padding: 0 !important; }
+.pin-list .label-link { display: flex; gap: 8px; align-items: flex-start; color: var(--text); text-decoration: none; font-weight: 500; }
+.pin-list .label-link:hover { color: #fff; }
+.label-link .num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: var(--pin);
+  color: #1f0812;
+  font-size: var(--fs-xs);
+  font-weight: 750;
+}
+/* The marker's badge number. Inline-grid keeps the dotted underline off it. */
+.structures .num { display: inline-grid; width: 18px; height: 18px; margin: 0 8px 0 0; vertical-align: -3px; background: var(--marker); color: #1f1a05; font-size: 0.6875rem; }
+
+.probe-figure { display: grid; grid-template-columns: 7.5rem 1fr; gap: 12px; align-items: center; margin: 4px 0 10px; }
+.probe-figure svg { display: block; width: 100%; height: auto; }
+.probe-figure .torso { fill: var(--surface-2); stroke: #3a4552; stroke-width: 2; }
+.probe-figure .bone { fill: none; stroke: var(--muted); stroke-width: 2; opacity: 0.55; }
+.probe-figure .heart { fill: rgb(255 138 128 / 0.22); stroke: #ff8a80; stroke-width: 1.5; }
+.probe-figure text { fill: var(--muted); font: 14px var(--font); }
+.probe-figure .probe { fill: var(--accent); stroke: #000; stroke-width: 1; }
+.probe-figure .notch { fill: var(--focus); }
+.probe-figure .notch-arrow { fill: none; stroke: var(--focus); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.probe-figure figcaption { font-size: var(--fs-xs); color: var(--muted); line-height: 1.5; }
+
+.sheet-handle {
+  display: none;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  min-height: var(--handle-h);
+  padding: 4px 0 6px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+.grabber { width: 36px; height: 4px; border-radius: 2px; background: rgb(255 255 255 / 0.35); }
+
+@media (max-width: 800px) {
+  .info { display: flex; top: auto; left: 0; right: 0; bottom: 0; width: auto; max-height: 72%; border-radius: var(--r-lg) var(--r-lg) 0 0; border-bottom: 0; }
+  .info:not(.open) :is(.info-head, .tab-body) { display: none; }
+  .info.open { animation: sheet-up var(--slow) var(--ease); }
+  @keyframes sheet-up { from { transform: translateY(24px); opacity: 0.6; } }
+  .sheet-handle { display: flex; }
+  .panel-close { display: none; }
+}

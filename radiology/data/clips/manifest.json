@@ -1,0 +1,1236 @@
+[
+  {
+    "id": "plax-normal-1",
+    "view": "plax",
+    "src": "plax-normal-1.mp4",
+    "poster": "plax-normal-1.jpg",
+    "fps": 51,
+    "durationSec": 1,
+    "width": 624,
+    "height": 480,
+    "markers": [
+      {
+        "structure": "rv",
+        "at": [
+          0.513,
+          0.192
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.481,
+          0.281
+        ],
+        "r": 0.035
+      },
+      {
+        "structure": "lv",
+        "at": [
+          0.409,
+          0.406
+        ],
+        "r": 0.055
+      },
+      {
+        "structure": "aortic-root",
+        "at": [
+          0.665,
+          0.333
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.625,
+          0.5
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "inferolateral-wall",
+        "at": [
+          0.385,
+          0.525
+        ],
+        "r": 0.035
+      }
+    ],
+    "notes": "Parasternal long axis view of a normal heart. The loop lasts about one second.",
+    "source": {
+      "author": "CardioNetworks: Vdbilt",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:PLAXnormal_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Vdbilt. Source: CardioNetworks ECHOpedia (echopedia.org), PLAXnormal.avi, via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "psax-pm-normal-1",
+    "view": "psax-pm",
+    "src": "psax-pm-normal-1.mp4",
+    "poster": "psax-pm-normal-1.jpg",
+    "fps": 51,
+    "durationSec": 1.824,
+    "width": 624,
+    "height": 480,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.49,
+          0.45
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "anterolateral-papillary-muscle",
+        "at": [
+          0.57,
+          0.5
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "inferior-wall",
+        "at": [
+          0.48,
+          0.6
+        ],
+        "r": 0.03
+      }
+    ],
+    "notes": "Parasternal short axis view at the level of the papillary muscles. The source file name marks it as normal.",
+    "source": {
+      "author": "CardioNetworks: Vdbilt",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:SAXPAP_normal_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Vdbilt. Source: CardioNetworks ECHOpedia (echopedia.org), SAXPAP_normal.avi, via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "a4c-normal-1",
+    "view": "a4c",
+    "src": "a4c-normal-1.mp4",
+    "poster": "a4c-normal-1.jpg",
+    "fps": 51,
+    "durationSec": 0.98,
+    "width": 624,
+    "height": 480,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.53,
+          0.33
+        ],
+        "r": 0.06
+      },
+      {
+        "structure": "rv",
+        "at": [
+          0.37,
+          0.4
+        ],
+        "r": 0.045
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.44,
+          0.38
+        ],
+        "r": 0.025
+      },
+      {
+        "structure": "lv-apex",
+        "at": [
+          0.49,
+          0.14
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.53,
+          0.65
+        ],
+        "r": 0.045
+      },
+      {
+        "structure": "ra",
+        "at": [
+          0.34,
+          0.63
+        ],
+        "r": 0.045
+      }
+    ],
+    "notes": "Apical four chamber view of a normal heart. The loop lasts under one second.",
+    "source": {
+      "author": "CardioNetworks: Vdbilt",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:A4C_normal_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Vdbilt. Source: CardioNetworks ECHOpedia (echopedia.org), A4C_normal.avi, via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "a5c-normal-1",
+    "view": "a5c",
+    "src": "a5c-normal-1.mp4",
+    "poster": "a5c-normal-1.jpg",
+    "fps": 51,
+    "durationSec": 1.294,
+    "width": 624,
+    "height": 480,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.54,
+          0.3
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "rv",
+        "at": [
+          0.37,
+          0.37
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.45,
+          0.3
+        ],
+        "r": 0.025
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.52,
+          0.6
+        ],
+        "r": 0.045
+      }
+    ],
+    "notes": "Apical five chamber view. The source file name marks it as normal.",
+    "source": {
+      "author": "CardioNetworks: Vdbilt",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:A5Cnormal_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Vdbilt. Source: CardioNetworks ECHOpedia (echopedia.org), A5Cnormal.avi, via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "a2c-normal-1",
+    "view": "a2c",
+    "src": "a2c-normal-1.mp4",
+    "poster": "a2c-normal-1.jpg",
+    "fps": 51,
+    "durationSec": 1.784,
+    "width": 624,
+    "height": 480,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.53,
+          0.33
+        ],
+        "r": 0.06
+      },
+      {
+        "structure": "lv-apex",
+        "at": [
+          0.5,
+          0.13
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "inferior-wall",
+        "at": [
+          0.42,
+          0.38
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "anterior-wall",
+        "at": [
+          0.67,
+          0.52
+        ],
+        "r": 0.03
+      }
+    ],
+    "notes": "Apical two chamber view of a normal heart.",
+    "source": {
+      "author": "CardioNetworks: Vdbilt",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:A2Cnormal_(CardioNetworks_ECGpedia).avi.webm",
+      "attribution": "CardioNetworks: Vdbilt. Source: CardioNetworks ECHOpedia/ECGpedia, A2Cnormal.avi, via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "a3c-normal-1",
+    "view": "a3c",
+    "src": "a3c-normal-1.mp4",
+    "poster": "a3c-normal-1.jpg",
+    "fps": 51,
+    "durationSec": 2.02,
+    "width": 624,
+    "height": 480,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.47,
+          0.3
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "lv-apex",
+        "at": [
+          0.5,
+          0.13
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.6,
+          0.33
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "inferolateral-wall",
+        "at": [
+          0.36,
+          0.35
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "mitral-valve",
+        "at": [
+          0.49,
+          0.49
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.57,
+          0.64
+        ],
+        "r": 0.045
+      }
+    ],
+    "notes": "Apical three chamber view of a normal heart.",
+    "source": {
+      "author": "CardioNetworks: Vdbilt",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:A3Cnormal_(CardioNetworks_ECGpedia).avi.webm",
+      "attribution": "CardioNetworks: Vdbilt. Source: CardioNetworks ECHOpedia/ECGpedia, A3Cnormal.avi, via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "sc-4c-normal-1",
+    "view": "sc-4c",
+    "src": "sc-4c-normal-1.mp4",
+    "poster": "sc-4c-normal-1.jpg",
+    "fps": 51,
+    "durationSec": 0.863,
+    "width": 624,
+    "height": 480,
+    "markers": [
+      {
+        "structure": "liver",
+        "at": [
+          0.45,
+          0.18
+        ],
+        "r": 0.07
+      },
+      {
+        "structure": "rv",
+        "at": [
+          0.43,
+          0.35
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "lv",
+        "at": [
+          0.54,
+          0.54
+        ],
+        "r": 0.05
+      }
+    ],
+    "notes": "Subcostal view of a normal heart. The liver lies in the near field.",
+    "source": {
+      "author": "CardioNetworks: Vdbilt",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Subcostal_normal_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Vdbilt. Source: CardioNetworks ECHOpedia (echopedia.org), Subcostal_normal.avi, via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "psax-av-aortic-regurgitation-2",
+    "view": "psax-av",
+    "condition": "aortic-regurgitation",
+    "src": "psax-av-aortic-regurgitation-2.mp4",
+    "poster": "psax-av-aortic-regurgitation-2.jpg",
+    "fps": 50,
+    "durationSec": 1.58,
+    "width": 646,
+    "height": 478,
+    "markers": [
+      {
+        "structure": "aortic-valve",
+        "at": [
+          0.505,
+          0.33
+        ],
+        "r": 0.06
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.47,
+          0.53
+        ],
+        "r": 0.04
+      }
+    ],
+    "notes": "Parasternal short axis view of a bicuspid aortic valve. The source case has severe aortic regurgitation, shown in colour in a companion clip.",
+    "source": {
+      "author": "CardioNetworks: Secretariat",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Bicuspid_aortic_valve,_severe_aortic_regurgitation_E00855_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Secretariat. Source: CardioNetworks ECHOpedia (echopedia.org), E00855.avi; AMC Echolab, AMC, The Netherlands; via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "plax-pericardial-effusion-1",
+    "view": "plax",
+    "condition": "pericardial-effusion",
+    "src": "plax-pericardial-effusion-1.mp4",
+    "poster": "plax-pericardial-effusion-1.jpg",
+    "fps": 51,
+    "durationSec": 0.922,
+    "width": 646,
+    "height": 478,
+    "markers": [],
+    "pins": [
+      {
+        "at": [
+          0.42,
+          0.62
+        ],
+        "text": "Wide echo-free space lies behind the heart."
+      }
+    ],
+    "notes": "Parasternal long axis view with a huge pericardial effusion. The source describes a swinging heart.",
+    "source": {
+      "author": "CardioNetworks: Secretariat",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Pericardial_effusion,_%22swinging_heart%22_E00667_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Secretariat. Source: CardioNetworks ECHOpedia (echopedia.org), E00667.avi; AMC Echolab, AMC, The Netherlands; via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "plax-dilated-cardiomyopathy-1",
+    "view": "plax",
+    "condition": "dilated-cardiomyopathy",
+    "src": "plax-dilated-cardiomyopathy-1.mp4",
+    "poster": "plax-dilated-cardiomyopathy-1.jpg",
+    "fps": 51,
+    "durationSec": 0.922,
+    "width": 646,
+    "height": 478,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.42,
+          0.43
+        ],
+        "r": 0.06
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.5,
+          0.26
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "aortic-root",
+        "at": [
+          0.62,
+          0.34
+        ],
+        "r": 0.035
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.64,
+          0.47
+        ],
+        "r": 0.04
+      }
+    ],
+    "notes": "Parasternal long axis view of a dilated, poorly contracting left ventricle. The source states the patient was receiving chemotherapy.",
+    "source": {
+      "author": "CardioNetworks: Secretariat",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Dilated_cardiomyopathy_E00473_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Secretariat. Source: CardioNetworks ECHOpedia (echopedia.org), E00473.avi; AMC Echolab, AMC, The Netherlands; via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "plax-hypertrophic-cardiomyopathy-1",
+    "view": "plax",
+    "condition": "hypertrophic-cardiomyopathy",
+    "src": "plax-hypertrophic-cardiomyopathy-1.mp4",
+    "poster": "plax-hypertrophic-cardiomyopathy-1.jpg",
+    "fps": 51,
+    "durationSec": 0.686,
+    "width": 646,
+    "height": 478,
+    "markers": [
+      {
+        "structure": "rv",
+        "at": [
+          0.47,
+          0.22
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.4,
+          0.35
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "lv",
+        "at": [
+          0.45,
+          0.5
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.62,
+          0.5
+        ],
+        "r": 0.04
+      }
+    ],
+    "pins": [
+      {
+        "at": [
+          0.36,
+          0.3
+        ],
+        "text": "The septum is markedly thickened."
+      }
+    ],
+    "notes": "Parasternal long axis view titled HOCM with SAM. The source describes concentric left ventricular hypertrophy with systolic anterior motion of the anterior mitral leaflet.",
+    "source": {
+      "author": "CardioNetworks: Secretariat",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:HOCM_with_SAM_E00502_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Secretariat. Source: CardioNetworks ECHOpedia (echopedia.org), E00502.avi; AMC Echolab, AMC, The Netherlands; via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "plax-hypertrophic-cardiomyopathy-2",
+    "view": "plax",
+    "condition": "hypertrophic-cardiomyopathy",
+    "src": "plax-hypertrophic-cardiomyopathy-2.mp4",
+    "poster": "plax-hypertrophic-cardiomyopathy-2.jpg",
+    "fps": 20,
+    "durationSec": 3.55,
+    "width": 720,
+    "height": 490,
+    "markers": [
+      {
+        "structure": "ivs",
+        "at": [
+          0.5,
+          0.38
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "lv",
+        "at": [
+          0.45,
+          0.55
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.58,
+          0.68
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "aortic-root",
+        "at": [
+          0.62,
+          0.55
+        ],
+        "r": 0.035
+      }
+    ],
+    "notes": "Parasternal long axis view from a patient with hypertrophic cardiomyopathy and acute pulmonary edema. The source describes asymmetric septal thickening with normal systolic function.",
+    "source": {
+      "author": "Hanneman K, Nguyen E, Crean A",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Hypertrophic-Cardiomyopathy-Complicated-by-Pulmonary-Edema-in-the-Postpartum-Period-802352.f1.ogv",
+      "attribution": "Hanneman K, Nguyen E, Crean A (2013). 'Hypertrophic Cardiomyopathy Complicated by Pulmonary Edema in the Postpartum Period', Case Reports in Radiology (as credited on the page; DOI listed there). Via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "a2c-hypertrophic-cardiomyopathy-1",
+    "view": "a2c",
+    "condition": "hypertrophic-cardiomyopathy",
+    "src": "a2c-hypertrophic-cardiomyopathy-1.mp4",
+    "poster": "a2c-hypertrophic-cardiomyopathy-1.jpg",
+    "fps": 39.01,
+    "durationSec": 2.384,
+    "width": 636,
+    "height": 434,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.5,
+          0.45
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "lv-apex",
+        "at": [
+          0.5,
+          0.22
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "inferior-wall",
+        "at": [
+          0.4,
+          0.45
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "anterior-wall",
+        "at": [
+          0.6,
+          0.45
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.5,
+          0.76
+        ],
+        "r": 0.05
+      }
+    ],
+    "notes": "Apical two chamber view over three cardiac cycles. The source describes mid-ventricular septal and lateral wall thickening with an apical aneurysm.",
+    "source": {
+      "author": "Efthimiadis G, Pliakos C, Pagourelias E, Parcharidou D, Spanos G, Paraskevaidis S, Styliadis I, Parcharidis G",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Hypertrophic-cardiomyopathy-with-midventricular-obstruction-and-apical-aneurysm-formation-in-a-1476-7120-7-26-S1.ogv",
+      "attribution": "Efthimiadis G, Pliakos C, Pagourelias E, Parcharidou D, Spanos G, Paraskevaidis S, Styliadis I, Parcharidis G (2009). 'Hypertrophic cardiomyopathy with midventricular obstruction and apical aneurysm formation in a single family: case report', Cardiovascular Ultrasound, doi:10.1186/1476-7120-7-26. Via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "plax-mitral-regurgitation-1",
+    "view": "plax",
+    "condition": "mitral-regurgitation",
+    "src": "plax-mitral-regurgitation-1.mp4",
+    "poster": "plax-mitral-regurgitation-1.jpg",
+    "fps": 22,
+    "durationSec": 0.545,
+    "width": 646,
+    "height": 478,
+    "markers": [
+      {
+        "structure": "rv",
+        "at": [
+          0.48,
+          0.25
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.42,
+          0.34
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "lv",
+        "at": [
+          0.35,
+          0.45
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.6,
+          0.58
+        ],
+        "r": 0.05
+      }
+    ],
+    "pins": [
+      {
+        "at": [
+          0.64,
+          0.5
+        ],
+        "text": "Colour Doppler jet spreads into the left atrium."
+      }
+    ],
+    "notes": "Parasternal long axis colour Doppler view of severe mitral regurgitation with an eccentric jet. The source case is a severe prolapse of the posterior mitral leaflet.",
+    "source": {
+      "author": "CardioNetworks: Secretariat",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Severe_prolaps_of_PMVL_E00451_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Secretariat. Source: CardioNetworks ECHOpedia (echopedia.org), E00451.avi; AMC Echolab, AMC, The Netherlands; via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "a4c-mitral-regurgitation-1",
+    "view": "a4c",
+    "condition": "mitral-regurgitation",
+    "src": "a4c-mitral-regurgitation-1.mp4",
+    "poster": "a4c-mitral-regurgitation-1.jpg",
+    "fps": 28,
+    "durationSec": 0.571,
+    "width": 646,
+    "height": 478,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.5,
+          0.33
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.41,
+          0.35
+        ],
+        "r": 0.025
+      },
+      {
+        "structure": "rv",
+        "at": [
+          0.35,
+          0.4
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.48,
+          0.6
+        ],
+        "r": 0.045
+      },
+      {
+        "structure": "ra",
+        "at": [
+          0.33,
+          0.58
+        ],
+        "r": 0.04
+      }
+    ],
+    "pins": [
+      {
+        "at": [
+          0.52,
+          0.5
+        ],
+        "text": "Colour jet crosses the mitral valve into the left atrium."
+      }
+    ],
+    "notes": "Apical four chamber colour Doppler view of severe mitral regurgitation with an eccentric jet. The source case is a papillary muscle rupture.",
+    "source": {
+      "author": "CardioNetworks: Secretariat",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Papillary_muscle_rupture_E00652_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Secretariat. Source: CardioNetworks ECHOpedia (echopedia.org), E00652.avi; AMC Echolab, AMC, The Netherlands; via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "plax-mitral-stenosis-1",
+    "view": "plax",
+    "condition": "mitral-stenosis",
+    "src": "plax-mitral-stenosis-1.mp4",
+    "poster": "plax-mitral-stenosis-1.jpg",
+    "fps": 51,
+    "durationSec": 0.784,
+    "width": 608,
+    "height": 480,
+    "markers": [
+      {
+        "structure": "la",
+        "at": [
+          0.56,
+          0.58
+        ],
+        "r": 0.07
+      }
+    ],
+    "pins": [
+      {
+        "at": [
+          0.6,
+          0.5
+        ],
+        "text": "The left atrium is markedly enlarged."
+      }
+    ],
+    "notes": "Parasternal long axis view of severe mitral stenosis. The source notes a dilated left atrium and the hockey stick shape of the mitral leaflet.",
+    "source": {
+      "author": "CardioNetworks: Secretariat",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Severe_mitral_valve_stenosis_E00608_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Secretariat. Source: CardioNetworks ECHOpedia (echopedia.org), E00608.avi; AMC Echolab, AMC, The Netherlands; via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "plax-aortic-regurgitation-1",
+    "view": "plax",
+    "condition": "aortic-regurgitation",
+    "src": "plax-aortic-regurgitation-1.mp4",
+    "poster": "plax-aortic-regurgitation-1.jpg",
+    "fps": 37,
+    "durationSec": 0.865,
+    "width": 646,
+    "height": 478,
+    "markers": [
+      {
+        "structure": "rv",
+        "at": [
+          0.47,
+          0.24
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.43,
+          0.36
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "lv",
+        "at": [
+          0.42,
+          0.5
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.57,
+          0.56
+        ],
+        "r": 0.04
+      }
+    ],
+    "pins": [
+      {
+        "at": [
+          0.38,
+          0.46
+        ],
+        "text": "Colour jet runs back from the aortic valve into the LV."
+      }
+    ],
+    "notes": "Parasternal long axis colour Doppler view of severe aortic regurgitation with an eccentric jet.",
+    "source": {
+      "author": "CardioNetworks: Secretariat",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Severe_aortic_regurgitation_E00232_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Secretariat. Source: CardioNetworks ECHOpedia (echopedia.org), E00232.avi; AMC Echolab, AMC, The Netherlands; via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "psax-av-aortic-regurgitation-1",
+    "view": "psax-av",
+    "condition": "aortic-regurgitation",
+    "src": "psax-av-aortic-regurgitation-1.mp4",
+    "poster": "psax-av-aortic-regurgitation-1.jpg",
+    "fps": 51,
+    "durationSec": 0.941,
+    "width": 646,
+    "height": 478,
+    "markers": [
+      {
+        "structure": "aortic-valve",
+        "at": [
+          0.48,
+          0.4
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.5,
+          0.6
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "rvot",
+        "at": [
+          0.52,
+          0.22
+        ],
+        "r": 0.04
+      }
+    ],
+    "notes": "Parasternal short axis colour Doppler view of severe aortic regurgitation. The source case has a bicuspid aortic valve.",
+    "source": {
+      "author": "CardioNetworks: Secretariat",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Bicuspid_aortic_valve,_severe_aortic_regurgitation_E00856_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Secretariat. Source: CardioNetworks ECHOpedia (echopedia.org), E00856.avi; AMC Echolab, AMC, The Netherlands; via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "a4c-regional-wall-motion-abnormality-1",
+    "view": "a4c",
+    "condition": "regional-wall-motion-abnormality",
+    "src": "a4c-regional-wall-motion-abnormality-1.mp4",
+    "poster": "a4c-regional-wall-motion-abnormality-1.jpg",
+    "fps": 25,
+    "durationSec": 2.44,
+    "width": 636,
+    "height": 430,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.52,
+          0.45
+        ],
+        "r": 0.06
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.41,
+          0.55
+        ],
+        "r": 0.025
+      },
+      {
+        "structure": "rv",
+        "at": [
+          0.33,
+          0.55
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "lv-apex",
+        "at": [
+          0.48,
+          0.27
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.53,
+          0.76
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "ra",
+        "at": [
+          0.36,
+          0.76
+        ],
+        "r": 0.04
+      }
+    ],
+    "notes": "Apical four chamber grey scale view at follow-up after a myocardial infarction. The source describes thinning and akinesia of the distal septum and apex.",
+    "source": {
+      "author": "Rosendahl L, Blomstrand P, Brudin L, Todt T, Engvall J",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Longitudinal-peak-strain-detects-a-smaller-risk-area-than-visual-assessment-of-wall-motion-in-acute-1476-7120-8-2-S1.ogv",
+      "attribution": "Rosendahl L, Blomstrand P, Brudin L, Todt T, Engvall J (2010). 'Longitudinal peak strain detects a smaller risk area than visual assessment of wall motion in acute myocardial infarction', Cardiovascular Ultrasound (article id 1476-7120-8-2). Via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "a4c-regional-wall-motion-abnormality-2",
+    "view": "a4c",
+    "condition": "regional-wall-motion-abnormality",
+    "src": "a4c-regional-wall-motion-abnormality-2.mp4",
+    "poster": "a4c-regional-wall-motion-abnormality-2.jpg",
+    "fps": 51,
+    "durationSec": 0.765,
+    "width": 646,
+    "height": 478,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.52,
+          0.38
+        ],
+        "r": 0.06
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.43,
+          0.4
+        ],
+        "r": 0.025
+      },
+      {
+        "structure": "rv",
+        "at": [
+          0.35,
+          0.45
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.52,
+          0.65
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "ra",
+        "at": [
+          0.38,
+          0.65
+        ],
+        "r": 0.04
+      }
+    ],
+    "notes": "Apical four chamber view after an apical and anteroseptal infarction. The source describes a dilated left ventricle with poor function and akinesia of the apex and all mid segments.",
+    "source": {
+      "author": "CardioNetworks: Secretariat",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Apical_and_anteroseptal_infarction_E00531_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Secretariat. Source: CardioNetworks ECHOpedia (echopedia.org), E00531.avi; AMC Echolab, AMC, The Netherlands; via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "a4c-takotsubo-1",
+    "view": "a4c",
+    "condition": "takotsubo",
+    "src": "a4c-takotsubo-1.mp4",
+    "poster": "a4c-takotsubo-1.jpg",
+    "fps": 25,
+    "durationSec": 1.36,
+    "width": 720,
+    "height": 404,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.54,
+          0.38
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.46,
+          0.5
+        ],
+        "r": 0.03
+      },
+      {
+        "structure": "lv-apex",
+        "at": [
+          0.52,
+          0.17
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "anterolateral-wall",
+        "at": [
+          0.65,
+          0.5
+        ],
+        "r": 0.035
+      }
+    ],
+    "notes": "Apical four chamber view in Takotsubo syndrome. The source describes apical dyskinesia with hyperdynamic basal contraction and a moderately depressed ejection fraction.",
+    "source": {
+      "author": "Placido R, Martins A, Robalo Martins S, do Vale S, Almeida A, Pinto F, Martin Martins J",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Takotsubo-Syndrome-A-Pathway-through-the-Pituitary-Disease-9219018.f1.ogv",
+      "attribution": "Placido R, Martins A, Robalo Martins S, do Vale S, Almeida A, Pinto F, Martin Martins J (2016). 'Takotsubo Syndrome: A Pathway through the Pituitary Disease', Case Reports in Cardiology, doi:10.1155/2016/9219018. Via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "a4c-takotsubo-2",
+    "view": "a4c",
+    "condition": "takotsubo",
+    "src": "a4c-takotsubo-2.mp4",
+    "poster": "a4c-takotsubo-2.jpg",
+    "fps": 51,
+    "durationSec": 1.745,
+    "width": 694,
+    "height": 480,
+    "markers": [
+      {
+        "structure": "lv",
+        "at": [
+          0.56,
+          0.42
+        ],
+        "r": 0.05
+      },
+      {
+        "structure": "ivs",
+        "at": [
+          0.48,
+          0.45
+        ],
+        "r": 0.025
+      },
+      {
+        "structure": "rv",
+        "at": [
+          0.42,
+          0.45
+        ],
+        "r": 0.035
+      },
+      {
+        "structure": "la",
+        "at": [
+          0.58,
+          0.72
+        ],
+        "r": 0.04
+      },
+      {
+        "structure": "ra",
+        "at": [
+          0.43,
+          0.72
+        ],
+        "r": 0.035
+      }
+    ],
+    "notes": "Apical four chamber view of a Takotsubo cardiomyopathy.",
+    "source": {
+      "author": "CardioNetworks: Vdbilt",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:A4CTTS_(CardioNetworks_ECHOpedia).webm",
+      "attribution": "CardioNetworks: Vdbilt. Source: CardioNetworks ECHOpedia (echopedia.org), A4CTTS.avi, via Wikimedia Commons.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  }
+]

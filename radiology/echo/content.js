@@ -8,6 +8,8 @@ export const ALLOWED_LICENSES = 'CC0 1.0, Public domain, CC BY x.y or CC BY-SA x
 export const licenseAllowed = license => LICENSE.test(license);
 
 const fraction = v => Number.isFinite(v) && v >= 0 && v <= 1;
+// A pin label has to fit beside its dot on a phone-sized image.
+const PIN_TEXT_MAX = 90;
 const TYPES = {
   id: ['a kebab-case id', v => typeof v === 'string' && /^[a-z0-9]+(-[a-z0-9]+)*$/.test(v)],
   text: ['non-empty text', v => typeof v === 'string' && v.trim() !== ''],
@@ -19,6 +21,7 @@ const TYPES = {
   radius: ['a fraction of frame width above 0', v => fraction(v) && v > 0],
   point: ['[x, y] with each between 0 and 1', v => Array.isArray(v) && v.length === 2 && v.every(fraction)],
   list: ['a list', Array.isArray],
+  pinText: [`non-empty text of ${PIN_TEXT_MAX} characters or fewer`, v => TYPES.text[1](v) && v.length <= PIN_TEXT_MAX],
 };
 
 // A field is a type name (a trailing ? makes it optional), a list of allowed values, or a nested shape.
@@ -36,11 +39,12 @@ const SHAPES = {
   clips: {
     id: 'id', view: 'id', condition: 'id?', src: 'text', poster: 'text',
     fps: 'positive', durationSec: 'positive', width: 'positive', height: 'positive',
-    markers: 'list', notes: 'text?',
+    markers: 'list', pins: 'list?', notes: 'string?',
     source: { author: 'text', license: 'text', licenseUrl: 'text', url: 'text', attribution: 'string', modified: 'string' },
   },
 };
 const MARKER = { structure: 'id', at: 'point', r: 'radius' };
+const PIN = { at: 'point', text: 'pinText' };
 
 function checkShape(value, shape, where, problems) {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) {
@@ -108,10 +112,11 @@ export function validateContent(tables) {
       if (view && !view.structures.includes(m.structure)) {
         problems.push(`${where} marks "${m.structure}", which view "${clip.view}" does not list`);
       }
-      // One marker per structure keeps quiz ids stable and every correct click inside one ring.
+      // One marker per structure, so selecting a structure in the panel pulses exactly one ring.
       if (marked.has(m.structure)) problems.push(`${where} marks "${m.structure}" twice`);
       marked.add(m.structure);
     }
+    for (const [i, p] of (clip.pins ?? []).entries()) checkShape(p, PIN, `${where}.pins[${i}]`, problems);
   }
   return problems;
 }

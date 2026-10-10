@@ -4,36 +4,169 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#090c11">
   <link rel="icon" href="data:,">
-  <meta name="description" content="Interactive imaging teaching for medical students: echocardiography loops, atlas and quiz.">
+  <meta name="description" content="Interactive imaging teaching for medical students. Learn to read echocardiograms from real cine loops with labeled anatomy.">
   <title>Radiology teaching</title>
+  <link rel="stylesheet" href="core/theme.css">
   <script src="core/file-warning.js"></script>
   <script type="module">
-    import { h } from './core/dom.js';
-    import { mountShell } from './core/shell.js';
+    import { disclaimer } from './core/shell.js';
 
-    const { main } = mountShell('Radiology teaching');
-    const area = (href, title, text) => h('li', {}, href
-      ? h('a', { class: 'area', href }, h('h3', {}, title), h('p', {}, text))
-      : h('div', { class: 'area' }, h('h3', {}, title), h('p', {}, text), h('p', { class: 'muted' }, 'Coming later.')));
-    main.append(
-      h('h2', {}, 'Interactive imaging for medical students'),
-      h('p', {}, 'Learn to read images by working with them. Every module is free and runs in the browser.'),
-      h('ul', { class: 'areas' },
-        area('echo/index.html', 'Echocardiography', 'Standard views with probe placement and labeled anatomy. Loops and a quiz arrive as licensed clips are added.'),
-        area(null, 'CT and MRI viewer', 'Scroll stacks and three planes with window presets.'),
-        area(null, 'CT angiogram tour', 'A guided walk through the arteries.'),
-        area(null, 'POCUS simulator', 'Practice probe moves to find the views.')));
+    document.querySelector('.landing-footer').append(disclaimer());
   </script>
   <style>
-    .areas { list-style: none; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
-    .area { display: block; height: 100%; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); text-decoration: none; }
-    a.area:hover { border-color: var(--accent); }
-    a.area h3 { color: var(--accent); }
-    .area h3 { margin-top: 0; }
+    body { background: radial-gradient(ellipse 70% 55% at 50% -12%, rgb(124 183 255 / 0.13), transparent 70%), var(--bg); }
+    /* A faint ultrasound sector with a slow sweeping beam. CSS only, still under reduced motion. Fixed and clipped, so it never adds scroll. */
+    .sweep {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      background:
+        repeating-radial-gradient(circle at 50% 0, transparent 0 79px, rgb(124 183 255 / 0.045) 80px 81px),
+        radial-gradient(circle at 50% 0, rgb(124 183 255 / 0.06), rgb(124 183 255 / 0.015) 40%, transparent 70%);
+      -webkit-mask: conic-gradient(from 145deg at 50% 0, #000 70deg, transparent 70deg);
+      mask: conic-gradient(from 145deg at 50% 0, #000 70deg, transparent 70deg);
+    }
+    .sweep::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 200vmax;
+      height: 200vmax;
+      margin-left: -100vmax;
+      transform-origin: 50% 0;
+      background: conic-gradient(from 172deg at 50% 0, transparent, rgb(124 183 255 / 0.09) 8deg, transparent 16deg);
+      animation: sweep 7s ease-in-out infinite alternate;
+    }
+    @keyframes sweep { from { transform: rotate(-30deg); } to { transform: rotate(30deg); } }
+    @media (prefers-reduced-motion: reduce) { .sweep::after { animation: none; } }
+
+    .landing-main { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; width: 100%; max-width: 64rem; margin: 0 auto; padding: 72px 16px 40px; }
+    .hero { margin-bottom: 40px; text-align: center; }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(2.5rem, 7vw, 3.75rem); font-weight: 700; letter-spacing: -0.03em; }
+    .hero p { margin: 0; font-size: var(--fs-lg); color: var(--muted); }
+
+    .modalities { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .modality {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      height: 100%;
+      padding: 18px 22px 18px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      background: linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent), var(--surface);
+      color: var(--text);
+      text-decoration: none;
+      transition: transform var(--slow) var(--ease), box-shadow var(--slow) var(--ease), border-color var(--slow) var(--ease);
+    }
+    .modality h2 { margin: 8px 0 4px; font-size: var(--fs-lg); font-weight: 650; }
+    .modality p { margin: 0; font-size: var(--fs-md); color: var(--muted); line-height: 1.5; }
+    .art { flex: none; width: 120px; height: 90px; padding: 6px; border-radius: var(--r-md); background: #05070a; border: 1px solid var(--border); overflow: visible; }
+    .art * { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .pill { display: inline-block; padding: 2px 10px; border-radius: var(--r-pill); font-size: var(--fs-xs); font-weight: 650; letter-spacing: 0.02em; border: 1px solid currentColor; }
+
+    .available { border-color: rgb(124 183 255 / 0.45); box-shadow: 0 0 0 1px rgb(124 183 255 / 0.12), 0 18px 48px -24px rgb(124 183 255 / 0.5); }
+    .available .art { border-color: rgb(124 183 255 / 0.35); }
+    .available .art * { stroke: var(--accent); }
+    .available .art .soft { fill: rgb(124 183 255 / 0.1); stroke: rgb(124 183 255 / 0.55); }
+    .available .art .heart { fill: rgb(255 138 128 / 0.2); stroke: #ff8a80; }
+    .available .pill { color: var(--ok); background: rgb(111 220 149 / 0.1); }
+    .available .go { position: absolute; top: 16px; right: 16px; color: var(--accent); opacity: 0.7; transition: transform var(--slow) var(--ease), opacity var(--slow); }
+    .available:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 0 0 1px rgb(124 183 255 / 0.35), 0 24px 56px -20px rgb(124 183 255 / 0.55); }
+    .available:hover .go { opacity: 1; transform: translateX(3px); }
+    .available:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+
+    .soon { border-style: dashed; background: transparent; }
+    .soon .art * { stroke: #66727f; }
+    .soon .art .soft { fill: rgb(255 255 255 / 0.03); }
+    .soon h2 { color: #c3ccd6; }
+    .soon .pill { color: var(--muted); }
+
+    .landing-footer { position: relative; padding: 20px 16px 28px; text-align: center; }
+
+    @media (max-width: 720px) {
+      .landing-main { justify-content: flex-start; padding-top: 48px; }
+      .hero { margin-bottom: 28px; }
+      .modalities { grid-template-columns: minmax(0, 1fr); }
+      .modality { gap: 14px; padding: 14px 16px 14px 14px; }
+      .art { width: 88px; height: 66px; }
+    }
   </style>
 </head>
 <body>
-  <noscript><p>This page needs JavaScript.</p></noscript>
+  <div class="sweep" aria-hidden="true"></div>
+  <main class="landing-main">
+    <header class="hero">
+      <h1>Radiology</h1>
+      <p>Learn to read images by working with them.</p>
+    </header>
+    <ul class="modalities">
+      <li>
+        <a class="modality available" href="echo/index.html">
+          <svg class="art" viewBox="0 0 160 120" aria-hidden="true">
+            <path class="soft" d="M80 8 L28 94 A100.5 100.5 0 0 0 132 94 Z"/>
+            <path d="M59.4 42.3 A40 40 0 0 0 100.6 42.3 M43.9 68 A70 70 0 0 0 116.1 68"/>
+            <path class="heart" d="M80 100 C60 87 52 74 59 64 C65 56 76 58 80 66 C84 58 95 56 101 64 C108 74 100 87 80 100 Z"/>
+            <circle cx="80" cy="8" r="3"/>
+          </svg>
+          <div>
+            <span class="pill">Available</span>
+            <h2>Echocardiography</h2>
+            <p>Real cine loops of each standard view and common pathology, with labeled anatomy and teaching notes.</p>
+          </div>
+          <svg class="go icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </li>
+      <li>
+        <div class="modality soon" aria-disabled="true">
+          <svg class="art" viewBox="0 0 160 120" aria-hidden="true">
+            <rect class="soft" x="22" y="12" width="116" height="94" rx="24"/>
+            <circle cx="80" cy="59" r="32"/>
+            <path d="M65 66 C58 66 56 57 61 53 C59 46 66 41 71 44 C73 38 82 37 85 42 C89 38 97 41 97 47 C103 48 104 56 100 59 C102 65 96 69 91 66 C88 71 79 71 77 67 C73 70 66 69 65 66 Z M72 50 C76 48 78 52 82 50 M84 59 C88 57 90 61 94 58"/>
+          </svg>
+          <div>
+            <span class="pill">Coming soon</span>
+            <h2>CT and MRI viewer</h2>
+            <p>Scroll through stacks in three planes with window presets.</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="modality soon" aria-disabled="true">
+          <svg class="art" viewBox="0 0 160 120" aria-hidden="true">
+            <circle class="soft" cx="80" cy="50" r="40"/>
+            <circle cx="80" cy="50" r="22"/>
+            <path d="M14 58 H146 M14 66 H146 M66 66 V104 H94 V66"/>
+          </svg>
+          <div>
+            <span class="pill">Coming soon</span>
+            <h2>CT angiogram tour</h2>
+            <p>A guided walk along the arteries, one step at a time.</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="modality soon" aria-disabled="true">
+          <svg class="art" viewBox="0 0 160 120" aria-hidden="true">
+            <path d="M80 8 C80 2 92 0 98 6"/>
+            <rect x="71" y="8" width="18" height="30" rx="6"/>
+            <path class="soft" d="M66 38 H94 L91 48 H69 Z"/>
+            <path class="soft" d="M80 50 L42 106 A67.7 67.7 0 0 0 118 106 Z"/>
+          </svg>
+          <div>
+            <span class="pill">Coming soon</span>
+            <h2>POCUS simulator</h2>
+            <p>Practice probe moves until each view comes into focus.</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </main>
+  <footer class="landing-footer"></footer>
 </body>
 </html>
