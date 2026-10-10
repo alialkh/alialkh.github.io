@@ -1,0 +1,92 @@
+[
+  {
+    "id": "synth-plax-normal",
+    "view": "plax",
+    "src": "synth-plax-normal.mp4",
+    "poster": "synth-plax-normal.jpg",
+    "fps": 30,
+    "durationSec": 3,
+    "width": 720,
+    "height": 540,
+    "markers": [
+      { "structure": "rv", "at": [0.5, 0.12], "r": 0.04 },
+      { "structure": "lv", "at": [0.5, 0.517], "r": 0.06 },
+      { "structure": "mitral-valve", "at": [0.66, 0.517], "r": 0.04 },
+      { "structure": "la", "at": [0.5, 0.75], "r": 0.05 },
+      { "structure": "aortic-root", "at": [0.84, 0.69], "r": 0.05 }
+    ],
+    "notes": "Synthetic fixture. The bright disc swings once per second.",
+    "source": {
+      "author": "Synthetic, generated with ffmpeg lavfi",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "url": "https://ffmpeg.org/ffmpeg-filters.html",
+      "attribution": "",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "synth-plax-effusion",
+    "view": "plax",
+    "condition": "pericardial-effusion",
+    "src": "synth-plax-effusion.mp4",
+    "poster": "synth-plax-effusion.jpg",
+    "fps": 25,
+    "durationSec": 2.4,
+    "width": 720,
+    "height": 540,
+    "markers": [
+      { "structure": "lv", "at": [0.5, 0.517], "r": 0.06 }
+    ],
+    "source": {
+      "author": "Synthetic, generated with ffmpeg lavfi",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "url": "https://ffmpeg.org/ffmpeg-filters.html",
+      "attribution": "Synthetic test pattern. Not patient data.",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "synth-plax-normal-b",
+    "view": "plax",
+    "src": "synth-plax-effusion.mp4",
+    "poster": "synth-plax-effusion.jpg",
+    "fps": 25,
+    "durationSec": 2.4,
+    "width": 720,
+    "height": 540,
+    "markers": [],
+    "notes": "Second PLAX entry so the clip picker has a choice. Shares the B file.",
+    "source": {
+      "author": "Synthetic, generated with ffmpeg lavfi",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "url": "https://ffmpeg.org/ffmpeg-filters.html",
+      "attribution": "",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "synth-a4c-normal",
+    "view": "a4c",
+    "src": "synth-plax-normal.mp4",
+    "poster": "synth-plax-normal.jpg",
+    "fps": 30,
+    "durationSec": 3,
+    "width": 720,
+    "height": 540,
+    "markers": [
+      { "structure": "lv", "at": [0.5, 0.517], "r": 0.06 },
+      { "structure": "la", "at": [0.5, 0.75], "r": 0.05 }
+    ],
+    "source": {
+      "author": "Synthetic, generated with ffmpeg lavfi",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "url": "https://ffmpeg.org/ffmpeg-filters.html",
+      "attribution": "",
+      "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  }
+]

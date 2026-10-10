@@ -1,0 +1,39 @@
+[
+  {
+    "id": "plax", "name": "Parasternal long axis", "abbrev": "PLAX", "window": "parasternal",
+    "probe": { "site": "Fixture. Left sternal border, third or fourth intercostal space.", "chest": [0.56, 0.42], "notch": "Fixture. Toward the right shoulder." },
+    "screen": "Fixture. Apex of the sector at the top.",
+    "structures": ["rv", "lv", "mitral-valve", "la", "aortic-root"],
+    "tips": ["Fixture tip one for PLAX.", "Fixture tip two for PLAX."],
+    "pitfalls": ["Fixture pitfall for PLAX."],
+    "reviewed": true
+  },
+  {
+    "id": "psax", "name": "Parasternal short axis", "abbrev": "PSAX", "window": "parasternal",
+    "probe": { "site": "Fixture. Same spot as PLAX, rotated.", "chest": [0.56, 0.42], "notch": "Fixture. Toward the left shoulder." },
+    "screen": "Fixture. Round LV in the middle.",
+    "structures": ["rv", "lv", "mitral-valve"],
+    "tips": ["Fixture tip for PSAX."], "pitfalls": ["Fixture pitfall for PSAX."], "reviewed": false
+  },
+  {
+    "id": "a4c", "name": "Apical four chamber", "abbrev": "A4C", "window": "apical",
+    "probe": { "site": "Fixture. At the apex beat.", "chest": [0.7, 0.62], "notch": "Fixture. Toward the left side." },
+    "screen": "Fixture. Ventricles at the top.",
+    "structures": ["lv", "la", "rv", "mitral-valve"],
+    "tips": ["Fixture tip for A4C."], "pitfalls": ["Fixture pitfall for A4C."], "reviewed": false
+  },
+  {
+    "id": "a2c", "name": "Apical two chamber", "abbrev": "A2C", "window": "apical",
+    "probe": { "site": "Fixture. At the apex beat, rotated.", "chest": [0.7, 0.62], "notch": "Fixture. Toward the left shoulder." },
+    "screen": "Fixture. LV and LA only.",
+    "structures": ["lv", "la", "mitral-valve"],
+    "tips": ["Fixture tip for A2C."], "pitfalls": ["Fixture pitfall for A2C."], "reviewed": false
+  },
+  {
+    "id": "sc-ivc", "name": "Subcostal IVC", "abbrev": "IVC", "window": "subcostal",
+    "probe": { "site": "Fixture. Below the xiphoid.", "chest": [0.5, 0.8], "notch": "Fixture. Toward the head." },
+    "screen": "Fixture. Liver in the near field.",
+    "structures": ["ivc"],
+    "tips": ["Fixture tip for IVC."], "pitfalls": ["Fixture pitfall for IVC."], "reviewed": false
+  }
+]
