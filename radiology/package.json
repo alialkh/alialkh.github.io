@@ -1,5 +1,0 @@
-{
-  "private": true,
-  "type": "module",
-  "main": "tools/run-tests.js"
-}

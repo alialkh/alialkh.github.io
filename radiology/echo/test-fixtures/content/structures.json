@@ -1,8 +1,0 @@
-[
-  { "id": "lv", "name": "Left ventricle", "description": "Fixture text. The synthetic bright disc stands in for this structure." },
-  { "id": "la", "name": "Left atrium", "description": "Fixture text for the left atrium." },
-  { "id": "rv", "name": "Right ventricle", "description": "Fixture text for the right ventricle." },
-  { "id": "mitral-valve", "name": "Mitral valve", "description": "Fixture text for the mitral valve." },
-  { "id": "aortic-root", "name": "Aortic root", "description": "Fixture text for the aortic root." },
-  { "id": "ivc", "name": "Inferior vena cava", "description": "Fixture text for the IVC." }
-]
