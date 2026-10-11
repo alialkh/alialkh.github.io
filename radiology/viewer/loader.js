@@ -18,32 +18,40 @@ async function fetchChunk(url, signal, fetchFn) {
   return gunzip(new Uint8Array(await res.arrayBuffer()));
 }
 
-// Resolves true when every chunk is in, false when aborted. Chunks already in the volume are skipped, so calling it again resumes.
-// limit stops after that many chunks, for a thumbnail that needs only the middle one.
-export async function streamVolume(vol, meta, baseUrl, { signal, onChunk = () => {}, fetchFn = fetch, limit = Infinity }) {
-  const todo = chunkOrder(meta.chunks, vol.dims[2]).map(i => meta.chunks[i]).filter(c => !vol.ready[c.z0]).slice(0, limit);
+// jobs: [{ vol, meta, chunk, base, key? }], fetched in order PARALLEL at a time. Resolves true when all are in, false when aborted.
+// ramp sends the first job alone, so the first image does not share the link with chunks it does not need yet.
+export async function runJobs(jobs, { signal, onChunk = () => {}, fetchFn = fetch, ramp = false }) {
   let next = 0;
   let failed = false;
-  async function worker() {
-    while (next < todo.length && !failed) {
-      const chunk = todo[next++];
-      const url = new URL(chunk.file, baseUrl).href;
-      try {
-        const bytes = await fetchChunk(url, signal, fetchFn);
-        if (bytes.length !== chunkLength(meta, chunk)) throw new Error(`${url} holds ${bytes.length} bytes, expected ${chunkLength(meta, chunk)}`);
-        putChunk(vol, chunk, bytes);
-      } catch (error) {
-        failed = true;
-        throw error;
-      }
-      onChunk(chunk);
+  async function load(job) {
+    const { vol, meta, chunk } = job;
+    const url = new URL(chunk.file, job.base).href;
+    try {
+      const bytes = await fetchChunk(url, signal, fetchFn);
+      if (bytes.length !== chunkLength(meta, chunk)) throw new Error(`${url} holds ${bytes.length} bytes, expected ${chunkLength(meta, chunk)}`);
+      putChunk(vol, chunk, bytes);
+    } catch (error) {
+      failed = true;
+      throw error;
     }
+    onChunk(chunk, job);
+  }
+  async function worker() {
+    while (next < jobs.length && !failed) await load(jobs[next++]);
   }
   try {
-    await Promise.all(Array.from({ length: Math.min(PARALLEL, todo.length) }, worker));
+    if (ramp && jobs.length) await load(jobs[next++]);
+    await Promise.all(Array.from({ length: Math.min(PARALLEL, jobs.length - next) }, worker));
   } catch (error) {
     if (signal.aborted) return false;
     throw error;
   }
   return !signal.aborted;
+}
+
+// Resolves true when every chunk of one volume is in, false when aborted. Chunks already in the volume are skipped, so calling it again resumes.
+// limit stops after that many chunks, for a thumbnail that needs only the middle one.
+export async function streamVolume(vol, meta, baseUrl, { limit = Infinity, ...options }) {
+  const todo = chunkOrder(meta.chunks, vol.dims[2]).map(i => meta.chunks[i]).filter(c => !vol.ready[c.z0]).slice(0, limit);
+  return runJobs(todo.map(chunk => ({ vol, meta, chunk, base: baseUrl })), options);
 }

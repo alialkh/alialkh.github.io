@@ -398,6 +398,7 @@
       }
     ],
     "source": {
+      "short": "TotalSegmentator",
       "author": "Jakob Wasserthal, University Hospital Basel (TotalSegmentator CT dataset)",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
@@ -430,6 +431,7 @@
     ],
     "findings": [],
     "source": {
+      "short": "OpenNeuro ds000221",
       "author": "Babayan A, Baczkowski B and colleagues, MPI Leipzig Mind-Brain-Body dataset (OpenNeuro ds000221)",
       "license": "CC0 1.0",
       "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
@@ -476,6 +478,7 @@
     ],
     "findings": [],
     "source": {
+      "short": "UPENN-GBM",
       "author": "Bakas S, Sako C, Akbari H and colleagues, University of Pennsylvania Health System (UPENN-GBM)",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
@@ -512,6 +515,7 @@
     ],
     "findings": [],
     "source": {
+      "short": "COVID-CT-MD",
       "author": "Oikonomou A, Plataniotis K, Mohammadi A, Afshar P, Naderkhani F, Heidarian S and colleagues (COVID-CT-MD)",
       "license": "CC0 1.0",
       "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
@@ -548,6 +552,7 @@
     ],
     "findings": [],
     "source": {
+      "short": "Lung-PET-CT-Dx",
       "author": "Li P, Wang S, Li T, Lu J, HuangFu Y, Wang D (Lung-PET-CT-Dx)",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
@@ -642,6 +647,7 @@
       }
     ],
     "source": {
+      "short": "FUMPE",
       "author": "Masoudi M, Saadatmand-Tarzjan M, Ferdowsi University of Mashhad (FUMPE)",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
@@ -729,6 +735,7 @@
       }
     ],
     "source": {
+      "short": "Medical Segmentation Decathlon",
       "author": "Medical Segmentation Decathlon (Simpson AL, Antonelli M, Bakas S and colleagues), pancreas data from Memorial Sloan Kettering Cancer Center",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
@@ -770,6 +777,7 @@
     ],
     "findings": [],
     "source": {
+      "short": "HCC-TACE-Seg",
       "author": "Moawad AW, Fuentes D, Morshid A, Khalaf AM, Elmohr MM, Abusaif A, Hazle JD, Kaseb AO, Hassan M, Mahvash A, Szklaruk J, Qayyom A, Elsayes K (HCC-TACE-Seg)",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
@@ -924,6 +932,7 @@
       }
     ],
     "source": {
+      "short": "SPIDER",
       "author": "van der Graaf JW, van Hooff ML, Buckens CFM, Rutten M, van Susante JLC, Kroeze RJ, de Kleuver M, van Ginneken B, Lessmann N (SPIDER)",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
@@ -974,6 +983,7 @@
       }
     ],
     "source": {
+      "short": "Medical Segmentation Decathlon",
       "author": "Medical Segmentation Decathlon (Simpson AL, Antonelli M, Bakas S and colleagues), heart data from King's College London",
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",

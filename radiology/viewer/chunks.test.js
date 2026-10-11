@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { chunkOrder, volumeProblems, startSlice } from './chunks.js';
+import { chunkOrder, volumeProblems, startSlice, loadOrder } from './chunks.js';
 import { createVolume, putChunk, isComplete, valueAt, chunkLength, readyRange } from './volume.js';
 
 const chunksOf = (nz, size) => Array.from({ length: Math.ceil(nz / size) }, (_, i) => ({ file: `c${i}.gz`, z0: i * size, z1: Math.min(nz, (i + 1) * size) }));
@@ -93,4 +93,26 @@ test('readyRange is the run of arrived slices around a slice, and null when that
 test('every volume has its own id, so a pane never reuses a cached picture for the wrong scan', () => {
   const meta = { dtype: 'uint8', dims: [1, 1, 1], spacing: [1, 1, 1] };
   assert.notEqual(createVolume(meta).id, createVolume(meta).id);
+});
+
+// Four chunks each. Slice 8 of 8 is chunk 2 (the middle), then 1 and 3, then 0.
+const part = key => ({ key, chunks: chunksOf(8, 2), nz: 8 });
+const label = ({ key, i }) => `${key}${i}`;
+
+test('volumes on screen give their middle chunk first, in order of importance, then the others finish in turn', () => {
+  const order = loadOrder([part('a'), part('b'), part('c'), part('labels')], ['b', 'a', 'labels']).map(label);
+  assert.deepEqual(order.slice(0, 3), ['b2', 'a2', 'labels2']);
+  assert.deepEqual(order.slice(3, 9), ['b1', 'b3', 'b0', 'a1', 'a3', 'a0']);
+});
+
+test('a volume that is not on screen waits for every shown one, and still goes middle first', () => {
+  const order = loadOrder([part('a'), part('b'), part('c')], ['b']).map(label);
+  assert.deepEqual(order, ['b2', 'b1', 'b3', 'b0', 'a2', 'a1', 'a3', 'a0', 'c2', 'c1', 'c3', 'c0']);
+});
+
+test('every chunk of every volume is listed exactly once, and an eager key that is not a volume is ignored', () => {
+  const order = loadOrder([part('a'), part('b')], ['b', 'zzz', 'b', 'a']).map(label);
+  assert.equal(order.length, 8);
+  assert.equal(new Set(order).size, 8);
+  assert.equal(order[0], 'b2');
 });

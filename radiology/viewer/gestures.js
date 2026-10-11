@@ -20,7 +20,11 @@ export function attachGestures(el, handlers, count) {
   const touches = () => [...pointers.values()].filter(p => p.touch);
 
   el.addEventListener('pointerdown', e => {
-    el.setPointerCapture?.(e.pointerId);
+    try {
+      el.setPointerCapture?.(e.pointerId);
+    } catch {
+      // The pointer ended before the press was handled, and there is nothing to capture.
+    }
     const p = { ...at(e), touch: e.pointerType === 'touch' };
     pointers.set(e.pointerId, p);
     if (p.touch) {

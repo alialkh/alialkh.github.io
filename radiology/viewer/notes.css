@@ -1,6 +1,6 @@
-/* The info panel's tabs: findings, structures and tips. The panel itself is core/panel.css. */
+/* What is inside the side panel's tabs: findings, structures, the controls list and the credit. */
 .tab-body .findings { list-style: none; padding: 0; }
-.findings li { margin: 0 0 10px; padding: 10px 12px; border: 1px solid var(--glass-border); border-radius: var(--r-md); }
+.findings li { margin: 0 0 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--r-md); }
 .findings li.on { border-color: var(--finding); background: rgb(255 224 102 / 0.07); }
 .findings h4 { margin: 0 0 1px; font-size: var(--fs-md); font-weight: 650; }
 .findings .where { margin: 0 0 6px; font: var(--fs-xs) var(--mono); color: var(--muted); }
@@ -9,19 +9,18 @@
 
 .tab-body .structures { list-style: none; padding: 0; }
 .structures li { margin: 0 0 2px; }
-.structure {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  min-height: 2.25rem;
-  border-color: transparent;
-  background: none;
-  text-align: left;
-}
+.structure { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 2.25rem; border-color: transparent; background: none; text-align: left; }
 .structure:hover { background: var(--surface-2); }
 .swatch { flex: none; width: 14px; height: 14px; border-radius: 4px; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.5); }
 
 .keys { margin: 0; }
 .keys dt { margin-top: 10px; font-weight: 650; }
 .keys dd { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
+
+/* The credit tab: the exact credit line first, in a block that reads, then the same facts one by one. */
+.credit-block { margin: 0 0 14px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface-2); }
+.credit-block .credit { margin: 0; font-size: var(--fs-md); line-height: 1.6; overflow-wrap: anywhere; }
+.facts { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 12px; }
+.facts dt { color: var(--muted); font-size: var(--fs-sm); }
+.facts dd { margin: 0; overflow-wrap: anywhere; }
+.tab-body li a { overflow-wrap: anywhere; }

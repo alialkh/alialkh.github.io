@@ -42,6 +42,12 @@ test('rejects licenses that forbid republishing, with the allowed list in the me
   assert.deepEqual(after(t => { t[0].source.license = 'Public domain'; }), []);
 });
 
+test('the optional short source name must be non-empty text, and the real cases all carry one for the credit over the image', () => {
+  assert.deepEqual(after(t => { t[0].source.short = 'CT-1'; }), []);
+  assert.match(after(t => { t[0].source.short = ' '; }).join(), /source\.short must be non-empty text/);
+  assert.match(after(t => { t[0].source.short = 7; }).join(), /source\.short/);
+});
+
 test('rejects a finding that names a series or window that does not exist', () => {
   assert.match(after(t => { t[1].findings[0].series = 't3'; }).join(), /series "t3"/);
   assert.match(after(t => { t[0].findings[0].window = 'Brain'; }).join(), /window "Brain" is not a window of series "ct"/);
@@ -198,4 +204,8 @@ test('the fixture cases are valid, on one grid, licensed and plainly synthetic',
 
 test('the real case manifest, once it exists, is valid down to its volume files', { skip: !existsSync(REAL) }, () => {
   assert.deepEqual(problemsOf(REAL).problems, []);
+});
+
+test('every real case names its dataset in source.short, so the credit over the image is not a guess from the author line', { skip: !existsSync(REAL) }, () => {
+  for (const c of problemsOf(REAL).cases) assert.ok(c.source.short, c.id);
 });

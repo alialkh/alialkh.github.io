@@ -1,6 +1,7 @@
 // A case being viewed: its volumes and the streams that fill them. The last two cases stay in memory.
 import { fetchJson } from '../core/json.js';
-import { streamVolume } from './loader.js';
+import { runJobs } from './loader.js';
+import { loadOrder } from './chunks.js';
 import { createVolume } from './volume.js';
 import { validateGrid } from './content.js';
 
@@ -33,20 +34,23 @@ export function createSession(c) {
     volume: key => part(key)?.vol,
     // Slices in across every volume, as a fraction.
     progress: () => parts.reduce((n, p) => n + (p.vol?.readyCount ?? 0), 0) / parts.reduce((n, p) => n + (p.meta?.dims[2] ?? 1), 0),
-    // The shown series and the labels first, together. The other series follow.
-    async start(seriesId, { onChunk, onError }) {
+    // shown is the series on screen, the active viewport's first. They and the labels come first, the other series follow (see loadOrder).
+    // Calling it again with another list re-plans the rest and skips every chunk already in.
+    async start(shown, { onChunk, onError }) {
       const mine = ++token;
       controller?.abort();
       await session.ready();
       if (mine !== token) return;
       controller = new AbortController();
       const { signal } = controller;
-      const run = key => streamVolume(part(key).vol, part(key).meta, part(key).url, { signal, onChunk: () => onChunk(key) });
+      const order = loadOrder(parts.map(p => ({ key: p.key, chunks: p.meta.chunks, nz: p.meta.dims[2] })), [].concat(shown, 'labels'));
+      const jobs = order
+        .map(({ key, i }) => ({ key, vol: part(key).vol, meta: part(key).meta, chunk: part(key).meta.chunks[i], base: part(key).url }))
+        .filter(job => !job.vol.ready[job.chunk.z0]);
       try {
-        await Promise.all([run(seriesId), c.labels && run('labels')]);
-        for (const s of c.series) if (s.id !== seriesId) await run(s.id);
+        await runJobs(jobs, { signal, ramp: true, onChunk: (chunk, job) => onChunk(job.key) });
       } catch (error) {
-        if (!signal.aborted) onError(error);
+        onError(error);
       }
     },
     stop() {

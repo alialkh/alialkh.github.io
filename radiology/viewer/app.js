@@ -1,22 +1,21 @@
 import { h } from '../core/dom.js';
 import { disclaimer } from '../core/shell.js';
-import { credit } from '../core/credit.js';
 import { resolveRoute } from '../core/route.js';
-import { bindKeys } from '../core/keys.js';
-import { createSidebar } from '../core/sidebar.js';
-import { createTabPanel } from '../core/tabs.js';
 import { loadCases } from './content.js';
-import { caseList, caseSubtitle, REGION_NAMES } from './case-list.js';
+import { caseList, REGION_NAMES } from './case-list.js';
 import { icon } from './icons.js';
 import { createScene } from './scene.js';
 import { createSessions } from './session.js';
 import { canDecompress } from './loader.js';
-import { lazyThumb } from './thumb.js';
+import { createThumbs, drawVolumeThumb } from './thumb.js';
+import { initialState } from './state.js';
+import { loadPrefs, savePrefs } from './prefs.js';
+import { createLeft } from './left.js';
+import { createRight } from './right.js';
+import { createTopBar } from './topbar.js';
+import { bindViewerKeys } from './keys.js';
 import { tabsFor, renderTab } from './notes.js';
-import { HOME } from './view.js';
 
-// The notes panel opens by default only where it leaves the image enough room.
-const roomy = matchMedia('(min-width: 1101px)');
 const TITLE = 'CT and MRI';
 
 function showProblems(error) {
@@ -32,105 +31,139 @@ function start(cases) {
   const list = caseList(cases);
   const ids = list.cases.map(c => c.id);
   const byId = new Map(list.cases.map(c => [c.id, c]));
-  // set() redraws the chrome from this one object. The scene reads and writes its image fields too.
-  const ui = {
-    current: null, info: ids.length > 0 && roomy.matches, tab: 'overview', testing: false, rail: false, drawer: false,
-    layout: 'stack', active: 'axial', cursor: [0, 0, 0], series: null, center: 0, width: 1, invert: false, windowName: null, limits: { min: 0, max: 1 },
-    views: { axial: HOME, coronal: HOME, sagittal: HOME }, labels: false, opacity: 0.4, tool: 'window', measure: null, finding: null,
-    cine: false, speed: 10, touched: false, windowReady: false,
-  };
+  const narrow = matchMedia('(max-width: 800px)');
+  // The side panel opens by default only where it leaves the images enough room. What the reader chose overrides this.
+  const roomy = matchMedia('(min-width: 1400px)');
+  // The flags that are not about viewports. The viewports themselves are the scene's state object.
+  const ui = { current: null, testing: false, tool: 'window', opacity: 0.4, cine: false, speed: 10, finding: null };
+  const prefs = loadPrefs();
   const sessions = createSessions();
-  let notesKey = '';
+  const thumbs = createThumbs();
   let caseToken = 0;
+  let chromeKey = '';
+  let notesKey = '';
+  let switching = false;
 
-  const item = c => {
-    const thumb = h('canvas', { class: 'thumb', width: 56, height: 42, 'aria-hidden': 'true' });
-    lazyThumb(c, thumb);
-    return h('a', { class: 'case', href: `#/${c.id}`, title: `${c.title}, ${caseSubtitle(c)}` }, thumb,
-      h('span', { class: 'case-text' }, h('span', { class: 'case-title' }, c.title), h('span', { class: 'case-sub' }, caseSubtitle(c))));
-  };
-  const sidebar = createSidebar(list, { title: TITLE, empty: 'Cases appear here as scans are added.', item, onRail: () => set({ rail: !ui.rail }), onClose: () => setDrawer(false) });
-  const casesBtn = h('button', { type: 'button', class: 'cases-btn', 'aria-controls': 'case-list', 'aria-expanded': 'false', onclick: () => setDrawer(true) }, icon('cases'), 'Cases');
-  const chip = h('div', { class: 'title-chip glass' });
-  const note = h('aside', { class: 'finding-note glass', 'aria-label': 'Finding', hidden: true });
-  const testBanner = h('div', { class: 'test-banner glass' },
-    h('p', {}, h('strong', {}, 'Test mode. '), 'Scroll, window and measure, then reveal.'),
-    h('button', { type: 'button', class: 'primary', onclick: () => setTesting(false) }, 'Reveal'));
-  const notice = h('p', { class: 'notice glass', role: 'status', hidden: true });
-  const announcer = h('p', { class: 'visually-hidden', 'aria-live': 'polite' });
-  const progress = h('div', { class: 'progress', role: 'progressbar', 'aria-label': 'Loading the scan', 'aria-valuemin': '0', 'aria-valuemax': '100', hidden: true });
-  const credits = h('div', { class: 'credits' });
-  const topBar = h('div', { class: 'top-bar' }, casesBtn, chip, note, testBanner);
-  const viewport = h('div', { class: 'viewport' }, topBar, notice);
-  const stage = h('section', { class: 'stage', tabindex: '-1', 'aria-label': 'CT and MRI viewer' }, progress, viewport, credits);
-  const scrim = h('div', { class: 'scrim', onclick: () => setDrawer(false) });
-  const app = h('div', { class: 'app' }, sidebar.el, stage, scrim);
-  document.body.replaceChildren(app, announcer);
+  const app = h('div', { class: 'app' });
+  const dispatch = action => scene.dispatch(action);
+  const panel = name => dispatch({ type: 'panel', name });
+  const activeSeries = () => ui.current.series.find(s => s.id === (scene.state.viewports[scene.state.active]?.series ?? ui.current.series[0].id));
 
-  const scene = createScene(ui, {
-    stage,
-    changed: () => set({}),
-    onProgress: p => {
-      progress.hidden = p >= 1;
-      progress.style.setProperty('--p', String(p));
-      progress.setAttribute('aria-valuenow', String(Math.round(p * 100)));
-    },
-  });
-  scene.on.test = () => setTesting(!ui.testing);
-  scene.on.fullscreen = toggleFullscreen;
-  scene.on.error = text => flash(text, 0);
-
-  const panel = createTabPanel({
-    label: 'Case information', handle: 'Case notes', closeLabel: 'Hide case notes (I)',
-    onToggle: () => set({ info: !ui.info }),
+  const topbar = createTopBar({ on: {
+    left: () => panel('left'), right: () => panel('right'),
+    layout: layout => dispatch({ type: 'layout', layout }),
+    link: () => dispatch({ type: 'link' }), annotate: () => dispatch({ type: 'annotations' }),
+    imageOnly: () => dispatch({ type: 'imageOnly' }),
+    test: () => setTesting(!ui.testing), fullscreen: toggleFullscreen, reveal: () => setTesting(false),
+  } });
+  const left = createLeft(list, { thumbs, on: {
+    toggle: () => panel('left'),
+    pick: id => dispatch({ type: 'assign', slot: scene.state.active, series: id }),
+    drop: (slot, id) => dispatch({ type: 'assign', slot, series: id }),
+  } });
+  const right = createRight({
+    on: { toggle: () => panel('right'), closeFinding: () => scene.changeUi({ finding: null }), reveal: () => setTesting(false) },
     render: id => renderTab(id, {
-      c: ui.current, ui, series: ui.current.series.find(s => s.id === ui.series), dims: scene.dims, spacing: scene.spacing, presets: scene.presets(),
-      show: f => scene.showFinding(f), jump: s => scene.jumpTo(s),
+      c: ui.current, ui, series: activeSeries(), dims: scene.dims, spacing: scene.spacing, presets: scene.presets(),
+      show: f => { scene.showFinding(f); dispatch({ type: 'closeDrawer' }); },
+      jump: s => { scene.jumpTo(s); dispatch({ type: 'closeDrawer' }); },
     }),
   });
 
+  const barToggle = h('button', { type: 'button', class: 'icon-btn', 'aria-controls': 'viewer-controls', onclick: () => panel('bar') }, icon('chev-down'));
+  const findingChip = h('button', { type: 'button', class: 'finding-chip', hidden: true, onclick: () => {
+    if (!scene.state.panels.right || scene.state.narrow) dispatch({ type: 'panel', name: 'right' });
+  } });
+  const notice = h('p', { class: 'notice', role: 'status', hidden: true });
+  const announcer = h('p', { class: 'visually-hidden', 'aria-live': 'polite' });
+  const exitOnly = h('button', { type: 'button', class: 'exit-only', 'aria-label': 'Show the controls again (Z)', title: 'Show the controls again (Z)', onclick: () => dispatch({ type: 'imageOnly', on: false }) }, icon('restore'));
+  const scrim = h('div', { class: 'scrim', onclick: () => dispatch({ type: 'closeDrawer' }) });
+
+  const scene = createScene(ui, {
+    app,
+    initial: initialState({ narrow: narrow.matches, annotations: prefs.annotations, panels: { right: roomy.matches, ...prefs.panels } }),
+    hooks: {
+      changed: (prev, next) => {
+        if (prev.panels !== next.panels || prev.annotations !== next.annotations) savePrefs(next);
+        set();
+      },
+      progress(p) {
+        topbar.setProgress(p);
+        // The other cases' thumbnails come last, after the open case has everything on screen and in memory.
+        if (p >= 1) thumbs.release();
+      },
+      error(text) {
+        flash(text, 0);
+        thumbs.release();
+      },
+      series(key) {
+        const series = ui.current.series.find(s => s.id === key);
+        left.seriesThumb(key, scene.volume(key), series);
+        if (key === ui.current.series[0].id) {
+          const canvas = left.caseThumb(ui.current.id);
+          drawVolumeThumb(canvas, scene.volume(key), series);
+          thumbs.skip(canvas);
+        }
+      },
+    },
+  });
+  scene.controls.el.id = 'viewer-controls';
+  const main = h('main', { class: 'main', 'aria-label': 'CT and MRI viewer' }, scene.el, notice, exitOnly);
+  const foot = h('footer', { class: 'foot' }, scene.controls.el, h('div', { class: 'statusbar' }, barToggle, findingChip, disclaimer()));
+  app.append(topbar.el, left.el, main, foot, right.el, scrim);
+  document.body.replaceChildren(app, announcer);
+
   if (!list.cases.length) {
+    app.classList.add('empty');
     scene.el.replaceChildren(h('div', { class: 'empty-state' },
       h('h2', {}, 'CT and MRI cases are on their way'),
       h('p', {}, 'Each case appears here as a scan is added, with window presets, three planes, structure names and teaching notes.'),
-      h('a', { href: '../index.html' }, 'Back to Radiology')));
-    credits.append(disclaimer());
-    chip.hidden = testBanner.hidden = true;
+      h('a', { href: '../index.html' }, 'Back to Radiology'), disclaimer()));
   }
 
   function showStatus(text, problems) {
     scene.status.hidden = !text;
     scene.status.classList.toggle('failed', Boolean(problems));
     scene.status.setAttribute('role', problems ? 'alert' : 'status');
-    scene.status.replaceChildren(h('p', {}, text), problems && h('ul', {}, problems.map(p => h('li', {}, p))));
+    scene.status.replaceChildren(...[h('p', {}, text), problems && h('ul', {}, problems.map(p => h('li', {}, p)))].filter(Boolean));
   }
 
-  function set(patch) {
-    Object.assign(ui, patch);
-    app.classList.toggle('rail', ui.rail);
-    app.classList.toggle('testing', ui.testing);
-    app.classList.toggle('drawer-open', ui.drawer);
-    stage.classList.toggle('info-open', ui.info && !ui.testing);
-    panel.setOpen(ui.info);
-    sidebar.setRail(ui.rail);
-    casesBtn.setAttribute('aria-expanded', String(ui.drawer));
-    // inert is ignored before 2023 browsers, where the scrim and Escape still close the drawer.
-    stage.inert = ui.drawer;
+  // Redraws the chrome from the viewport state and the flags. The images are drawn by the scene.
+  function set() {
+    const vs = scene.state;
     const c = ui.current;
-    if (c) {
+    const leftOpen = vs.narrow ? vs.drawer === 'left' : vs.panels.left;
+    const rightOpen = vs.narrow ? vs.drawer === 'right' : vs.panels.right;
+    const key = [vs.layout, vs.link, vs.annotations, vs.imageOnly, vs.narrow, vs.drawer, vs.panels.left, vs.panels.right, vs.panels.bar, ui.testing, ui.finding?.id, c?.id, vs.active, scene.ready].join();
+    if (key !== chromeKey) {
+      chromeKey = key;
+      for (const [name, on] of [['left-closed', !leftOpen], ['right-closed', !rightOpen], ['bar-closed', !vs.panels.bar], ['image-only', vs.imageOnly], ['testing', ui.testing], ['narrow', vs.narrow], ['drawer', Boolean(vs.drawer)]]) {
+        app.classList.toggle(name, on);
+      }
+      topbar.sync({ layout: vs.layout, link: vs.link, annotations: vs.annotations, imageOnly: vs.imageOnly, leftOpen, rightOpen, testing: ui.testing });
+      const barLabel = vs.panels.bar ? 'Hide the controls (B)' : 'Show the controls (B)';
+      barToggle.setAttribute('aria-label', barLabel);
+      barToggle.title = barLabel;
+      barToggle.setAttribute('aria-expanded', String(vs.panels.bar));
+      barToggle.replaceChildren(icon(vs.panels.bar ? 'chev-down' : 'chev-up'));
+      // inert is ignored before 2023 browsers, where the scrim and Escape still close the drawer.
+      main.inert = vs.narrow && Boolean(vs.drawer);
+      left.setTesting(ui.testing);
+      right.setTesting(ui.testing);
+      findingChip.hidden = !ui.finding || ui.testing;
+      if (ui.finding) findingChip.textContent = `Finding: ${ui.finding.title}`;
+      right.setFinding(ui.finding, ui.testing);
+    }
+    if (c && !switching) {
       document.title = `${ui.testing ? 'Test mode' : c.title} · ${TITLE}`;
-      note.hidden = !ui.finding || ui.testing;
-      if (ui.finding && note.dataset.id !== ui.finding.id) {
-        note.dataset.id = ui.finding.id;
-        note.replaceChildren(h('div', {}, h('h3', {}, ui.finding.title), h('p', {}, ui.finding.text)),
-          h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'Close the finding', title: 'Close the finding', onclick: () => set({ finding: null }) }, icon('close')));
+      const series = scene.ready ? activeSeries().id : '';
+      const nk = `${c.id}|${series}|${scene.ready}|${scene.presets().map(p => p.name)}`;
+      if (nk !== notesKey) {
+        notesKey = nk;
+        right.panel.refresh();
       }
-      const key = `${c.id}|${ui.series}|${scene.ready}|${scene.presets().map(p => p.name)}`;
-      if (key !== notesKey) {
-        notesKey = key;
-        panel.refresh();
-      }
-      for (const [i, li] of panel.el.querySelectorAll('.findings li').entries()) {
+      left.markShown([...new Set(vs.viewports.map(v => v.series))], vs.viewports[vs.active]?.series);
+      for (const [i, li] of right.panel.el.querySelectorAll('.findings li').entries()) {
         const on = c.findings[i].id === ui.finding?.id;
         li.classList.toggle('on', on);
         if (on) li.setAttribute('aria-current', 'true');
@@ -139,22 +172,29 @@ function start(cases) {
     }
     // Focus inside something that just disappeared would otherwise fall back to the page body.
     const focused = document.activeElement;
-    if (focused && focused !== document.body && !focused.getClientRects().length) stage.focus({ preventScroll: true });
+    if (focused && focused !== document.body && !focused.getClientRects().length) main.focus({ preventScroll: true });
     scene.schedule();
   }
 
   function selectCase(c) {
     const mine = ++caseToken;
-    closeDrawer();
-    chip.replaceChildren(h('h2', { class: 'chip-title' }, c.title), h('p', { class: 'chip-sub' }, `${REGION_NAMES[c.region]} · ${c.modality}`));
-    credits.replaceChildren(credit(c.source, { noun: 'Scan', changed: 'processed' }), disclaimer());
-    sidebar.select(c.id);
+    thumbs.hold();
+    dispatch({ type: 'closeDrawer' });
+    topbar.setCase(c);
+    left.select(c.id);
+    left.setSeries(c);
+    right.resetFinding();
     notesKey = '';
-    note.dataset.id = '';
-    // open() sets ui.current and ui.series before its first await, which the notes need.
+    chromeKey = '';
+    // The tabs are built after the scene has swapped the viewports to this case, and set() must not draw them before that.
+    switching = true;
     const opening = canDecompress ? scene.open(sessions.open(c), c) : null;
-    if (!opening) Object.assign(ui, { current: c, series: c.series[0].id });
-    panel.show(tabsFor(c));
+    if (!opening) {
+      Object.assign(ui, { current: c });
+      dispatch({ type: 'open' });
+    }
+    right.panel.show(tabsFor(c));
+    switching = false;
     if (!opening) {
       showStatus('This browser cannot unpack the scan files.', ['Use a current Chrome, Edge, Firefox or Safari 16.4 or later.']);
     } else {
@@ -168,25 +208,18 @@ function start(cases) {
         });
     }
     announcer.textContent = ui.testing ? 'Next case' : `${c.title}. ${REGION_NAMES[c.region]}, ${c.modality}.`;
-    set({});
+    set();
   }
 
   function setTesting(on) {
-    closeDrawer();
-    set({ testing: on });
+    dispatch({ type: 'closeDrawer' });
+    scene.changeUi({ testing: on });
   }
-  function setDrawer(open) {
-    set({ drawer: open });
-    if (open) sidebar.focusCurrent();
-    else casesBtn.focus({ preventScroll: true });
-  }
-  const closeDrawer = () => ui.drawer && setDrawer(false);
-
   function toggleFullscreen() {
     if (document.fullscreenElement) document.exitFullscreen();
-    else stage.requestFullscreen?.().catch(() => {});
+    else app.requestFullscreen?.().catch(() => {});
   }
-  document.addEventListener('fullscreenchange', () => scene.controls.setFullscreen(document.fullscreenElement === stage));
+  document.addEventListener('fullscreenchange', () => topbar.setFullscreen(document.fullscreenElement === app));
 
   let noticeTimer = 0;
   function flash(text, ms = 6000) {
@@ -207,46 +240,19 @@ function start(cases) {
     if (next) location.hash = `#/${next}`;
   };
 
-  const inList = e => e.target.closest?.('.sidebar');
-  const KEYS = {
-    arrowup: e => (e.shiftKey ? scene.pan(0, 40) : scene.step(-1)),
-    arrowleft: e => (e.shiftKey ? scene.pan(40, 0) : scene.step(-1)),
-    arrowdown: e => (e.shiftKey ? scene.pan(0, -40) : scene.step(1)),
-    arrowright: e => (e.shiftKey ? scene.pan(-40, 0) : scene.step(1)),
-    '+': () => scene.zoom(1.25),
-    '=': () => scene.zoom(1.25),
-    '-': () => scene.zoom(0.8),
-    enter: () => scene.markAtCursor(),
-    pageup: e => (inList(e) ? move(-1) : scene.step(-10)),
-    pagedown: e => (inList(e) ? move(1) : scene.step(10)),
-    home: () => scene.ends(false),
-    end: () => scene.ends(true),
-    ' ': () => scene.toggleCine(),
-    r: () => scene.reset(),
-    m: () => set({ tool: ui.tool === 'ruler' ? 'window' : 'ruler' }),
-    l: () => !ui.testing && set({ labels: !ui.labels }),
-    i: () => !ui.testing && set({ info: !ui.info }),
-    t: () => setTesting(!ui.testing),
-    f: toggleFullscreen,
-    j: () => move(1),
-    k: () => move(-1),
-    ...Object.fromEntries(Array.from({ length: 9 }, (_, i) => [String(i + 1), () => scene.setPreset(i)])),
-  };
-  bindKeys(KEYS, {
-    ready: () => ui.current,
-    // The slice slider and the other range inputs use these keys themselves, and a focused button or link owns Space.
-    skips: (key, target) => ((key === ' ' || key === 'enter') && target.matches('button, a, input, select, summary'))
-      || (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'home', 'end', 'pageup', 'pagedown'].includes(key) && target.matches('input')),
-  });
+  bindViewerKeys({ scene, ui, move, setTesting, toggleFullscreen });
+  // Escape closes the menu or notes first, then image only, then a maximized viewport, then a drawer.
   addEventListener('keydown', e => {
-    if (e.key === 'Escape' && ui.drawer) closeDrawer();
+    if (e.key !== 'Escape' || e.defaultPrevented || topbar.dismiss()) return;
+    const vs = scene.state;
+    if (vs.imageOnly) dispatch({ type: 'imageOnly', on: false });
+    else if (vs.maximized !== null) dispatch({ type: 'restore' });
+    else if (vs.drawer) dispatch({ type: 'closeDrawer' });
   });
-  roomy.addEventListener('change', () => set({ info: ids.length > 0 && roomy.matches, drawer: false }));
+  narrow.addEventListener('change', () => dispatch({ type: 'narrow', on: narrow.matches }));
 
-  viewport.insertBefore(scene.el, notice);
-  set({});
+  set();
   if (list.cases.length) {
-    viewport.append(scene.controls.el, panel.el);
     addEventListener('hashchange', route);
     route();
   }

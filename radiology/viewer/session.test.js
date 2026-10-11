@@ -114,3 +114,55 @@ test('only the last two cases stay open, and the oldest is stopped when a third 
   assert.notEqual(c, b);
   assert.ok(!isComplete(b.volume('t2')), 'the evicted case was stopped before it finished');
 });
+
+test('start takes the series on screen: the first one then the other shown one and the labels get their middle chunk before any second chunk', async () => {
+  const log = [];
+  serve({ log });
+  await createSession(mk('a')).start(['t2', 't1'], quiet);
+  const files = gz(log).map(p => p.split('/').slice(2).join('/'));
+  assert.deepEqual(files.slice(0, 3), ['t2/c1.gz', 't1/c1.gz', 'labels/c1.gz']);
+  assert.equal(files.length, 9);
+});
+
+test('a series that is not on screen is fetched after every chunk of the ones that are', async () => {
+  const log = [];
+  serve({ log });
+  await createSession(mk('a')).start(['t1'], quiet);
+  const folders = gz(log).map(p => p.split('/')[2]);
+  assert.ok(folders.lastIndexOf('t1') < folders.indexOf('t2'));
+  assert.ok(folders.lastIndexOf('labels') < folders.indexOf('t2'));
+});
+
+test('starting again with another series on top skips what is in and puts the new series first', async () => {
+  const log = [];
+  serve({ log });
+  const session = createSession(mk('a'));
+  let stopped = false;
+  await session.start(['t1'], { ...quiet, onChunk() { if (!stopped) { stopped = true; session.stop(); } } });
+  const before = gz(log).length;
+  await session.start(['t2', 't1'], quiet);
+  const again = gz(log).slice(before).map(p => p.split('/')[2]);
+  assert.equal(again[0], 't2');
+  for (const key of ['t1', 't2', 'labels']) assert.ok(isComplete(session.volume(key)), key);
+});
+
+test('the first chunk of a start goes alone, so the first image does not share the link with the rest', async () => {
+  const started = [];
+  let busy = 0;
+  const inner = globalThis.fetch;
+  serve();
+  const served = globalThis.fetch;
+  globalThis.fetch = async (url, opts) => {
+    if (!new URL(url).pathname.endsWith('.gz')) return served(url, opts);
+    started.push(++busy);
+    await new Promise(resolve => setTimeout(resolve, 8));
+    busy--;
+    return served(url, opts);
+  };
+  try {
+    await createSession(mk('a')).start(['t1'], quiet);
+  } finally {
+    globalThis.fetch = inner;
+  }
+  assert.equal(started[1], 1, 'the second chunk request waited for the first');
+});

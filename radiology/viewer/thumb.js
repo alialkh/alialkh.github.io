@@ -1,38 +1,33 @@
-// A small picture of the middle axial slice for the sidebar. It fetches only the middle chunk, and only once the item is on screen.
+// Small pictures of the middle axial slice for the sidebar. A series thumbnail is drawn from a volume that is already loaded.
+// A case thumbnail fetches its first series' middle chunk alone, at low priority, when the queue asks for it.
 import { fetchJson } from '../core/json.js';
-import { chunkOrder, startSlice } from './chunks.js';
+import { startSlice } from './chunks.js';
 import { streamVolume } from './loader.js';
 import { createVolume } from './volume.js';
 import { extractSlice } from './planes.js';
 import { applyLut, autoWindow, windowLut } from './window.js';
+import { createThumbQueue } from './thumb-queue.js';
 
-async function draw(c, canvas) {
+// vol must hold its middle slice. CT uses the series' default window, MR a window from that one slice.
+export function drawVolumeThumb(canvas, vol, series) {
+  const [nx, ny, nz] = vol.dims;
+  const slice = extractSlice(vol, 'axial', startSlice(nz));
+  const win = series.windows.find(w => w.name === series.defaultWindow) ?? autoWindow(slice);
+  Object.assign(canvas, { width: nx, height: ny });
+  const image = new ImageData(nx, ny);
+  applyLut(slice, windowLut(win.center, win.width), new Uint32Array(image.data.buffer));
+  canvas.getContext('2d').putImageData(image, 0, 0);
+}
+
+const lowPriority = (url, options) => fetch(url, { ...options, priority: 'low' });
+
+async function fetchThumb(c, canvas) {
   const series = c.series[0];
   const url = new URL('vol.json', series.url);
   const meta = await fetchJson(url);
   const vol = createVolume(meta);
-  const done = await streamVolume(vol, meta, url, { signal: new AbortController().signal, limit: 1 });
-  if (!done) return;
-  const [nx, ny, nz] = vol.dims;
-  const chunk = meta.chunks[chunkOrder(meta.chunks, nz)[0]];
-  const win = series.windows.find(w => w.name === series.defaultWindow) ?? autoWindow(vol.data.subarray(chunk.z0 * nx * ny, chunk.z1 * nx * ny));
-  Object.assign(canvas, { width: nx, height: ny });
-  const image = new ImageData(nx, ny);
-  applyLut(extractSlice(vol, 'axial', startSlice(nz)), windowLut(win.center, win.width), new Uint32Array(image.data.buffer));
-  canvas.getContext('2d').putImageData(image, 0, 0);
+  const done = await streamVolume(vol, meta, url, { signal: new AbortController().signal, limit: 1, fetchFn: lowPriority });
+  if (done) drawVolumeThumb(canvas, vol, series);
 }
 
-const seen = typeof IntersectionObserver === 'function' ? new IntersectionObserver((entries, observer) => {
-  for (const { isIntersecting, target } of entries) {
-    if (!isIntersecting) continue;
-    observer.unobserve(target);
-    target.drawThumb().catch(error => console.warn('Thumbnail failed:', error.message));
-  }
-}) : null;
-
-// Draws when the canvas first scrolls into view. Browsers without IntersectionObserver draw at once.
-export function lazyThumb(c, canvas) {
-  canvas.drawThumb = () => draw(c, canvas);
-  if (seen) seen.observe(canvas);
-  else canvas.drawThumb().catch(() => {});
-}
+export const createThumbs = () => createThumbQueue({ load: fetchThumb });

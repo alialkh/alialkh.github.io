@@ -1,15 +1,18 @@
-// What the info panel says: one renderer per tab, rebuilt whenever the case, the series or the active finding changes.
+// What the side panel says: one renderer per tab, rebuilt whenever the case, the active series or the active finding changes.
 import { h } from '../core/dom.js';
+import { DISCLAIMER } from '../core/shell.js';
+import { credit } from '../core/credit.js';
 import { PLANE_NAMES, planeInfo, indexToPosition } from './planes.js';
 import { structuresPresent, cssColor } from './labels.js';
 import { windowEnds } from './window.js';
 
-export const TAB_NAMES = { overview: 'Overview', findings: 'Findings', anatomy: 'Anatomy', tips: 'Tips' };
-export const tabsFor = c => ['overview', ...(c.findings.length ? ['findings'] : []), ...(c.labels ? ['anatomy'] : []), 'tips']
+export const TAB_NAMES = { overview: 'Overview', findings: 'Findings', anatomy: 'Anatomy', tips: 'Tips', credits: 'Credits' };
+export const tabsFor = c => ['overview', ...(c.findings.length ? ['findings'] : []), ...(c.labels ? ['anatomy'] : []), 'tips', 'credits']
   .map(id => ({ id, name: TAB_NAMES[id] }));
 
 const section = (title, ...body) => h('section', {}, h('h3', {}, title), ...body);
 const unit = c => (c.modality === 'CT' ? ' HU' : '');
+const link = (href, text) => h('a', { href, rel: 'noopener', target: '_blank' }, text ?? href);
 
 const ORIENT = 'The letters at the edges of each image name the direction: R and L for the patient\'s right and left, A and P for front and back, S and I for head and feet. '
   + 'On an axial slice the patient\'s right is on the left of the screen and the front of the body is at the top.';
@@ -17,10 +20,15 @@ const ORIENT = 'The letters at the edges of each image name the direction: R and
 const KEYS = [
   ['Scroll', 'Mouse wheel, Up and Down arrows, or one finger dragging up and down. Page Up and Page Down move 10 slices. Home and End go to the first and last slice.'],
   ['Window', 'Drag with the left button, or use the Level and Width sliders. Drag right to widen, drag up to brighten. Keys 1 to 9 pick a preset.'],
-  ['Zoom and pan', 'Drag with the right button or pinch to zoom, hold Shift while dragging or use the middle button to pan. From the keyboard, plus and minus zoom and Shift with the arrows pans. Double click or R resets.'],
-  ['Measure', 'M turns the ruler on. Drag across the image to read a distance in millimetres. From the keyboard, Enter drops the first and then the second end at the crosshair. Scroll the other planes in three-plane view to move the crosshair.'],
-  ['Other', 'L labels, I this panel, T test mode, F fullscreen, Space plays the slices, J and K change case.'],
+  ['Zoom and pan', 'Drag with the right button or pinch to zoom, hold Shift while dragging or use the middle button to pan. From the keyboard, plus and minus zoom and Shift with the arrows pans. Double click or R resets the active viewport.'],
+  ['Measure', 'M turns the ruler on. Drag across the image to read a distance in millimetres. From the keyboard, Enter drops the first and then the second end at the crosshair.'],
+  ['Viewports', 'Click a viewport to make it active. The wheel, window, zoom and pan act under the pointer, the keys on the active one. Drag a title bar onto another viewport to swap them, or drag a series from the list onto one. '
+    + 'With a title bar focused, Alt and an arrow key swap with the neighbour. Double click a title bar or press X to fill the grid, Escape to restore. V links the viewports so the same planes stay on the same slice.'],
+  ['Panels', 'C the case list, I this panel, B the control bar, A the corner text, Z only the images, F fullscreen, T test mode.'],
+  ['Other', 'L labels, Space plays the slices, J and K change case.'],
 ];
+
+const urlsIn = text => [...text.matchAll(/https?:\/\/[^\s)]+/g)].map(m => m[0].replace(/[.,;]+$/, ''));
 
 const TABS = {
   overview: ({ c, series }) => [
@@ -31,7 +39,7 @@ const TABS = {
   ],
 
   findings: ({ c, ui, dims, spacing, show }) => [
-    h('p', { class: 'hint' }, 'Show me moves the image to the finding and marks it with a ring.'),
+    h('p', { class: 'hint' }, 'Show me moves a viewport to the finding and marks it with a ring.'),
     h('ol', { class: 'findings' }, c.findings.map(f => {
       const count = dims && planeInfo(f.plane, dims, spacing).count;
       const where = `${PLANE_NAMES[f.plane]}${count ? `, slice ${indexToPosition(f.plane, f.index, count) + 1} of ${count}` : ''}`;
@@ -61,8 +69,30 @@ const TABS = {
       const [low, high] = windowEnds({ center, width });
       return h('li', {}, h('strong', {}, `${i + 1}. ${name}`), `: level ${Math.round(center)}, width ${Math.round(width)}. Black at ${Math.round(low)}${unit(c)} and below, white at ${Math.round(high)}${unit(c)} and above.`);
     }))),
+    section('Corner text', h('p', {}, 'Im is the image number out of the total. Loc is the distance in millimetres from the first image of the stack, because these scans carry no table position. '
+      + 'Sp is the spacing between neighbouring slices. WW and WL are the window width and level, and HU or Intensity is the value under the pointer.')),
     section('Controls', h('dl', { class: 'keys' }, KEYS.flatMap(([term, text]) => [h('dt', {}, term), h('dd', {}, text)]))),
   ],
+
+  // The credit line is the one core/credit.js builds for the page, word for word. The rest is the same facts laid out to read.
+  credits: ({ c, dims, spacing }) => {
+    const s = c.source;
+    const links = urlsIn(s.attribution);
+    return [
+      h('p', { class: 'hint' }, 'CC BY and CC BY-SA ask that this credit stays with the scan. A short form is always shown over the first image.'),
+      h('div', { class: 'credit-block' }, credit(s, { noun: 'Scan', changed: 'processed' })),
+      section('Source', h('dl', { class: 'facts' },
+        h('dt', {}, 'Dataset'), h('dd', {}, s.short ?? s.author),
+        h('dt', {}, 'Author'), h('dd', {}, s.author),
+        h('dt', {}, 'License'), h('dd', {}, link(s.licenseUrl, s.license)),
+        h('dt', {}, 'Source'), h('dd', {}, link(s.url)),
+        h('dt', {}, 'Case'), h('dd', {}, c.id),
+        dims && [h('dt', {}, 'Volume'), h('dd', {}, `${dims.join(' × ')} voxels, ${spacing.map(v => Number(v.toFixed(2))).join(' × ')} mm`)])),
+      links.length > 0 && section('Links in the credit', h('ul', {}, links.map(u => h('li', {}, link(u))))),
+      s.modified && section('What was changed', h('p', {}, s.modified)),
+      section('Use', h('p', {}, DISCLAIMER)),
+    ];
+  },
 };
 
 // ctx: { c, ui, series, dims, spacing, presets, show(finding), jump(structure) }

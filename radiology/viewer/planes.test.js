@@ -129,3 +129,8 @@ test('extractSlice reuses a right-sized output and keeps the volume dtype', () =
   const labels = { data: Uint8Array.from(vol.data, v => v % 200), dims: DIMS, spacing: SPACING };
   assert.ok(extractSlice(labels, 'sagittal', 0) instanceof Uint8Array);
 });
+
+test('the step between slices is the spacing along the axis the plane scrolls through', () => {
+  const step = plane => planeInfo(plane, DIMS, SPACING).step;
+  assert.deepEqual(PLANES.map(step), [3, 2, 1]);
+});

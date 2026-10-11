@@ -10,6 +10,16 @@ export function chunkOrder(chunks, nz) {
   return chunks.map((chunk, i) => ({ i, d: distance(chunk) })).sort((a, b) => a.d - b.d).map(c => c.i);
 }
 
+// The order to fetch chunks across several volumes. parts: [{ key, chunks, nz }]. Volumes in eager (most important first) each give their middle chunk
+// before any volume gives a second one, so every viewport on screen has an image early. After that each volume finishes in turn, eager ones first.
+export function loadOrder(parts, eager) {
+  const byKey = new Map(parts.map(p => [p.key, p]));
+  const first = [...new Set(eager)].filter(key => byKey.has(key));
+  const sequence = key => chunkOrder(byKey.get(key).chunks, byKey.get(key).nz).map(i => ({ key, i }));
+  const rest = parts.map(p => p.key).filter(key => !first.includes(key));
+  return [...first.map(key => sequence(key)[0]), ...first.flatMap(key => sequence(key).slice(1)), ...rest.flatMap(sequence)];
+}
+
 export const startSlice = nz => middle(nz);
 
 // Problems in a vol.json, as text. Empty when it can be loaded.

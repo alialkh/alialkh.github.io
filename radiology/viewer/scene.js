@@ -1,206 +1,144 @@
-// The image side of the page: three panes, the control bar and every action that moves the cursor, the window or the view.
-// ui is the one shared state object. The page owns the chrome fields, the scene owns the rest. changed() asks the page to redraw its chrome.
-import { h } from '../core/dom.js';
-import { PLANES, planeInfo, indexToPosition, positionToIndex, cursorIndex, withIndex, findingCursor, imagePoint } from './planes.js';
-import { windowLut, dragWindow, autoWindow, valueRange } from './window.js';
-import { HOME, zoomAt, clampPan } from './view.js';
-import { movePosition, accumulate } from './input.js';
+// The image side of the page: the grid of viewports, the control bar and every action that moves a cursor, a window or a view.
+// All viewport state is one object, `vs`, changed only through dispatch() and the pure reducer in state.js. ui holds the flags that are not about viewports.
+import { PLANES, planeInfo, indexToPosition, cursorIndex, findingCursor, imagePoint } from './planes.js';
+import { dragWindow } from './window.js';
+import { zoomAt, clampPan } from './view.js';
+import { accumulate } from './input.js';
 import { startSlice } from './chunks.js';
-import { readyRange, isComplete } from './volume.js';
 import { centroidCursor } from './labels.js';
-import { createPane } from './pane.js';
+import { reduce } from './state.js';
+import { scrollCursor, seekCursor, crosshairShown } from './link.js';
+import { resolveWindow, presetsFor, limitsFor } from './windows.js';
+import { neighbour, defaultFill } from './layouts.js';
+import { creditShort } from './annotate.js';
+import { createGrid } from './grid.js';
 import { createControls } from './controls.js';
+import { createWindowing } from './windowing.js';
 
-const CT_LIMITS = { min: -1024, max: 3071 };
-
-export function createScene(ui, { stage, changed, onProgress }) {
+// hooks: changed(prev, next) after every state change, progress(fraction), error(text), series(key) when a series has its middle slices.
+export function createScene(ui, { app, initial, hooks }) {
+  let vs = initial;
   let session = null;
-  let vol = null;
-  let grid = null;
+  let dims = null;
+  let spacing = null;
+  let infos = null;
   let token = 0;
   let scheduled = false;
+  let streamKey = '';
+  let placing = false;
   let cineCarry = 0;
   let cineLast = 0;
-  const lut = new Uint32Array(65536);
-  let lutKey = '';
-  let lutId = 0;
-  const autos = new Map();
+  let autoVersion = 0;
+  const thumbed = new Set();
+  const last = [];
+  const tall = matchMedia('(max-width: 800px) and (orientation: portrait)');
   // Keys and buttons can arrive before the scan has.
-  const guard = fn => (...args) => (vol ? fn(...args) : undefined);
+  const guard = fn => (...args) => (dims ? fn(...args) : undefined);
 
-  const status = h('div', { class: 'status', role: 'status' });
-  const panes = Object.fromEntries(PLANES.map(plane => [plane, createPane(plane, {
-    tool: () => ui.tool,
-    scroll: (p, steps) => scroll(p, steps),
-    window: (dx, dy) => setWindow(dragWindow({ center: ui.center, width: ui.width }, dx, dy), true),
-    view: onView,
-    click: (p, voxel) => {
-      if (voxel) ui.cursor = voxel;
-      activate(p);
-    },
-    measure: onMeasure,
-    reset: () => reset(),
-    activate,
-  })]));
-  const el = h('div', { class: 'panes', 'data-layout': ui.layout }, Object.values(panes).map(p => p.el), status);
+  const seriesOf = id => ui.current.series.find(s => s.id === id);
+  const volOf = id => session.volume(id);
+  const windowing = createWindowing(volOf);
+  const infoOf = plane => infos[plane];
+  const active = () => vs.viewports[vs.active];
+  const windowOf = vp => resolveWindow(vp.win, seriesOf(vp.series), windowing.autos.get(vp.series));
+  const presets = () => (dims ? presetsFor(seriesOf(active().series), windowing.autos.get(active().series)) : []);
 
-  const controls = createControls(stage, Object.fromEntries(Object.entries({
-    cine: () => setCine(!ui.cine),
-    speed: s => { ui.speed = s; },
-    seek: position => seek(ui.active, position),
-    plane: activate,
-    series: setSeries,
-    preset: i => setPreset(presets()[i]),
-    invert: () => { ui.invert = !ui.invert; schedule(); },
-    level: value => setWindow({ center: value, width: ui.width }, true),
-    width: value => setWindow({ center: ui.center, width: value }, true),
-    opacity: value => { ui.opacity = value; el.style.setProperty('--label-opacity', String(value)); schedule(); },
-    labels: () => changeUi({ labels: !ui.labels }),
-    ruler: () => changeUi({ tool: ui.tool === 'ruler' ? 'window' : 'ruler' }),
-    layout: () => changeUi({ layout: ui.layout === 'mpr' ? 'stack' : 'mpr' }),
-    reset: () => reset(),
-    info: () => changeUi({ info: !ui.info }),
-    test: () => scene.on.test(),
-    fullscreen: () => scene.on.fullscreen(),
-  }).map(([name, fn]) => [name, ['test', 'fullscreen', 'info'].includes(name) ? fn : guard(fn)])), () => ui.cine);
-
-  const series = () => ui.current.series.find(s => s.id === ui.series);
-  const infoOf = plane => grid[plane];
-  const changeUi = patch => { Object.assign(ui, patch); changed(); };
-
-  function presets() {
-    const s = series();
-    if (s.windows.length) return s.windows;
-    const auto = autos.get(s.id);
-    return auto ? [{ name: 'Auto', center: auto.center, width: auto.width }, { name: 'Full range', center: (auto.max + auto.min) / 2, width: auto.max - auto.min + 1 }] : [];
-  }
-
-  // MR windows come from the arrived slices around the middle. Redone once the series is complete, unless the reader has moved it.
-  function measureAuto() {
-    const range = readyRange(vol, startSlice(vol.dims[2]));
-    if (!range) return false;
-    const size = vol.dims[0] * vol.dims[1];
-    const values = vol.data.subarray(range[0] * size, (range[1] + 1) * size);
-    const [min, max] = valueRange(values);
-    autos.set(series().id, { ...autoWindow(values), min, max });
-    return true;
-  }
-
-  const limitsFor = s => (s.windows.length ? CT_LIMITS : { min: Math.min(0, autos.get(s.id).min), max: autos.get(s.id).max });
-
-  function applyDefaultWindow() {
-    const s = series();
-    if (!s.windows.length && !measureAuto()) return false;
-    ui.limits = limitsFor(s);
-    ui.windowReady = true;
-    setPreset(s.windows.length ? s.windows.find(w => w.name === s.defaultWindow) : presets()[0]);
-    return true;
-  }
-
-  function setPreset(p) {
-    if (!p) return;
-    ui.center = p.center;
-    ui.width = p.width;
-    ui.windowName = p.name;
-    ui.touched = false;
+  function dispatch(...actions) {
+    const prev = vs;
+    vs = actions.flat().reduce(reduce, vs);
+    if (vs === prev) return;
+    if (dims) restream();
     schedule();
+    hooks.changed(prev, vs);
   }
-
-  function setWindow({ center, width }, byHand) {
-    ui.center = center;
-    ui.width = width;
-    ui.windowName = null;
-    if (byHand) ui.touched = true;
+  const changeUi = patch => {
+    Object.assign(ui, patch);
     schedule();
-  }
+    hooks.changed(vs, vs);
+  };
 
-  function onChunk(key) {
-    if (key === ui.series && !ui.windowReady) {
-      applyDefaultWindow();
-    } else if (key === ui.series && isComplete(vol) && !series().windows.length && measureAuto()) {
-      ui.limits = limitsFor(series());
-      if (!ui.touched) setPreset(presets().find(p => p.name === ui.windowName) ?? presets()[0]);
-    }
-    onProgress(session.progress());
-    schedule();
+  // The series on screen, the active viewport's first, are fetched before the rest of the case.
+  const shown = () => [...new Set([active().series, ...vs.viewports.map(v => v.series)])];
+  function restream() {
+    const key = shown().join();
+    if (key === streamKey) return;
+    streamKey = key;
+    if (session.progress() < 1) stream();
   }
-
   // Chunks and errors from a case that has since been left must not touch the one on screen.
   function stream() {
     const mine = token;
-    session.start(ui.series, { onChunk: key => mine === token && onChunk(key), onError: error => mine === token && onError(error) });
+    session.start(shown(), { onChunk: key => mine === token && onChunk(key), onError: error => mine === token && onError(error) });
   }
-
-  function setSeries(id) {
-    if (id === ui.series) return;
-    ui.series = id;
-    vol = session.volume(id);
-    ui.windowReady = false;
-    applyDefaultWindow();
-    stream();
-    changed();
-  }
-
   function onError(error) {
     console.error('Scan failed to load:', error);
-    scene.on.error('Part of this scan could not be loaded. Reload the page to try again.');
+    hooks.error('Part of this scan could not be loaded. Reload the page to try again.');
   }
 
-  function scroll(plane, steps, wrap = false) {
-    const { count } = infoOf(plane);
-    const position = movePosition(indexToPosition(plane, cursorIndex(plane, ui.cursor), count), steps, count, wrap);
-    ui.cursor = withIndex(ui.cursor, plane, positionToIndex(plane, position, count));
-    activate(plane);
-  }
-  function seek(plane, position) {
-    const { count } = infoOf(plane);
-    ui.cursor = withIndex(ui.cursor, plane, positionToIndex(plane, Math.min(count - 1, Math.max(0, position)), count));
-    schedule();
-  }
-  function activate(plane) {
-    ui.active = plane;
+  function onChunk(key) {
+    if (key !== 'labels') {
+      if (seriesOf(key).windows.length < 2 && windowing.chunk(key)) autoVersion++;
+      if (!thumbed.has(key) && volOf(key).ready[startSlice(dims[2])]) {
+        thumbed.add(key);
+        hooks.series(key);
+      }
+    }
+    hooks.progress(session.progress());
     schedule();
   }
 
-  function onView(plane, { zoomBy, anchor, panBy }) {
-    let v = ui.views[plane];
+  function scroll(slot, steps, wrap = false) {
+    const vp = vs.viewports[slot];
+    dispatch({ type: 'cursor', slot, cursor: scrollCursor(vp, steps, infoOf(vp.plane).count, wrap) }, { type: 'activate', slot });
+  }
+  function seek(slot, position) {
+    const vp = vs.viewports[slot];
+    dispatch({ type: 'cursor', slot, cursor: seekCursor(vp, position, infoOf(vp.plane).count) });
+  }
+  function onView(slot, { zoomBy, anchor, panBy }) {
+    const vp = vs.viewports[slot];
+    let v = vp.view;
     if (zoomBy) v = zoomAt(v, zoomBy, anchor);
     if (panBy) v = { ...v, panX: v.panX + panBy[0], panY: v.panY + panBy[1] };
-    const { widthMm, heightMm } = infoOf(plane);
-    const fit = panes[plane].fit;
-    ui.views[plane] = clampPan(v, widthMm * fit * v.zoom, heightMm * fit * v.zoom);
-    schedule();
+    const { widthMm, heightMm } = infoOf(vp.plane);
+    const fit = grid.panes[slot].fit;
+    dispatch({ type: 'view', slot, view: clampPan(v, widthMm * fit * v.zoom, heightMm * fit * v.zoom) });
   }
-
-  function onMeasure(plane, phase, point, index) {
-    const { width, height } = infoOf(plane);
+  function onMeasure(slot, phase, point, index) {
+    const vp = vs.viewports[slot];
+    const { width, height } = infoOf(vp.plane);
     const p = [Math.min(width, Math.max(0, point[0])), Math.min(height, Math.max(0, point[1]))];
+    let m = vp.measure;
     if (phase === 'start') {
-      ui.measure = { plane, index, a: p, b: p };
+      m = { plane: vp.plane, index, a: p, b: p };
       placing = false;
+    } else if (m && phase === 'move') {
+      m = { ...m, b: p };
+    } else if (m && phase === 'end' && m.a[0] === m.b[0] && m.a[1] === m.b[1]) {
+      m = null;
     }
-    else if (ui.measure && phase === 'move') ui.measure = { ...ui.measure, b: p };
-    else if (ui.measure && phase === 'end' && ui.measure.a[0] === ui.measure.b[0] && ui.measure.a[1] === ui.measure.b[1]) ui.measure = null;
-    schedule();
+    dispatch({ type: 'measure', slot, measure: m });
   }
-
   // The keyboard way to measure: the first Enter drops one end at the crosshair, the second drops the other.
-  let placing = false;
   function markAtCursor() {
     if (ui.tool !== 'ruler') return;
-    const plane = ui.active;
-    const point = imagePoint(plane, ui.cursor, vol.dims);
-    ui.measure = placing ? { ...ui.measure, b: point } : { plane, index: cursorIndex(plane, ui.cursor), a: point, b: point };
+    const vp = active();
+    const point = imagePoint(vp.plane, vp.cursor, dims);
+    const measure = placing && vp.measure ? { ...vp.measure, b: point } : { plane: vp.plane, index: cursorIndex(vp.plane, vp.cursor), a: point, b: point };
     placing = !placing;
-    schedule();
+    dispatch({ type: 'measure', slot: vs.active, measure });
   }
-
-  function reset() {
-    ui.views = { axial: HOME, coronal: HOME, sagittal: HOME };
-    ui.invert = false;
-    ui.measure = null;
-    applyDefaultWindow();
-    schedule();
+  function windowDrag(slot, dx, dy) {
+    const win = windowOf(vs.viewports[slot]);
+    if (win) dispatch({ type: 'window', slot, win: dragWindow(win, dx, dy) });
+  }
+  const setHand = patch => {
+    const win = windowOf(active());
+    if (win) dispatch({ type: 'window', slot: vs.active, win: { center: win.center, width: win.width, ...patch } });
+  };
+  function setPreset(i) {
+    const p = presets()[i];
+    if (p) dispatch({ type: 'window', slot: vs.active, win: { name: p.name } });
   }
 
   function setCine(on) {
@@ -208,34 +146,83 @@ export function createScene(ui, { stage, changed, onProgress }) {
     cineCarry = 0;
     cineLast = 0;
     if (on) requestAnimationFrame(tick);
-    changed();
+    changeUi({});
   }
   function tick(now) {
     if (!ui.cine) return;
     const r = accumulate(cineCarry, ((now - (cineLast || now)) / 1000) * ui.speed, 1);
     cineLast = now;
     cineCarry = r.carry;
-    if (r.steps) scroll(ui.active, r.steps, true);
+    if (r.steps) scroll(vs.active, r.steps, true);
     requestAnimationFrame(tick);
+  }
+
+  // The title bar and the gestures report here.
+  const on = {
+    tool: () => ui.tool,
+    scroll: guard(scroll),
+    window: guard(windowDrag),
+    view: guard(onView),
+    click: guard((slot, voxel) => dispatch(voxel ? [{ type: 'cursor', slot, cursor: voxel }, { type: 'activate', slot }] : { type: 'activate', slot })),
+    measure: guard(onMeasure),
+    reset: slot => dispatch({ type: 'reset', slot }),
+    activate: slot => dispatch({ type: 'activate', slot }),
+    maximize: slot => dispatch({ type: 'maximize', slot }),
+    assign: (slot, patch) => dispatch({ type: 'assign', slot, ...patch }),
+    swapWith: (a, b) => dispatch({ type: 'swap', a, b }),
+    swapKey(slot, direction) {
+      const to = neighbour(vs.layout, slot, direction, tall.matches);
+      if (to === null) return;
+      dispatch({ type: 'swap', a: slot, b: to });
+      grid.panes[to].title.el.focus({ preventScroll: true });
+    },
+  };
+  const grid = createGrid(on);
+  const controls = createControls(app, {
+    cine: () => setCine(!ui.cine),
+    speed: s => { ui.speed = s; },
+    seek: guard(position => seek(vs.active, position)),
+    preset: guard(setPreset),
+    invert: guard(() => dispatch({ type: 'invert', slot: vs.active })),
+    level: guard(value => setHand({ center: value })),
+    width: guard(value => setHand({ width: value })),
+    opacity: value => { ui.opacity = value; grid.el.style.setProperty('--label-opacity', String(value)); schedule(); },
+    labels: guard(() => dispatch({ type: 'labels', slot: vs.active })),
+    ruler: () => changeUi({ tool: ui.tool === 'ruler' ? 'window' : 'ruler' }),
+    reset: guard(() => dispatch({ type: 'reset', slot: vs.active })),
+  }, () => ui.cine);
+
+  // Draws one viewport when its state or anything it shows has changed, and skips it otherwise.
+  function paint(slot) {
+    const vp = vs.viewports[slot];
+    const vol = volOf(vp.series);
+    const labelVol = volOf('labels');
+    const win = windowOf(vp);
+    const table = win && windowing.lut(win, vp.invert);
+    const first = slot === (vs.maximized ?? 0);
+    const frame = {
+      vp, vol, labelVol, labelNames: ui.current.labels?.names ?? {}, win, lut: table?.lut, lutId: table?.id ?? 0, ui,
+      crosshair: crosshairShown(vs, slot), active: slot === vs.active, maximized: vs.maximized === slot, series: seriesOf(vp.series),
+      modality: ui.current.modality, credit: first ? creditShort(ui.current.source) : null,
+    };
+    const key = [vol.readyCount, labelVol?.readyCount, frame.lutId, ui.opacity, ui.testing, ui.finding?.id, frame.crosshair, frame.active, frame.maximized, vs.annotations, frame.credit, autoVersion].join('|');
+    if (last[slot]?.vp === vp && last[slot].key === key) return;
+    last[slot] = { vp, key };
+    grid.panes[slot].update(frame);
   }
 
   function draw() {
     scheduled = false;
-    if (!vol) return;
-    const key = `${ui.center}|${ui.width}|${ui.invert}`;
-    if (key !== lutKey) {
-      lutKey = key;
-      windowLut(ui.center, ui.width, ui.invert, lut);
-      lutId++;
-    }
-    el.dataset.layout = ui.layout;
-    for (const plane of PLANES) panes[plane].el.classList.toggle('active', plane === ui.active);
-    const frame = { ui, vol, labelVol: session.volume('labels'), labelNames: ui.current.labels?.names ?? {}, lut, lutId };
-    for (const plane of ui.layout === 'mpr' ? PLANES : [ui.active]) panes[plane].update(frame);
-    const { count } = infoOf(ui.active);
+    if (!dims) return;
+    grid.apply(vs, tall.matches);
+    for (const slot of vs.maximized === null ? vs.viewports.keys() : [vs.maximized]) paint(slot);
+    const vp = active();
+    const s = seriesOf(vp.series);
+    const a = windowing.autos.get(vp.series);
+    const { count } = infoOf(vp.plane);
     controls.sync({
-      ui, count, case: ui.current, presets: presets(),
-      position: indexToPosition(ui.active, cursorIndex(ui.active, ui.cursor), count),
+      ui, vp, count, presets: presetsFor(s, a), win: windowOf(vp), limits: limitsFor(s, a), c: ui.current,
+      position: indexToPosition(vp.plane, cursorIndex(vp.plane, vp.cursor), count),
     });
   }
   function schedule() {
@@ -243,60 +230,67 @@ export function createScene(ui, { stage, changed, onProgress }) {
     scheduled = true;
     requestAnimationFrame(draw);
   }
+  tall.addEventListener('change', schedule);
 
-  const scene = {
-    el,
+  return {
+    el: grid.el,
+    status: grid.status,
     controls,
-    status,
     schedule,
-    on: { test() {}, fullscreen() {}, error() {} },
-    get ready() { return Boolean(vol); },
-    get dims() { return vol?.dims ?? null; },
-    get spacing() { return vol?.spacing ?? null; },
-    presets: () => (vol ? presets() : []),
-    step: guard((steps, wrap) => scroll(ui.active, steps, wrap)),
-    ends: guard(last => seek(ui.active, last ? Infinity : 0)),
-    setPreset: guard(i => setPreset(presets()[i])),
-    reset: guard(reset),
-    zoom: guard(factor => onView(ui.active, { zoomBy: factor, anchor: { x: 0, y: 0 } })),
-    pan: guard((dx, dy) => onView(ui.active, { panBy: [dx, dy] })),
+    dispatch,
+    changeUi,
+    get state() { return vs; },
+    get ready() { return Boolean(dims); },
+    get dims() { return dims; },
+    get spacing() { return spacing; },
+    presets,
+    step: guard((steps, wrap) => scroll(vs.active, steps, wrap)),
+    ends: guard(lastOne => seek(vs.active, lastOne ? Infinity : 0)),
+    setPreset: guard(setPreset),
+    reset: guard(() => dispatch({ type: 'reset', slot: vs.active })),
+    zoom: guard(factor => onView(vs.active, { zoomBy: factor, anchor: { x: 0, y: 0 } })),
+    pan: guard((dx, dy) => onView(vs.active, { panBy: [dx, dy] })),
     markAtCursor: guard(markAtCursor),
     toggleCine: guard(() => setCine(!ui.cine)),
-    showFinding(f) {
-      if (f.series && f.series !== ui.series) setSeries(f.series);
-      if (f.window) setPreset(presets().find(p => p.name === f.window));
-      ui.cursor = findingCursor(f, vol.dims);
-      ui.active = f.plane;
-      changeUi({ finding: f });
-    },
-    jumpTo(structure) {
-      ui.cursor = centroidCursor(structure.centroid, vol.dims);
-      schedule();
-    },
+    toggleLabels: guard(() => dispatch({ type: 'labels', slot: vs.active })),
+    assign: on.assign,
+    showFinding: guard(f => {
+      ui.finding = f;
+      dispatch({ type: 'showFinding', finding: f, cursor: findingCursor(f, dims) });
+    }),
+    jumpTo: guard(structure => dispatch({ type: 'cursor', slot: vs.active, cursor: centroidCursor(structure.centroid, dims) })),
+    // The series' middle slice as a picture for the sidebar, once that slice is in.
+    volume: id => (dims ? volOf(id) : null),
     // Opens a case from a session. Resolves when the first chunks are asked for, and rejects with problems when the case does not fit together.
     async open(next, c) {
       const mine = ++token;
       session?.stop();
       session = next;
-      vol = null;
-      autos.clear();
-      Object.assign(ui, {
-        current: c, series: c.series[0].id, active: 'axial', views: { axial: HOME, coronal: HOME, sagittal: HOME },
-        invert: false, measure: null, finding: null, cine: false, windowReady: false, touched: false, windowName: null,
-        limits: CT_LIMITS, center: 0, width: 1,
-      });
+      dims = null;
+      windowing.clear();
+      thumbed.clear();
+      last.length = 0;
+      streamKey = '';
+      placing = false;
+      Object.assign(ui, { current: c, finding: null, cine: false });
+      dispatch({ type: 'open' });
+      grid.setSeries(c.series.map(({ id, name }) => ({ id, name })));
       await next.ready();
       if (mine !== token) return;
-      vol = next.volume(ui.series);
-      grid = Object.fromEntries(PLANES.map(p => [p, planeInfo(p, vol.dims, vol.spacing)]));
-      ui.cursor = [vol.dims[0] >> 1, vol.dims[1] >> 1, startSlice(vol.dims[2])];
-      applyDefaultWindow();
+      const vol = next.volume(c.series[0].id);
+      dispatch({
+        type: 'ready', cursor: [vol.dims[0] >> 1, vol.dims[1] >> 1, startSlice(vol.dims[2])],
+        fill: defaultFill({ series: c.series, spacing: vol.spacing, labels: Boolean(c.labels) }),
+      });
+      [dims, spacing] = [vol.dims, vol.spacing];
+      infos = Object.fromEntries(PLANES.map(p => [p, planeInfo(p, dims, spacing)]));
+      streamKey = shown().join();
       stream();
+      hooks.progress(session.progress());
       // Draw now, so the page can drop its loading cover without a frame of the last case showing.
       scheduled = true;
       draw();
-      changed();
+      hooks.changed(vs, vs);
     },
   };
-  return scene;
 }

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { gzipSync } from 'node:zlib';
-import { streamVolume } from './loader.js';
+import { streamVolume, runJobs } from './loader.js';
 import { createVolume, isComplete } from './volume.js';
 
 // 2 by 2 voxels, 8 slices, chunks of 2. Every voxel holds its slice number. Slice 4 is the middle one, in c2.
@@ -90,4 +90,63 @@ test('after one chunk fails no further chunks are requested', async () => {
   // The other workers are still finishing their own chunks, so give them time to ask for more if they were going to.
   await new Promise(resolve => setTimeout(resolve, 30));
   assert.deepEqual([...log].sort(), ['c1.gz', 'c2.gz', 'c3.gz']);
+});
+
+// Counts how many requests are open when each one starts.
+function counting(inner) {
+  const started = [];
+  let open = 0;
+  const fetchFn = async (url, options) => {
+    started.push(++open);
+    await new Promise(resolve => setTimeout(resolve, 8));
+    try {
+      return await inner(url, options);
+    } finally {
+      open--;
+    }
+  };
+  return { fetchFn, started };
+}
+const jobsFor = (vol, base = 'http://x.test/a/') => meta.chunks.map(chunk => ({ vol, meta, chunk, base }));
+
+test('without ramp the first three chunks are requested together', async () => {
+  const { fetchFn, started } = counting(server());
+  await runJobs(jobsFor(createVolume(meta)), { signal: new AbortController().signal, fetchFn });
+  assert.deepEqual(started.slice(0, 3), [1, 2, 3]);
+});
+
+test('with ramp the first chunk goes alone, then the others share the link three at a time', async () => {
+  const log = [];
+  const { fetchFn, started } = counting(server({ log }));
+  const vol = createVolume(meta);
+  const done = await runJobs(jobsFor(vol), { signal: new AbortController().signal, fetchFn, ramp: true });
+  assert.equal(done, true);
+  assert.equal(started[0], 1);
+  assert.equal(started[1], 1, 'the second request waited for the first to finish');
+  assert.equal(Math.max(...started), 3);
+  assert.equal(log[0], 'c0.gz', 'jobs run in the order given');
+  assert.ok(isComplete(vol));
+});
+
+test('jobs from two volumes land in their own volume and report their key', async () => {
+  const a = createVolume(meta);
+  const b = createVolume(meta);
+  const keys = [];
+  const jobs = [{ ...jobsFor(a)[0], key: 'a' }, { ...jobsFor(b)[1], key: 'b' }];
+  await runJobs(jobs, { signal: new AbortController().signal, fetchFn: server(), onChunk: (chunk, job) => keys.push(`${job.key}${chunk.z0}`) });
+  assert.deepEqual(keys.sort(), ['a0', 'b2']);
+  assert.deepEqual([a.ready[0], a.ready[2], b.ready[0], b.ready[2]], [1, 0, 0, 1]);
+});
+
+test('with ramp, a failing first chunk stops everything and nothing else is requested', async () => {
+  const log = [];
+  await assert.rejects(runJobs(jobsFor(createVolume(meta)), { signal: new AbortController().signal, fetchFn: server({ log, badSize: 'c0.gz' }), ramp: true }), /c0\.gz holds 7 bytes/);
+  assert.deepEqual(log, ['c0.gz']);
+});
+
+test('a stream that is aborted by its own first chunk resolves false', async () => {
+  const controller = new AbortController();
+  const vol = createVolume(meta);
+  const done = await streamVolume(vol, meta, base, { signal: controller.signal, fetchFn: server(), limit: 1, onChunk: () => controller.abort() });
+  assert.equal(done, false);
 });

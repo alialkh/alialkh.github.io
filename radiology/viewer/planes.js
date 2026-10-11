@@ -26,6 +26,8 @@ export function planeInfo(plane, dims, spacing) {
     plane, width, height, du, dv,
     widthMm: width * du, heightMm: height * dv,
     count: dims[AXIS[through]],
+    // Millimetres between neighbouring slices of this plane.
+    step: spacing[AXIS[through]],
     letters: {
       left: ENDS[u][0], right: ENDS[u][1],
       top: ENDS[va][vs > 0 ? 0 : 1], bottom: ENDS[va][vs > 0 ? 1 : 0],

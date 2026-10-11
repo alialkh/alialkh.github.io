@@ -1,42 +1,118 @@
-/* The viewer's page shell. The frame, stage, control bar and panel rules it builds on live in core/. */
+/* The viewer's page shell: a workstation that fills the window. A slim top bar, two collapsible sidebars, the viewports, and a control bar over a status strip. */
 :root {
+  /* Neutral near-black chrome. Text pairs pass WCAG AA on these surfaces. */
+  --bg: #0b0b0c;
+  --surface: #131416;
+  --surface-2: #1b1d20;
+  --surface-3: #26292d;
+  --border: #2a2d32;
+  --control-border: #6c727b;
+  --text: #e8eaed;
+  --muted: #a6adb7;
+  --glass: rgb(19 20 22 / 0.94);
   --finding: #ffe066;
   --finding-ring: #7df9ff;
+  --top-h: 42px;
+  --left-w: 216px;
+  --right-w: 316px;
+  --edge-w: 22px;
 }
+html, body { height: 100%; overflow: hidden; }
+body { display: block; min-height: 0; font-size: var(--fs-md); line-height: 1.5; }
 
-/* Title row, then the panes, then the control bar. The row stays out of the image, which fills its cell edge to edge. */
-.viewport { grid-template: auto minmax(0, 1fr) auto / minmax(0, 1fr); }
-.top-bar { position: relative; inset: auto; grid-row: 1; flex-wrap: wrap; align-items: stretch; }
-.panes { grid-row: 2; }
-.controls { grid-row: 3; }
-@media (min-width: 801px) {
-  .stage.info-open .viewport { padding-right: calc(var(--panel-w) + 2 * var(--gutter)); }
+.app {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background: var(--bg);
 }
+.topbar { grid-column: 1 / -1; grid-row: 1; }
+.side.left { grid-column: 1; grid-row: 2 / 4; }
+.main { grid-column: 2; grid-row: 2; }
+.foot { grid-column: 2; grid-row: 3; }
+.side.right { grid-column: 3; grid-row: 2 / 4; }
 
-.title-chip { max-width: 24rem; padding: 7px 14px 8px; }
-@media (max-width: 800px) {
-  .title-chip { flex: 1 1 10rem; max-width: none; }
-}
-.chip-title { font-size: var(--fs-base); }
-.finding-note {
+/* The top bar */
+.topbar {
+  position: relative;
+  z-index: 8;
   display: flex;
-  flex: 1 1 18rem;
-  align-items: flex-start;
-  gap: 6px;
-  min-width: 0;
-  max-height: 7.5rem;
-  overflow-y: auto;
-  padding: 6px 6px 6px 14px;
-  border-radius: var(--r-lg);
-  border-color: rgb(255 224 102 / 0.5);
+  align-items: center;
+  gap: 4px;
+  min-height: var(--top-h);
+  padding: 4px 8px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
-.finding-note > div { flex: 1; padding-top: 2px; }
-.finding-note h3 { margin: 0 0 1px; font-size: var(--fs-md); color: var(--finding); }
-.finding-note p { margin: 0; font-size: var(--fs-sm); line-height: 1.45; }
-.test-banner { margin-left: auto; }
+.topbar .icon-btn, .statusbar .icon-btn { width: 2.125rem; height: 2.125rem; min-height: 0; border-radius: var(--r-sm); }
+.topbar .icon { width: 1.125rem; height: 1.125rem; }
+.topbar-tools { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+.chip { display: flex; align-items: center; gap: 2px; min-width: 0; margin-left: 4px; }
+.chip-text { min-width: 0; }
+.chip-title { margin: 0; font-size: var(--fs-md); font-weight: 650; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: 0; }
+.chip-sub { margin: 0; font-size: var(--fs-xs); line-height: 1.25; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.test-chip { gap: 12px; }
+.test-chip p { margin: 0; font-size: var(--fs-sm); }
+.test-chip button { min-height: 2rem; padding: 0 14px; }
 
-.progress { position: absolute; z-index: 7; top: 0; left: 0; right: 0; height: 3px; pointer-events: none; }
+.progress { position: absolute; z-index: 9; left: 0; right: 0; bottom: -1px; height: 2px; pointer-events: none; }
 .progress::after { content: ""; display: block; height: 100%; width: calc(var(--p, 0) * 100%); background: var(--accent); transition: width var(--fast) linear; }
+
+/* The layout menu */
+.menu { position: relative; }
+.menu-list {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  right: 0;
+  display: grid;
+  min-width: 13rem;
+  padding: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--control-border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-2);
+}
+.menu-list button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 2.25rem;
+  padding: 0 10px;
+  border: 0;
+  background: none;
+  text-align: left;
+  font-size: var(--fs-sm);
+}
+.menu-list button:hover { background: var(--surface-3); }
+.menu-list button[aria-checked="true"] { color: var(--accent); background: var(--accent-soft); }
+.menu-list button:focus-visible { outline-offset: -3px; }
+
+/* The notes popover. It opens over the grid on request and nowhere else. */
+.notes-pop {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  left: 44px;
+  width: min(27rem, calc(100vw - 16px));
+  max-height: min(60vh, 30rem);
+  overflow-y: auto;
+  padding: 12px 44px 8px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--control-border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-2);
+  font-size: var(--fs-md);
+}
+.notes-pop .icon-btn { position: absolute; top: 6px; right: 6px; }
+.notes-pop h2 { margin: 0 0 4px; font-size: var(--fs-xs); font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.notes-pop p { margin: 0 0 10px; }
+
+/* The viewports */
+.main { position: relative; display: flex; min-width: 0; min-height: 0; background: #000; }
+.main:focus { outline: none; }
 
 .status {
   position: absolute;
@@ -48,11 +124,100 @@
   padding: 16px;
   text-align: center;
   color: var(--muted);
+  pointer-events: none;
 }
 .status p { margin: 0; }
-.status.failed { color: var(--text); }
+.status.failed { color: var(--text); pointer-events: auto; background: #000; }
 .status.failed p { font-size: var(--fs-lg); font-weight: 650; color: var(--bad); }
 .status.failed ul { max-width: 40rem; margin: 0 auto; padding: 0; list-style: none; font: var(--fs-md) var(--mono); text-align: left; }
+.empty-state { margin: auto; max-width: 30rem; padding: 32px 16px; text-align: center; }
+.empty-state h2 { font-size: var(--fs-xl); }
+.empty-state p { color: var(--muted); }
+.app.empty .foot, .app.empty .topbar-tools, .app.empty .side.right { display: none; }
 
-.case .thumb { object-fit: cover; background: #000; }
-.case-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.exit-only { display: none; }
+
+/* The control bar over the status strip */
+.foot { background: var(--surface); border-top: 1px solid var(--border); }
+.app.bar-closed .controls { display: none; }
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 1.875rem;
+  padding: 0 8px 0 4px;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+.statusbar .icon-btn { flex: none; width: 1.75rem; height: 1.75rem; }
+.statusbar .disclaimer { margin-left: auto; text-align: right; line-height: 1.3; }
+.notice { margin: 0; padding: 1px 10px; border-radius: var(--r-pill); background: var(--surface-3); color: var(--text); font-size: var(--fs-xs); }
+.finding-chip {
+  min-height: 0;
+  max-width: 22rem;
+  padding: 1px 10px;
+  border-color: rgb(255 224 102 / 0.5);
+  border-radius: var(--r-pill);
+  background: none;
+  color: var(--finding);
+  font-size: var(--fs-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Dragging a viewport or a series */
+.drag-ghost {
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  max-width: 16rem;
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 650 var(--fs-sm) var(--font);
+  box-shadow: var(--shadow-2);
+  pointer-events: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+body.dragging, body.dragging * { cursor: grabbing !important; user-select: none; }
+
+/* Only the images */
+.app.image-only { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+.app.image-only .main { grid-column: 1; grid-row: 1; }
+.app.image-only :is(.topbar, .side, .foot, .scrim) { display: none; }
+.app.image-only .exit-only {
+  position: absolute;
+  z-index: 7;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  min-height: 0;
+  padding: 0;
+  border-color: rgb(255 255 255 / 0.25);
+  background: rgb(0 0 0 / 0.55);
+  opacity: 0.45;
+}
+.app.image-only .exit-only:is(:hover, :focus-visible) { opacity: 1; }
+
+/* Narrow screens: the sidebars become drawers and the bar wraps */
+@media (max-width: 800px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .main, .foot { grid-column: 1; }
+  .topbar { flex-wrap: wrap; padding: 4px 6px; row-gap: 2px; }
+  .chip { flex: 1 1 8rem; }
+  .topbar-tools { margin-left: 0; flex: 1 0 100%; justify-content: space-between; }
+  .topbar .icon-btn, .statusbar .icon-btn { width: 2.25rem; height: 2.25rem; }
+  .statusbar { flex-wrap: wrap; row-gap: 0; padding: 2px 8px 2px 4px; }
+  .statusbar .disclaimer { flex: 1 1 10rem; font-size: 0.6875rem; }
+  .notes-pop { left: 6px; }
+  .menu-list { right: auto; left: 0; }
+  .test-chip p span { display: none; }
+}

@@ -1,45 +1,42 @@
-/* What is inside the control bar. The bar itself, its sliders and its idle fade are in core/controls.css. */
-.controls { width: min(100%, 980px); }
-.scrub { gap: 8px; }
-.scrub .icon-btn { flex: none; }
+/* The control bar. It collapses to the status strip under it, and fades while cine plays. */
+/* One row when the width allows. Otherwise the tools wrap under the slider, and the window sliders open on their own row. */
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0 14px; padding: 4px 10px 2px; transition: opacity var(--slow) var(--ease); }
+.app.idle .controls { opacity: 0; pointer-events: none; }
+.app.idle .main { cursor: none; }
+
+.scrub { flex: 1 1 24rem; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.scrub .icon-btn { flex: none; width: 2.125rem; height: 2.125rem; min-height: 0; }
+.scrub select { min-height: 2rem; padding: 0 0.4rem; border-color: var(--control-border); background: transparent; font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+.scrub select option { background: var(--surface-2); }
+.track { position: relative; flex: 1; display: flex; align-items: center; min-width: 0; }
+.track input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 26px; margin: 0; background: transparent; cursor: pointer; }
+.track input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: rgb(255 255 255 / 0.3); }
+.track input[type="range"]::-moz-range-track { height: 4px; border-radius: 2px; background: rgb(255 255 255 / 0.3); }
+.track input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -6px; border-radius: 50%; border: 2px solid #0b1220; background: var(--accent); }
+.track input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #0b1220; background: var(--accent); }
+.track input[type="range"]:focus-visible { outline-offset: 0; border-radius: var(--r-sm); }
 .counter { min-width: 4.5rem; text-align: right; font: var(--fs-xs)/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 
-.row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; padding-top: 2px; }
-.group { display: flex; align-items: center; gap: 6px; min-width: 0; }
-.toggles { margin-left: auto; gap: 2px; }
+.tools { flex: 0 1 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; }
+.tools .icon-btn { width: 2.125rem; height: 2.125rem; min-height: 0; }
 
-.seg { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--glass-border); border-radius: var(--r-md); background: rgb(255 255 255 / 0.04); }
-.seg button {
-  min-height: 2rem;
-  padding: 0 10px;
-  border: 0;
-  border-radius: var(--r-sm);
-  background: transparent;
-  color: var(--muted);
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  white-space: nowrap;
-}
+.seg { display: inline-flex; gap: 2px; max-width: 100%; padding: 2px; overflow-x: auto; scrollbar-width: none; border: 1px solid var(--border); border-radius: var(--r-md); background: rgb(255 255 255 / 0.03); }
+.seg button { min-height: 1.75rem; padding: 0 9px; border: 0; border-radius: var(--r-sm); background: transparent; color: var(--muted); font-size: var(--fs-sm); font-weight: 600; white-space: nowrap; }
 .seg button:hover { color: var(--text); background: rgb(255 255 255 / 0.06); }
 .seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); box-shadow: inset 0 0 0 1px rgb(124 183 255 / 0.45); }
 .seg button:focus-visible { outline-offset: -2px; }
-.presets { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
 .presets .n { margin-right: 6px; font-family: var(--mono); font-size: var(--fs-xs); opacity: 0.7; }
 
-.win-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0 14px; padding: 0 4px; }
-.field { flex: 1 1 11rem; gap: 8px; font-size: var(--fs-xs); color: var(--muted); }
+.win-row { display: none; flex: 1 0 100%; flex-wrap: wrap; align-items: center; gap: 0 14px; padding: 0 4px; }
+.win-row.open { display: flex; }
+.field { flex: 1 1 11rem; display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); color: var(--muted); }
 .field span { flex: none; min-width: 2.6rem; }
 .field .val { min-width: 2.8rem; text-align: right; color: var(--text); font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .field input[type="range"] { min-width: 6rem; }
-.win-toggle { display: none; }
 
-@media (max-width: 1100px) {
-  .win-toggle { display: inline-grid; }
-  .win-row:not(.open) { display: none; }
-}
 @media (max-width: 800px) {
-  .controls { width: 100%; }
-  .toggles { margin-left: 0; width: 100%; justify-content: space-between; }
-  .win-row .field { flex: 1 1 100%; }
+  .controls { padding: 2px 6px 0; }
   .scrub select { display: none; }
+  .tools { justify-content: space-between; }
+  .win-row .field { flex: 1 1 100%; }
 }

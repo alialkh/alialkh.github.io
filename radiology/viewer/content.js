@@ -21,7 +21,7 @@ const SHAPES = {
   case: {
     id: 'id', modality: ['CT', 'MR'], region: REGIONS, title: 'text', summary: 'text', vignette: 'text?',
     series: 'list', labels: 'object?', findings: 'list',
-    source: { author: 'text', license: 'text', licenseUrl: 'text', url: 'text', attribution: 'string', modified: 'string' },
+    source: { author: 'text', license: 'text', licenseUrl: 'text', url: 'text', attribution: 'string', modified: 'string', short: 'text?' },
   },
   series: { id: 'id', name: 'text', url: 'folder', windows: 'list', defaultWindow: 'string?' },
   window: { name: 'text', center: 'number', width: 'positive' },
