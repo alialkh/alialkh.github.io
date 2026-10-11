@@ -1,0 +1,27 @@
+# radiology
+Self-contained teaching module for med students. CT/MRI viewer, CT angiogram tour, echo library, POCUS simulator. Static files only, no build step, hosted free on GitHub Pages.
+
+Run: serve this folder over http, for example `python -m http.server 8000` (ES modules do not load from file://).
+Test: `node --test radiology/` from the repo root (Node 22, no install). Then open the page for the area you changed.
+
+## Isolation rule
+This folder must lift out into its own site (for example "The Budding Radiology") unchanged.
+- Every path is relative and stays inside `radiology/`. No absolute `/` paths.
+- No imports or links to the parent site's CSS, JS or pages. Styles live in `core/`.
+- Native ES modules, no bundler. Third-party code goes in `core/vendor/` with its version and license noted.
+
+## Map
+- `core/`   shared shell, loaders, tour and quiz engine. Read `core/CLAUDE.md`.
+- `viewer/` CT/MRI stack and 3-plane viewer. Read `viewer/CLAUDE.md`.
+- `cta/`    guided CT angiogram tour on the viewer. Read `cta/CLAUDE.md`.
+- `echo/`   cine loops, view atlas, quiz. Read `echo/CLAUDE.md`.
+- `pocus/`  ultrasound simulator game. Read `pocus/CLAUDE.md`.
+- `data/`   cases and clips. Read `data/INDEX.md`, never the files.
+- `docs/`   dataset licenses, content schemas. Open on demand.
+- `tools/`  offline Node scripts, not shipped. `add-clip.mjs` ingests echo clips. `run-tests.js` is the `main` in `package.json`, which is how `node --test radiology/` finds every `*.test.js`.
+
+## Rules
+- Educational use only. Every page shows the disclaimer from `core/`.
+- No real patient data. A dataset goes in `docs/LICENSES.md` with a license that allows republishing before any of its files enter `data/`.
+- First image in about 2 seconds. Load a low-res volume first, stream full-res after.
+- When a folder's purpose changes, its `CLAUDE.md` changes in the same commit.

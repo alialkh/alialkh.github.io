@@ -1,0 +1,480 @@
+[
+  {
+    "id": "plax",
+    "name": "Parasternal long axis",
+    "abbrev": "PLAX",
+    "window": "parasternal",
+    "probe": {
+      "site": "Left sternal border, usually in the third or fourth intercostal space, with the patient turned onto the left side.",
+      "chest": [
+        0.56,
+        0.42
+      ],
+      "notch": "Points toward the patient's right shoulder."
+    },
+    "screen": "The transducer is at the top of the sector. The RV lies in the near field, then the septum, the LV cavity and the inferolateral wall. The aortic root and left atrium are on the right of the screen and the LV apex points to the left, usually just off the image.",
+    "structures": [
+      "rv",
+      "ivs",
+      "lv",
+      "inferolateral-wall",
+      "aortic-root",
+      "aortic-valve",
+      "anterior-mitral-leaflet",
+      "posterior-mitral-leaflet",
+      "la",
+      "descending-aorta"
+    ],
+    "tips": [
+      "Move up or down one interspace until the aortic valve and mitral valve are both in view.",
+      "Aim for a septum and inferolateral wall that run nearly horizontal across the screen.",
+      "Rotate slightly until both the aortic and mitral leaflets open cleanly in the same plane.",
+      "Start deep enough to see the descending aorta behind the left atrium, then reduce depth to study the valves.",
+      "Ask the patient to breathe out and hold if lung blocks the image."
+    ],
+    "pitfalls": [
+      "An oblique cut makes the LV look short and the walls look thicker than they are.",
+      "Measuring walls or cavity size off-axis overestimates them.",
+      "A dark space only in front of the RV is often epicardial fat rather than fluid."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "rv-inflow",
+    "name": "Right ventricular inflow",
+    "abbrev": "RV inflow",
+    "window": "parasternal",
+    "probe": {
+      "site": "Same spot as the parasternal long axis, with the beam tilted down and medially.",
+      "chest": [
+        0.55,
+        0.44
+      ],
+      "notch": "Stays toward the patient's right shoulder while the beam is angled toward the patient's right hip."
+    },
+    "screen": "The RV fills the upper part of the sector with the right atrium below it, separated by the tricuspid valve. The IVC and coronary sinus enter the right atrium in the lower part of the image.",
+    "structures": [
+      "rv",
+      "tricuspid-valve",
+      "ra",
+      "coronary-sinus",
+      "ivc",
+      "eustachian-valve"
+    ],
+    "tips": [
+      "Start from a good parasternal long axis view.",
+      "Tilt the beam toward the patient's right hip until the LV disappears and the tricuspid valve comes into view.",
+      "Center the tricuspid valve in the sector so both leaflets open and close in plane.",
+      "Use this view to see tricuspid leaflets and the coronary sinus that apical views can miss."
+    ],
+    "pitfalls": [
+      "The Eustachian valve at the IVC entry can be mistaken for a mass or thrombus.",
+      "If any of the LV is still in view, the tilt is not yet enough."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "psax-av",
+    "name": "Parasternal short axis, aortic valve level",
+    "abbrev": "PSAX AV",
+    "window": "parasternal",
+    "probe": {
+      "site": "Left sternal border, same spot as the long axis, with the beam tilted up toward the base of the heart.",
+      "chest": [
+        0.56,
+        0.42
+      ],
+      "notch": "Rotated about 90 degrees clockwise from the long axis so it points toward the patient's left shoulder."
+    },
+    "screen": "The aortic valve sits in the center as a circle. The RVOT curves over the top from the tricuspid valve on the left of the screen to the pulmonic valve on the right. The left atrium is below the valve and the right atrium is on the lower left.",
+    "structures": [
+      "aortic-valve",
+      "right-coronary-cusp",
+      "left-coronary-cusp",
+      "noncoronary-cusp",
+      "la",
+      "ra",
+      "tricuspid-valve",
+      "rvot",
+      "pulmonic-valve",
+      "main-pulmonary-artery"
+    ],
+    "tips": [
+      "Center the aortic valve in the long axis first, then rotate clockwise about 90 degrees.",
+      "Tilt the beam up toward the right shoulder until the aortic valve appears as a circle.",
+      "In diastole the closed cusps form a three-pointed star.",
+      "Adjust tilt and rotation until the valve is round rather than oval."
+    ],
+    "pitfalls": [
+      "An oval valve means the cut is oblique and cusp shapes will be misread.",
+      "Count cusps in systole, when the valve opens, because a raphe can look like a commissure in diastole."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "psax-mv",
+    "name": "Parasternal short axis, mitral valve level",
+    "abbrev": "PSAX MV",
+    "window": "parasternal",
+    "probe": {
+      "site": "Left sternal border, same spot as the long axis, with the beam roughly perpendicular to the chest wall.",
+      "chest": [
+        0.56,
+        0.43
+      ],
+      "notch": "Points toward the patient's left shoulder."
+    },
+    "screen": "The LV is a round ring in the center with the RV as a crescent at the upper left. The mitral orifice opens like a fish mouth in diastole, with the anterior leaflet at the top and the posterior leaflet at the bottom. The septum is on the left, the anterior wall at the top, the lateral wall on the right and the inferior wall at the bottom.",
+    "structures": [
+      "rv",
+      "ivs",
+      "lv",
+      "anterior-mitral-leaflet",
+      "posterior-mitral-leaflet",
+      "anterior-wall",
+      "anterolateral-wall",
+      "inferolateral-wall",
+      "inferior-wall"
+    ],
+    "tips": [
+      "From the aortic valve level, tilt the beam toward the apex until the mitral leaflets appear.",
+      "Keep the LV round, which means the beam is cutting straight across it.",
+      "Sweep slowly through the leaflet tips to find the smallest orifice, especially when planimetry of mitral stenosis is needed."
+    ],
+    "pitfalls": [
+      "An oval LV means the cut is oblique.",
+      "Cutting above the leaflet tips overestimates the orifice area in mitral stenosis."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "psax-pm",
+    "name": "Parasternal short axis, papillary muscle level",
+    "abbrev": "PSAX PM",
+    "window": "parasternal",
+    "probe": {
+      "site": "Left sternal border, same spot or slightly lower than the long axis, with the beam tilted toward the apex.",
+      "chest": [
+        0.56,
+        0.44
+      ],
+      "notch": "Points toward the patient's left shoulder."
+    },
+    "screen": "The LV is a round ring with both papillary muscles inside it. The anterolateral muscle is on the right at about 4 o'clock and the posteromedial muscle on the lower left at about 8 o'clock. The RV sits as a crescent at the upper left.",
+    "structures": [
+      "rv",
+      "ivs",
+      "lv",
+      "anterolateral-papillary-muscle",
+      "posteromedial-papillary-muscle",
+      "anterior-wall",
+      "anterolateral-wall",
+      "inferolateral-wall",
+      "inferior-wall",
+      "pericardium"
+    ],
+    "tips": [
+      "Tilt further toward the apex from the mitral level until both papillary muscles appear.",
+      "Keep the LV round and the papillary muscles symmetric.",
+      "Use this level to judge overall LV function, since all three coronary territories are in one image.",
+      "Check the shape of the septum, which flattens when the RV is overloaded."
+    ],
+    "pitfalls": [
+      "An oblique cut makes the LV oval and can mimic septal flattening.",
+      "Including a papillary muscle in a wall measurement overestimates wall thickness."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "psax-apex",
+    "name": "Parasternal short axis, apical level",
+    "abbrev": "PSAX apex",
+    "window": "parasternal",
+    "probe": {
+      "site": "One interspace lower and slightly more lateral than the other short axis views, closer to the apex.",
+      "chest": [
+        0.59,
+        0.49
+      ],
+      "notch": "Points toward the patient's left shoulder."
+    },
+    "screen": "A small round LV cavity sits below the transducer with no papillary muscles inside it. The RV is small or absent at this level.",
+    "structures": [
+      "lv",
+      "lv-apex",
+      "ivs",
+      "anterior-wall",
+      "anterolateral-wall",
+      "inferior-wall",
+      "pericardium"
+    ],
+    "tips": [
+      "Slide the probe down toward the apex, or tilt further from the papillary muscle level.",
+      "Stop when the papillary muscles disappear but the cavity is still visible.",
+      "Keep the cavity round and watch every segment thicken in systole."
+    ],
+    "pitfalls": [
+      "The apex is easy to cut obliquely, which makes normal segments look abnormal.",
+      "Near-field clutter can hide or mimic apical thrombus."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "a4c",
+    "name": "Apical four chamber",
+    "abbrev": "A4C",
+    "window": "apical",
+    "probe": {
+      "site": "Over the apex beat, with the patient turned onto the left side.",
+      "chest": [
+        0.62,
+        0.55
+      ],
+      "notch": "Points to the patient's left, at about 3 o'clock, with the beam aimed toward the right shoulder."
+    },
+    "screen": "The apex is at the top of the sector. The LV is on the right of the screen and the RV on the left. The atria are at the bottom, with the left atrium on the right and the right atrium on the left.",
+    "structures": [
+      "lv",
+      "lv-apex",
+      "ivs",
+      "anterolateral-wall",
+      "rv",
+      "moderator-band",
+      "mitral-valve",
+      "tricuspid-valve",
+      "la",
+      "ra"
+    ],
+    "tips": [
+      "Feel for the apex beat and place the probe there, often lower and more lateral than expected.",
+      "Slide until the apex sits at the top center and the septum runs straight down the screen.",
+      "Rotate until both atrioventricular valves and both atria are fully open.",
+      "The LV should look long and bullet shaped, not round.",
+      "Keep the LVOT out of view so the plane stays posterior to the outflow tract."
+    ],
+    "pitfalls": [
+      "Foreshortening from a probe placed too high makes the apex look round and thick and hides apical wall motion and thrombus.",
+      "Tilting anteriorly brings in the LVOT and turns this into a five chamber view.",
+      "The thin middle of the interatrial septum can drop out and mimic a defect.",
+      "Small rotation errors change the apparent size of the RV."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "a5c",
+    "name": "Apical five chamber",
+    "abbrev": "A5C",
+    "window": "apical",
+    "probe": {
+      "site": "Over the apex beat, same spot as the four chamber view.",
+      "chest": [
+        0.62,
+        0.55
+      ],
+      "notch": "Points to the patient's left as in the four chamber view, with the beam tilted anteriorly toward the chest wall."
+    },
+    "screen": "The layout matches the four chamber view, with the LVOT and aortic valve opening in the center between the anterior mitral leaflet and the septum.",
+    "structures": [
+      "lv",
+      "ivs",
+      "lvot",
+      "aortic-valve",
+      "aortic-root",
+      "rv",
+      "mitral-valve",
+      "la",
+      "ra"
+    ],
+    "tips": [
+      "Start from a good four chamber view.",
+      "Tilt the beam slightly anterior until the aortic valve opens in the middle of the image.",
+      "Use the smallest tilt that shows the valve, and align the LVOT with the beam for Doppler."
+    ],
+    "pitfalls": [
+      "Do not use this view for chamber sizes, because the plane is tilted.",
+      "Too much tilt loses the atria and the true apex."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "a2c",
+    "name": "Apical two chamber",
+    "abbrev": "A2C",
+    "window": "apical",
+    "probe": {
+      "site": "Over the apex beat, same spot as the four chamber view.",
+      "chest": [
+        0.62,
+        0.55
+      ],
+      "notch": "Rotated about 60 degrees counterclockwise from the four chamber position, so it points up toward the patient's head and left."
+    },
+    "screen": "Only the left heart is shown, with the apex at the top and the left atrium at the bottom. The inferior wall is on the left of the screen and the anterior wall on the right.",
+    "structures": [
+      "lv",
+      "lv-apex",
+      "inferior-wall",
+      "anterior-wall",
+      "mitral-valve",
+      "la",
+      "left-atrial-appendage",
+      "coronary-sinus"
+    ],
+    "tips": [
+      "Start from a well centered four chamber view and keep the apex fixed while rotating.",
+      "Rotate counterclockwise until the RV and right atrium disappear.",
+      "Keep the LV long and bullet shaped, as in the four chamber view.",
+      "Use this view with the four chamber view for biplane ejection fraction."
+    ],
+    "pitfalls": [
+      "Foreshortening hides apical wall motion and thrombus.",
+      "Incomplete rotation leaves part of the RV in view and misplaces the walls."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "a3c",
+    "name": "Apical three chamber (apical long axis)",
+    "abbrev": "A3C",
+    "window": "apical",
+    "probe": {
+      "site": "Over the apex beat, same spot as the four chamber view.",
+      "chest": [
+        0.62,
+        0.55
+      ],
+      "notch": "Rotated a further 60 degrees or so counterclockwise from the two chamber position, so it points toward the patient's right shoulder as in the parasternal long axis."
+    },
+    "screen": "This is the long axis seen from the apex. The apex is at the top, the inferolateral wall is on the left of the screen, and the anteroseptum with the LVOT and aortic valve is on the right. The left atrium is at the bottom.",
+    "structures": [
+      "lv",
+      "lv-apex",
+      "ivs",
+      "inferolateral-wall",
+      "lvot",
+      "aortic-valve",
+      "aortic-root",
+      "mitral-valve",
+      "la"
+    ],
+    "tips": [
+      "Rotate counterclockwise from the two chamber view until the LVOT and aortic valve open.",
+      "Keep the apex at the top center while rotating.",
+      "Use this view to see the anteroseptal and inferolateral walls along their whole length."
+    ],
+    "pitfalls": [
+      "Foreshortening is common because the probe drifts upward while rotating.",
+      "Too little rotation leaves a two chamber view with no outflow tract."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "sc-4c",
+    "name": "Subcostal four chamber",
+    "abbrev": "SC 4C",
+    "window": "subcostal",
+    "probe": {
+      "site": "Just below the xiphoid process, with the patient lying flat and the knees bent to relax the abdomen.",
+      "chest": [
+        0.52,
+        0.7
+      ],
+      "notch": "Points to the patient's left, at about 3 o'clock, with the probe held nearly flat and the beam aimed up toward the left shoulder."
+    },
+    "screen": "The liver is in the near field at the top. The RV free wall lies closest to the liver, with the LV beyond it. The atria are on the left of the screen and the apex points to the right.",
+    "structures": [
+      "liver",
+      "rv",
+      "ra",
+      "interatrial-septum",
+      "la",
+      "lv",
+      "tricuspid-valve",
+      "mitral-valve",
+      "ivs",
+      "pericardium"
+    ],
+    "tips": [
+      "Hold the probe almost flat against the abdomen and press firmly.",
+      "Ask the patient to breathe in and hold, which brings the heart down toward the probe.",
+      "Use the liver as the window, sliding slightly to the patient's right if bowel gas is in the way.",
+      "Try this view first when parasternal and apical windows are poor, as in lung disease, ventilated patients and resuscitation."
+    ],
+    "pitfalls": [
+      "The apex is often foreshortened here, so do not judge LV function on this view alone.",
+      "An oblique cut makes the RV free wall look thicker than it is.",
+      "Fluid seen only around the liver may be ascites, not pericardial fluid."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "sc-ivc",
+    "name": "Subcostal inferior vena cava",
+    "abbrev": "SC IVC",
+    "window": "subcostal",
+    "probe": {
+      "site": "Below the xiphoid process, slightly to the patient's right of the midline.",
+      "chest": [
+        0.5,
+        0.7
+      ],
+      "notch": "Rotated about 90 degrees counterclockwise from the subcostal four chamber so it points toward the patient's head."
+    },
+    "screen": "The liver is at the top. The IVC runs horizontally through the liver and enters the right atrium on the right of the screen, with a hepatic vein joining it just before the atrium.",
+    "structures": [
+      "liver",
+      "diaphragm",
+      "hepatic-vein",
+      "ivc",
+      "ra",
+      "eustachian-valve"
+    ],
+    "tips": [
+      "Center the right atrium in the subcostal four chamber view, then rotate to bring the IVC into long axis.",
+      "Confirm the vessel by seeing it enter the right atrium and receive a hepatic vein.",
+      "Measure the diameter just before the hepatic vein joins.",
+      "Watch a full breathing cycle, then ask for a short sharp sniff to test collapse."
+    ],
+    "pitfalls": [
+      "The abdominal aorta can be mistaken for the IVC. The aorta lies to the patient's left, has thick pulsatile walls and does not enter the right atrium.",
+      "The IVC can slide out of the plane with breathing and look as if it collapses.",
+      "Collapse is not reliable in patients on positive pressure ventilation."
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "suprasternal",
+    "name": "Suprasternal long axis of the aortic arch",
+    "abbrev": "SSN",
+    "window": "suprasternal",
+    "probe": {
+      "site": "In the suprasternal notch, with the neck extended, often with a pillow under the shoulders.",
+      "chest": [
+        0.5,
+        0.1
+      ],
+      "notch": "Points to the patient's left and is rotated slightly so the imaging plane runs along the arch."
+    },
+    "screen": "The aortic arch curves across the top of the image. The ascending aorta is on the left of the screen and the descending aorta on the right. The three head and neck branches rise from the top of the arch, and the right pulmonary artery is a round circle beneath it.",
+    "structures": [
+      "ascending-aorta",
+      "aortic-arch",
+      "brachiocephalic-artery",
+      "left-common-carotid-artery",
+      "left-subclavian-artery",
+      "descending-aorta",
+      "right-pulmonary-artery"
+    ],
+    "tips": [
+      "Extend the neck and turn the head slightly to give the probe room.",
+      "Aim the beam down toward the heart, then rotate until the whole arch is in one plane.",
+      "Use the round right pulmonary artery under the arch to confirm the view.",
+      "A small footprint probe fits the notch more easily."
+    ],
+    "pitfalls": [
+      "This view is often difficult in older patients, short necks and lung disease.",
+      "Reverberation and side lobe artifacts in the arch can mimic a dissection flap."
+    ],
+    "reviewed": false
+  }
+]
