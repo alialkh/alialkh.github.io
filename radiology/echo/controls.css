@@ -1,39 +1,4 @@
-/* The bottom control bar. While a clip plays it fades out after a few idle seconds. */
-.controls {
-  position: relative;
-  z-index: 3;
-  justify-self: center;
-  width: min(100%, 880px);
-  padding: 4px 10px 6px;
-  border-radius: var(--r-lg);
-  transition: opacity var(--slow) var(--ease), transform var(--slow) var(--ease);
-}
-.stage.idle .controls { opacity: 0; transform: translateY(8px); pointer-events: none; }
-
-.scrub { display: flex; align-items: center; gap: 12px; padding: 0 4px; }
-.track { position: relative; flex: 1; display: flex; align-items: center; min-width: 0; }
-.track input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 28px;
-  margin: 0;
-  background: transparent;
-  cursor: pointer;
-}
-.track input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: rgb(255 255 255 / 0.3); }
-.track input[type="range"]::-moz-range-track { height: 4px; border-radius: 2px; background: rgb(255 255 255 / 0.3); }
-.track input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  margin-top: -6px;
-  border-radius: 50%;
-  border: 2px solid #0b1220;
-  background: var(--accent);
-}
-.track input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #0b1220; background: var(--accent); }
-.track input[type="range"]:focus-visible { outline-offset: 0; border-radius: var(--r-sm); }
+/* The A-B loop and the frame counter. The bar itself lives in ../core/controls.css. */
 /* --a and --b are fractions of the clip. The 8 px insets follow the thumb, which stops half its width short of each end. */
 .loop-band {
   position: absolute;
@@ -48,35 +13,10 @@
 }
 .counter { min-width: 4.5rem; text-align: right; font: var(--fs-xs)/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 
-.buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 14px; }
-.group { display: flex; align-items: center; gap: 2px; }
-.toggles { margin-left: auto; }
-.controls select {
-  min-height: 2.25rem;
-  margin-left: 6px;
-  padding: 0 0.5rem;
-  border-color: rgb(255 255 255 / 0.3);
-  background: transparent;
-  font-size: var(--fs-sm);
-  font-variant-numeric: tabular-nums;
-}
-.controls select option { background: var(--surface-2); }
-.text-btn {
-  min-width: 2.25rem;
-  min-height: 2.25rem;
-  padding: 0 0.5rem;
-  border-color: rgb(255 255 255 / 0.3);
-  background: transparent;
-  font-size: var(--fs-sm);
-  font-weight: 650;
-}
 .loop { gap: 4px; }
 .loop .icon-btn { width: 2.25rem; height: 2.25rem; }
 .loop-text { margin-left: 4px; font-size: var(--fs-xs); color: var(--muted); }
 
 @media (max-width: 800px) {
-  .controls { padding: 2px 6px 4px; }
-  .buttons { gap: 2px 6px; justify-content: space-between; }
-  .toggles { margin-left: 0; }
   .loop-text { display: none; }
 }

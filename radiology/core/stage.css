@@ -1,0 +1,103 @@
+/* The stage: a black viewport, the overlays on top (title chip, test banner, cases button, notice) and the credit line under it. */
+.stage {
+  --panel-w: 320px;
+  --gutter: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: #000;
+}
+.stage:focus { outline: none; }
+.stage:fullscreen { width: 100%; height: 100%; }
+.stage.idle { cursor: none; }
+
+/* The image fits inside the padding, so the panel and the control bar never cover it. */
+.viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: var(--gutter);
+}
+.stage.info-open .viewport { padding-right: calc(var(--panel-w) + 2 * var(--gutter)); }
+
+.empty-state { margin: auto; max-width: 30rem; padding: 32px 16px; text-align: center; }
+.empty-state h2 { font-size: var(--fs-xl); }
+.empty-state p { color: var(--muted); }
+
+/* Overlays. */
+.top-bar {
+  position: absolute;
+  z-index: 5;
+  top: var(--gutter);
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none;
+}
+.top-bar > * { pointer-events: auto; }
+.title-chip { max-width: 20rem; padding: 10px 14px 11px; border-radius: var(--r-lg); }
+.chip-title { margin: 0; font-size: var(--fs-lg); font-weight: 650; }
+.chip-sub { margin: 2px 0 0; font-size: var(--fs-sm); color: var(--muted); }
+.title-chip .badge { margin-top: 8px; }
+/* Test mode takes the panel's place on the right, so it never covers the image. */
+.test-banner { display: none; align-items: center; gap: 12px; width: var(--panel-w); margin-left: auto; padding: 10px 10px 10px 14px; border-radius: var(--r-lg); }
+.test-banner p { margin: 0; font-size: var(--fs-sm); }
+.test-banner button { flex: none; white-space: nowrap; }
+.app.testing .test-banner { display: flex; }
+.app.testing .title-chip { display: none; }
+.cases-btn { display: none; align-items: center; gap: 6px; min-height: 2.5rem; padding: 0 12px 0 10px; border-color: var(--glass-border); background: var(--glass); font-size: var(--fs-sm); font-weight: 600; }
+.stage:fullscreen .cases-btn { display: none; }
+
+.notice {
+  position: absolute;
+  z-index: 6;
+  top: var(--gutter);
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(90%, 26rem);
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-sm);
+  animation: drop-in var(--slow) var(--ease);
+}
+@keyframes drop-in { from { opacity: 0; transform: translate(-50%, -6px); } }
+
+.credits {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2px 16px;
+  padding: 6px 14px 7px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+.credits p { margin: 0; }
+.credits .disclaimer { margin-left: auto; }
+.credits a { color: var(--muted); }
+.credits a:hover { color: var(--text); }
+
+/* On a phone the image spans the full width, so the title row sits above it instead of over the image. */
+@media (max-width: 800px) {
+  .stage { --gutter: 8px; }
+  .cases-btn { display: inline-flex; flex: none; }
+  .viewport { grid-template-rows: auto minmax(0, 1fr) auto; padding-bottom: calc(var(--handle-h) + var(--gutter)); }
+  .stage.info-open .viewport { padding-right: var(--gutter); }
+  .top-bar { position: relative; top: auto; left: auto; right: auto; grid-row: 1; }
+  .controls { grid-row: 3; }
+  .title-chip { min-width: 0; max-width: none; padding: 6px 12px 7px; }
+  .chip-title { font-size: var(--fs-base); }
+  .title-chip .badge { margin-top: 4px; }
+  .test-banner { flex: 1; width: auto; min-width: 0; padding: 6px 6px 6px 12px; }
+  .test-banner p { font-size: var(--fs-xs); }
+}

@@ -1,5 +1,5 @@
 // Pure. Every clip is one case. The sidebar and the stage both read cases from here.
-import { groupBy } from './content.js';
+import { groupBy } from '../core/group.js';
 
 export const WINDOW_NAMES = { parasternal: 'Parasternal', apical: 'Apical', subcostal: 'Subcostal', suprasternal: 'Suprasternal' };
 export const SYSTEM_NAMES = {

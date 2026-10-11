@@ -1,0 +1,45 @@
+/* What is inside the control bar. The bar itself, its sliders and its idle fade are in core/controls.css. */
+.controls { width: min(100%, 980px); }
+.scrub { gap: 8px; }
+.scrub .icon-btn { flex: none; }
+.counter { min-width: 4.5rem; text-align: right; font: var(--fs-xs)/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; padding-top: 2px; }
+.group { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.toggles { margin-left: auto; gap: 2px; }
+
+.seg { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--glass-border); border-radius: var(--r-md); background: rgb(255 255 255 / 0.04); }
+.seg button {
+  min-height: 2rem;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.seg button:hover { color: var(--text); background: rgb(255 255 255 / 0.06); }
+.seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); box-shadow: inset 0 0 0 1px rgb(124 183 255 / 0.45); }
+.seg button:focus-visible { outline-offset: -2px; }
+.presets { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.presets .n { margin-right: 6px; font-family: var(--mono); font-size: var(--fs-xs); opacity: 0.7; }
+
+.win-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0 14px; padding: 0 4px; }
+.field { flex: 1 1 11rem; gap: 8px; font-size: var(--fs-xs); color: var(--muted); }
+.field span { flex: none; min-width: 2.6rem; }
+.field .val { min-width: 2.8rem; text-align: right; color: var(--text); font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.field input[type="range"] { min-width: 6rem; }
+.win-toggle { display: none; }
+
+@media (max-width: 1100px) {
+  .win-toggle { display: inline-grid; }
+  .win-row:not(.open) { display: none; }
+}
+@media (max-width: 800px) {
+  .controls { width: 100%; }
+  .toggles { margin-left: 0; width: 100%; justify-content: space-between; }
+  .win-row .field { flex: 1 1 100%; }
+  .scrub select { display: none; }
+}

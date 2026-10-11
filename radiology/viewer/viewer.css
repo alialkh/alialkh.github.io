@@ -1,0 +1,58 @@
+/* The viewer's page shell. The frame, stage, control bar and panel rules it builds on live in core/. */
+:root {
+  --finding: #ffe066;
+  --finding-ring: #7df9ff;
+}
+
+/* Title row, then the panes, then the control bar. The row stays out of the image, which fills its cell edge to edge. */
+.viewport { grid-template: auto minmax(0, 1fr) auto / minmax(0, 1fr); }
+.top-bar { position: relative; inset: auto; grid-row: 1; flex-wrap: wrap; align-items: stretch; }
+.panes { grid-row: 2; }
+.controls { grid-row: 3; }
+@media (min-width: 801px) {
+  .stage.info-open .viewport { padding-right: calc(var(--panel-w) + 2 * var(--gutter)); }
+}
+
+.title-chip { max-width: 24rem; padding: 7px 14px 8px; }
+@media (max-width: 800px) {
+  .title-chip { flex: 1 1 10rem; max-width: none; }
+}
+.chip-title { font-size: var(--fs-base); }
+.finding-note {
+  display: flex;
+  flex: 1 1 18rem;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  max-height: 7.5rem;
+  overflow-y: auto;
+  padding: 6px 6px 6px 14px;
+  border-radius: var(--r-lg);
+  border-color: rgb(255 224 102 / 0.5);
+}
+.finding-note > div { flex: 1; padding-top: 2px; }
+.finding-note h3 { margin: 0 0 1px; font-size: var(--fs-md); color: var(--finding); }
+.finding-note p { margin: 0; font-size: var(--fs-sm); line-height: 1.45; }
+.test-banner { margin-left: auto; }
+
+.progress { position: absolute; z-index: 7; top: 0; left: 0; right: 0; height: 3px; pointer-events: none; }
+.progress::after { content: ""; display: block; height: 100%; width: calc(var(--p, 0) * 100%); background: var(--accent); transition: width var(--fast) linear; }
+
+.status {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 8px;
+  padding: 16px;
+  text-align: center;
+  color: var(--muted);
+}
+.status p { margin: 0; }
+.status.failed { color: var(--text); }
+.status.failed p { font-size: var(--fs-lg); font-weight: 650; color: var(--bad); }
+.status.failed ul { max-width: 40rem; margin: 0 auto; padding: 0; list-style: none; font: var(--fs-md) var(--mono); text-align: left; }
+
+.case .thumb { object-fit: cover; background: #000; }
+.case-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

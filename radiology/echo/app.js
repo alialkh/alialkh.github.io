@@ -1,12 +1,13 @@
 import { h } from '../core/dom.js';
 import { disclaimer } from '../core/shell.js';
+import { resolveRoute } from '../core/route.js';
+import { bindKeys } from '../core/keys.js';
+import { createSidebar } from '../core/sidebar.js';
 import { loadContent } from './content.js';
 import { caseList } from './case-list.js';
-import { resolveRoute } from './route.js';
 import { createPlayer, credit } from './player.js';
 import { createControls } from './controls.js';
 import { createPanel } from './panel.js';
-import { createSidebar } from './sidebar.js';
 import { icon } from './icons.js';
 
 const narrow = matchMedia('(max-width: 800px)');
@@ -31,7 +32,13 @@ function start(content) {
   let player = null;
   let normal = null;
 
-  const sidebar = createSidebar(list, { onRail: () => set({ rail: !ui.rail }), onClose: () => setDrawer(false) });
+  const caseLink = c => h('a', { class: 'case', href: `#/${c.id}`, title: `${c.title}, ${c.subtitle}` },
+    h('img', { class: 'thumb', src: c.clip.poster, alt: '', loading: 'lazy', width: c.clip.width, height: c.clip.height }),
+    h('span', { class: 'case-text' }, h('span', { class: 'case-title' }, c.title), h('span', { class: 'case-sub' }, c.subtitle)));
+  const sidebar = createSidebar(list, {
+    title: 'Echocardiography', empty: 'Cases appear here as clips are added.', item: caseLink,
+    onRail: () => set({ rail: !ui.rail }), onClose: () => setDrawer(false),
+  });
   const casesBtn = h('button', { type: 'button', class: 'cases-btn', 'aria-controls': 'case-list', 'aria-expanded': 'false', onclick: () => setDrawer(true) }, icon('cases'), 'Cases');
   const chip = h('div', { class: 'title-chip glass', 'aria-live': 'polite' });
   const testBanner = h('div', { class: 'test-banner glass' },
@@ -201,16 +208,13 @@ function start(content) {
     pageup: () => move(-1),
   };
   addEventListener('keydown', e => {
-    const key = e.key.toLowerCase();
-    if (key === 'escape' && ui.drawer) return closeDrawer();
-    if (!KEYS[key] || !ui.current || e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
-    const target = e.target;
-    // Leave typing alone, and the keys a focused control already uses.
-    if (target.matches('select, textarea, input:not([type="range"]), [contenteditable]')) return;
-    if (key === ' ' && target.matches('button, a, input')) return;
-    if (['arrowleft', 'arrowright', 'home', 'pageup', 'pagedown'].includes(key) && target.matches('input')) return;
-    e.preventDefault();
-    KEYS[key](e);
+    if (e.key === 'Escape' && ui.drawer) closeDrawer();
+  });
+  bindKeys(KEYS, {
+    ready: () => ui.current,
+    // A focused button or link owns Space, and the frame slider owns the arrows, Home and the page keys.
+    skips: (key, target) => (key === ' ' && target.matches('button, a, input'))
+      || (['arrowleft', 'arrowright', 'home', 'pageup', 'pagedown'].includes(key) && target.matches('input')),
   });
   narrow.addEventListener('change', () => set({ info: ids.length > 0 && !narrow.matches && !ui.comparing, drawer: false }));
 

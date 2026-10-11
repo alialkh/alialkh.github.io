@@ -1,7 +1,7 @@
 # echo
 Purpose: echocardiography case viewer. Every clip is a case. One screen: a case sidebar, the clip on a black stage, and teaching overlays (title chip, info panel, markers, pins, control bar, test mode, compare with normal).
 Input: `content/*.json` (structures, views, conditions) and `../data/clips/manifest.json`   Output: `index.html`, a single screen routed by `#/<clip id>`.
-Files: `app.js` wiring and one `ui` state object, `case-list.js` pure case grouping and per-case info, `route.js` pure hash resolver, `content.js` load and validate, `loop.js` pure A-B loop, `label-layout.js` pure marker chip placement, `player.js` cine player and clip credit, `controls.js` control bar, `panel.js` info panel tabs, `sidebar.js`, `icons.js`. CSS: `echo.css` frame and sidebar, `stage.css`, `controls.css`, `panel.css`.
+Files: `app.js` wiring, one `ui` state object and the case link renderer, `case-list.js` pure case grouping and per-case info, `content.js` load and validate, `loop.js` pure A-B loop, `label-layout.js` pure marker chip placement, `player.js` cine player and clip credit, `controls.js` control bar, `panel.js` case notes tab renderers, `icons.js` echo glyphs on top of the core set. CSS after the core shell: `echo.css` thumbnail lift, `stage.css` clips, markers, pins and compare, `controls.css` A-B loop and counter, `panel.css` case notes content. Sidebar, tab panel, routing, keys, auto-hide, credit and content checks come from `../core/`.
 Done when: every standard view and condition has a licensed clip with markers, and every case reads well in the viewer.
 Gotchas:
 - Encode clips with `../tools/add-clip.mjs` (H.264, a few hundred KB). Record source and license in the manifest before the file is added.

@@ -1,5 +1,6 @@
 // Cine player for one clip: a frame fitted to its cell, frame stepping, A-B loop, speed, markers and pins.
 import { h } from '../core/dom.js';
+import { credit as creditLine } from '../core/credit.js';
 import { NO_LOOP, setLoopPoint, loopSeek } from './loop.js';
 import { layoutLabels } from './label-layout.js';
 
@@ -7,15 +8,7 @@ export const SPEEDS = [0.1, 0.25, 0.5, 1, 1.5];
 // Clips are at most 720 px wide. Past twice that, upscaling only adds blur.
 const MAX_SCALE = 2;
 
-// CC BY and CC BY-SA need visible credit: who, which license, where from, and whether it was changed.
-export function credit(clip) {
-  const s = clip.source;
-  return h('p', { class: 'credit' },
-    'Clip: ', s.attribution || s.author, ', ',
-    h('a', { href: s.licenseUrl, rel: 'license noopener', target: '_blank' }, s.license), ', ',
-    h('a', { href: s.url, rel: 'noopener', target: '_blank' }, 'source'),
-    s.modified && [', ', h('span', { title: s.modified }, 're-encoded')], '.');
-}
+export const credit = clip => creditLine(clip.source);
 
 const place = ([x, y]) => `left: ${x * 100}%; top: ${y * 100}%`;
 

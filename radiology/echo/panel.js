@@ -1,6 +1,6 @@
-// The info panel over the right of the stage: one tab list, one tab panel, rebuilt for each case.
+// The case notes: one renderer per tab in the core tab panel, rebuilt for each case.
 import { h } from '../core/dom.js';
-import { icon } from './icons.js';
+import { createTabPanel } from '../core/tabs.js';
 import { TAB_NAMES } from './case-list.js';
 
 // The scale is the figure's 200 by 240 viewBox.
@@ -70,46 +70,16 @@ function labelButton(text, selector, on, number) {
 
 export function createPanel({ content, on, onToggle }) {
   let current = null;
-  let tab = 'overview';
-  const tablist = h('div', { class: 'tabs', role: 'tablist', 'aria-label': 'Case information' });
-  const body = h('div', { class: 'tab-body', id: 'case-tab-body', role: 'tabpanel', tabindex: '0' });
-  const handle = h('button', { type: 'button', class: 'sheet-handle', 'aria-expanded': 'false', onclick: onToggle }, h('span', { class: 'grabber' }), 'Case notes');
-  const close = h('button', { type: 'button', class: 'icon-btn panel-close', 'aria-label': 'Hide case notes (I)', title: 'Hide case notes (I)', onclick: onToggle }, icon('close'));
-  const el = h('aside', { class: 'info glass', 'aria-label': 'Case notes' }, handle, h('div', { class: 'info-head' }, tablist, close), body);
-
-  function select(id, focus = false) {
-    tab = id;
-    for (const b of tablist.children) {
-      const selected = b.dataset.tab === id;
-      b.setAttribute('aria-selected', String(selected));
-      b.tabIndex = selected ? 0 : -1;
-      if (selected) body.setAttribute('aria-labelledby', b.id);
-      if (selected && focus) b.focus();
-    }
-    body.replaceChildren(...TABS[id](current, content, on).flat().filter(Boolean));
-    body.scrollTop = 0;
-  }
-  tablist.addEventListener('keydown', e => {
-    const moves = { ArrowRight: 1, ArrowLeft: -1, Home: -Infinity, End: Infinity };
-    if (!(e.key in moves)) return;
-    e.preventDefault();
-    const i = current.tabs.indexOf(tab) + moves[e.key];
-    select(current.tabs[Math.min(current.tabs.length - 1, Math.max(0, i))], true);
+  const panel = createTabPanel({
+    label: 'Case information', handle: 'Case notes', closeLabel: 'Hide case notes (I)', onToggle,
+    render: id => TABS[id](current, content, on),
   });
-
   return {
-    el,
+    el: panel.el,
     show(c) {
       current = c;
-      tablist.replaceChildren(...c.tabs.map(id => h('button', {
-        type: 'button', role: 'tab', id: `tab-${id}`, 'data-tab': id, 'aria-controls': 'case-tab-body', onclick: () => select(id),
-      }, TAB_NAMES[id])));
-      // Keep the reader on the same tab when the next case has it.
-      select(c.tabs.includes(tab) ? tab : 'overview');
+      panel.show(c.tabs.map(id => ({ id, name: TAB_NAMES[id] })));
     },
-    setOpen(open) {
-      el.classList.toggle('open', open);
-      handle.setAttribute('aria-expanded', String(open));
-    },
+    setOpen: panel.setOpen,
   };
 }

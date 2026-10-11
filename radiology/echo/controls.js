@@ -1,20 +1,11 @@
 // The bottom control bar. Built once, then pointed at each case's player in turn.
 import { h } from '../core/dom.js';
+import { autoHide } from '../core/idle.js';
 import { icon } from './icons.js';
 import { SPEEDS } from './player.js';
 import { loopActive, loopLabel } from './loop.js';
 
-const IDLE_MS = 3000;
 const KEY_HINT = 'Keys work anywhere outside a text field. Space plays or pauses. Left and Right step a frame, with Shift 10. Home goes to the first frame. [ and ] change speed. L labels, I case notes, T test mode, F fullscreen. J and K, or Page Down and Page Up, change case.';
-
-// :focus-visible needs Safari 15.4. Before that, any focus inside the bar keeps it up.
-const keyboardFocus = el => {
-  try {
-    return el.matches(':focus-visible');
-  } catch {
-    return true;
-  }
-};
 
 // toggles: [{ name, icon, label, onclick }], shown as pressed buttons on the right of the bar.
 export function createControls(stage, toggles) {
@@ -64,17 +55,7 @@ export function createControls(stage, toggles) {
     wake();
   }
 
-  let timer = 0;
-  const engaged = () => bar.matches(':hover') || (bar.contains(document.activeElement) && keyboardFocus(document.activeElement));
-  function wake() {
-    stage.classList.remove('idle');
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      if (player && !player.video.paused && !engaged()) stage.classList.add('idle');
-    }, IDLE_MS);
-  }
-  for (const type of ['pointermove', 'pointerdown', 'focusin']) stage.addEventListener(type, wake);
-  addEventListener('keydown', wake);
+  const wake = autoHide(stage, bar, () => player && !player.video.paused);
 
   scrub.addEventListener('input', () => player.seek(Number(scrub.value)));
   speed.addEventListener('change', () => player.setRate(Number(speed.value)));

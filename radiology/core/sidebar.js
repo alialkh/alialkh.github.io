@@ -1,13 +1,13 @@
-// The case list. Each case is a link to #/<clip id>, and the app marks the current one.
-import { h } from '../core/dom.js';
+// The case list. Each case is a link to #/<case id>, and the page marks the current one.
+import { h } from './dom.js';
 import { icon } from './icons.js';
 
-export function createSidebar(list, { onRail, onClose }) {
+// list: { sections: [{ label, groups: [{ label, cases }] }] }. item(c) returns the case's <a class="case" href="#/<id>">.
+// title is the list heading, empty the line shown when there are no sections.
+export function createSidebar(list, { title, empty, item, onRail, onClose }) {
   const links = new Map();
-  const item = c => {
-    const link = h('a', { class: 'case', href: `#/${c.id}`, title: `${c.title}, ${c.subtitle}` },
-      h('img', { src: c.clip.poster, alt: '', loading: 'lazy', width: c.clip.width, height: c.clip.height }),
-      h('span', { class: 'case-text' }, h('span', { class: 'case-title' }, c.title), h('span', { class: 'case-sub' }, c.subtitle)));
+  const row = c => {
+    const link = item(c);
     links.set(c.id, link);
     return h('li', {}, link);
   };
@@ -18,12 +18,12 @@ export function createSidebar(list, { onRail, onClose }) {
     h('div', { class: 'side-head' },
       h('a', { class: 'back', href: '../index.html', title: 'All radiology modules' }, icon('back'), h('span', {}, 'Radiology')),
       railBtn, closeBtn),
-    h('h1', { class: 'side-title' }, 'Echocardiography'),
+    h('h1', { class: 'side-title' }, title),
     h('nav', { class: 'case-nav', 'aria-label': 'Cases' },
-      list.sections.length ? null : h('p', { class: 'side-empty' }, 'Cases appear here as clips are added.'),
+      list.sections.length ? null : h('p', { class: 'side-empty' }, empty),
       list.sections.map(s => h('section', {},
         h('h2', {}, s.label),
-        s.groups.flatMap(g => [g.label && h('h3', {}, g.label), h('ul', {}, g.cases.map(item))])))));
+        s.groups.flatMap(g => [g.label && h('h3', {}, g.label), h('ul', {}, g.cases.map(row))])))));
 
   return {
     el,

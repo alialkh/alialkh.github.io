@@ -1,0 +1,27 @@
+/* The info panel's tabs: findings, structures and tips. The panel itself is core/panel.css. */
+.tab-body .findings { list-style: none; padding: 0; }
+.findings li { margin: 0 0 10px; padding: 10px 12px; border: 1px solid var(--glass-border); border-radius: var(--r-md); }
+.findings li.on { border-color: var(--finding); background: rgb(255 224 102 / 0.07); }
+.findings h4 { margin: 0 0 1px; font-size: var(--fs-md); font-weight: 650; }
+.findings .where { margin: 0 0 6px; font: var(--fs-xs) var(--mono); color: var(--muted); }
+.show-me { min-height: 2.25rem; margin-top: 2px; padding: 0 14px; border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 650; }
+.show-me:hover:not(:disabled) { background: rgb(124 183 255 / 0.24); border-color: var(--accent); }
+
+.tab-body .structures { list-style: none; padding: 0; }
+.structures li { margin: 0 0 2px; }
+.structure {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 2.25rem;
+  border-color: transparent;
+  background: none;
+  text-align: left;
+}
+.structure:hover { background: var(--surface-2); }
+.swatch { flex: none; width: 14px; height: 14px; border-radius: 4px; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.5); }
+
+.keys { margin: 0; }
+.keys dt { margin-top: 10px; font-weight: 650; }
+.keys dd { margin: 0; color: var(--muted); font-size: var(--fs-sm); }

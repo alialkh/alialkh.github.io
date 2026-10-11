@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { validateContent, licenseAllowed, groupBy, indexContent } from './content.js';
+import { validateContent, licenseAllowed, indexContent } from './content.js';
 
 const base = () => ({
   structures: [
@@ -129,12 +129,6 @@ test('rejects pins that are not a list and notes that are not a string', () => {
 
 test('a missing table is reported, not thrown', () => {
   assert.deepEqual(problemsAfter(t => { delete t.clips; }), ['clips must be a list']);
-});
-
-test('groupBy keeps first-seen key order and item order, like Map.groupBy', () => {
-  const g = groupBy(['b1', 'a1', 'b2', 'c1', 'a2'], s => s[0]);
-  assert.deepEqual([...g], [['b', ['b1', 'b2']], ['a', ['a1', 'a2']], ['c', ['c1']]]);
-  assert.deepEqual([...groupBy([], s => s)], []);
 });
 
 test('indexContent groups normal clips by view and case clips by condition', () => {
