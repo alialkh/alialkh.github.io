@@ -25,7 +25,6 @@
       "Ascites in the subcostal view"
     ],
     "compareView": "plax",
-    "reviewed": false,
     "sources": [
       "Adler Y et al. 2015 ESC Guidelines for the diagnosis and management of pericardial diseases. Eur Heart J 2015;36:2921-2964. PMID 26320112.",
       "Klein AL et al. ASE clinical recommendations for multimodality cardiovascular imaging of patients with pericardial disease. J Am Soc Echocardiogr 2013;26:965-1012. PMID 23998693.",
@@ -39,7 +38,7 @@
     "summary": "A clinical diagnosis of circulatory compromise caused by pericardial fluid compressing the heart. Echo does not make the diagnosis alone, but it shows the effusion and the signs that support it.",
     "findings": [
       "Find the effusion first in the subcostal four chamber or parasternal long axis view.",
-      "Watch the right atrial wall during ventricular systole. Inward collapse of the right atrium is an early sign.",
+      "Watch the right atrial wall in late diastole, just before the ventricles contract. Inward collapse of the right atrium is an early sign.",
       "Watch the RV free wall in early diastole. Diastolic collapse of the RV is a more specific sign.",
       "In the subcostal IVC view, a dilated IVC that barely changes with breathing supports a high right atrial pressure.",
       "Watch the septum shift toward the LV with inspiration and back with expiration, a sign of exaggerated interdependence between the ventricles.",
@@ -58,11 +57,10 @@
       "Massive pulmonary embolism, which also causes shock with a dilated IVC"
     ],
     "compareView": "sc-4c",
-    "reviewed": false,
     "sources": [
       "Adler Y et al. 2015 ESC Guidelines for the diagnosis and management of pericardial diseases. Eur Heart J 2015;36:2921-2964. PMID 26320112.",
       "Klein AL et al. ASE clinical recommendations for multimodality cardiovascular imaging of patients with pericardial disease. J Am Soc Echocardiogr 2013;26:965-1012. PMID 23998693.",
-      "Rudski LG et al. Guidelines for the Echocardiographic Assessment of the Right Heart in Adults. J Am Soc Echocardiogr 2010;23:685-713. PMID 20620859."
+      "Mukherjee M et al. Guidelines for the Echocardiographic Assessment of the Right Heart in Adults and Special Considerations in Pulmonary Hypertension: Recommendations from the American Society of Echocardiography. J Am Soc Echocardiogr 2025;38:141-186. doi:10.1016/j.echo.2025.01.006."
     ]
   },
   {
@@ -91,7 +89,6 @@
       "Severe aortic or mitral regurgitation causing LV dilation"
     ],
     "compareView": "a4c",
-    "reviewed": false,
     "sources": [
       "Arbelo E et al. 2023 ESC Guidelines for the management of cardiomyopathies. Eur Heart J 2023;44:3503-3626. PMID 37622657.",
       "Lang RM et al. Recommendations for Cardiac Chamber Quantification by Echocardiography in Adults. J Am Soc Echocardiogr 2015;28:1-39. PMID 25559473."
@@ -104,17 +101,17 @@
     "summary": "An inherited heart muscle disease with LV wall thickening that is not explained by loading conditions such as hypertension or aortic stenosis.",
     "findings": [
       "In the parasternal long axis, look for a septum that is thicker than the inferolateral wall.",
-      "In adults, a maximal wall thickness of 15 mm or more in any segment supports the diagnosis when no other cause is present.",
+      "In adults, clearly increased wall thickness in any segment, with no other cause, supports the diagnosis.",
       "Scan every short axis level, because the thickest segment may be anterior, lateral or apical rather than septal.",
       "Watch the anterior mitral leaflet in systole. Systolic anterior motion toward the septum narrows the LVOT.",
       "The LV cavity is often small with vigorous systolic contraction.",
       "In apical views, look for apical hypertrophy giving a spade-shaped cavity, which is easy to miss without careful imaging of the apex.",
-      "Doppler in the LVOT shows a late-peaking gradient when obstruction is present, sometimes only with a Valsalva maneuver."
+      "Doppler in the LVOT shows a late-peaking gradient when obstruction is present, sometimes only with provocation such as a Valsalva maneuver or exercise."
     ],
-    "significance": "Hypertrophic cardiomyopathy is a leading cause of sudden cardiac death in young people. Echo measures the wall thickness and outflow obstruction that guide risk assessment and treatment.",
+    "significance": "Hypertrophic cardiomyopathy can cause sudden cardiac death, including in young people. Echo measures the wall thickness and outflow obstruction that guide risk assessment and treatment.",
     "pearls": [
       "Measure wall thickness at end-diastole in the short axis at each level.",
-      "In a first degree relative of someone with the disease, or with a disease-causing gene variant, a wall thickness of 13 mm or more can support the diagnosis.",
+      "In a first degree relative of someone with the disease, or in a carrier of a disease-causing gene variant, a smaller increase in wall thickness can support the diagnosis.",
       "Contrast helps when the apex is poorly seen."
     ],
     "mimics": [
@@ -123,7 +120,6 @@
       "Athlete's heart"
     ],
     "compareView": "plax",
-    "reviewed": false,
     "sources": [
       "Ommen SR et al. 2024 AHA/ACC/AMSSM/HRS/PACES/SCMR Guideline for the Management of Hypertrophic Cardiomyopathy. Circulation 2024;149:e1239-e1311. PMID 38718139.",
       "Arbelo E et al. 2023 ESC Guidelines for the management of cardiomyopathies. Eur Heart J 2023;44:3503-3626. PMID 37622657."
@@ -139,7 +135,7 @@
       "In the parasternal short axis, the septum flattens and the LV becomes D-shaped.",
       "Note when the septum flattens. Flattening in both systole and diastole points to pressure overload, while flattening only in diastole points to volume overload.",
       "The RV free wall contracts poorly. In acute pulmonary embolism the free wall may be akinetic while the RV apex still contracts, the McConnell sign.",
-      "In chronic pressure overload the RV free wall thickens, best seen in the subcostal view.",
+      "In chronic pressure overload the RV free wall thickens. It is best measured in the subcostal view at end-diastole.",
       "The right atrium and IVC are often dilated.",
       "Doppler of tricuspid regurgitation estimates RV systolic pressure."
     ],
@@ -155,9 +151,8 @@
       "Arrhythmogenic right ventricular cardiomyopathy"
     ],
     "compareView": "psax-pm",
-    "reviewed": false,
     "sources": [
-      "Rudski LG et al. Guidelines for the Echocardiographic Assessment of the Right Heart in Adults. J Am Soc Echocardiogr 2010;23:685-713. PMID 20620859.",
+      "Mukherjee M et al. Guidelines for the Echocardiographic Assessment of the Right Heart in Adults and Special Considerations in Pulmonary Hypertension: Recommendations from the American Society of Echocardiography. J Am Soc Echocardiogr 2025;38:141-186. doi:10.1016/j.echo.2025.01.006.",
       "Lang RM et al. Recommendations for Cardiac Chamber Quantification by Echocardiography in Adults. J Am Soc Echocardiogr 2015;28:1-39. PMID 25559473."
     ]
   },
@@ -186,7 +181,6 @@
       "Normal pulmonary venous inflow into the left atrium"
     ],
     "compareView": "a4c",
-    "reviewed": false,
     "sources": [
       "Zoghbi WA et al. Recommendations for Noninvasive Evaluation of Native Valvular Regurgitation. J Am Soc Echocardiogr 2017;30:303-371. PMID 28314623.",
       "Otto CM et al. 2020 ACC/AHA Guideline for the Management of Patients With Valvular Heart Disease. Circulation 2021;143:e72-e227. PMID 33332150."
@@ -209,7 +203,7 @@
     "significance": "Severe stenosis raises left atrial and pulmonary pressures, causing breathlessness and atrial fibrillation. In the 2020 ACC/AHA valve guideline, a valve area of 1.5 cm² or less marks severe rheumatic stenosis.",
     "pearls": [
       "Fused commissures are the hallmark of rheumatic disease.",
-      "Calcific stenosis in older patients and in kidney disease starts at the annulus rather than the commissures.",
+      "Calcific stenosis in older patients starts at the annulus and spreads into the leaflet bases, without fused commissures.",
       "Gradients rise with heart rate, so always note the rate with the gradient."
     ],
     "mimics": [
@@ -218,7 +212,6 @@
       "High flow across a normal valve, as in severe mitral regurgitation"
     ],
     "compareView": "psax-mv",
-    "reviewed": false,
     "sources": [
       "Baumgartner H et al. Echocardiographic assessment of valve stenosis: EAE/ASE recommendations for clinical practice. J Am Soc Echocardiogr 2009;22:1-23. PMID 19130998.",
       "Otto CM et al. 2020 ACC/AHA Guideline for the Management of Patients With Valvular Heart Disease. Circulation 2021;143:e72-e227. PMID 33332150."
@@ -249,7 +242,6 @@
       "Obstructive hypertrophic cardiomyopathy"
     ],
     "compareView": "psax-av",
-    "reviewed": false,
     "sources": [
       "Baumgartner H et al. Recommendations on the Echocardiographic Assessment of Aortic Valve Stenosis. J Am Soc Echocardiogr 2017;30:372-392. PMID 28385280.",
       "Otto CM et al. 2020 ACC/AHA Guideline for the Management of Patients With Valvular Heart Disease. Circulation 2021;143:e72-e227. PMID 33332150."
@@ -266,7 +258,7 @@
       "The jet may strike the anterior mitral leaflet and make it flutter in diastole.",
       "Chronic severe regurgitation dilates the LV.",
       "Color Doppler in the long axis shows the jet in the LVOT. Its width compared with the LVOT and its vena contracta help grade it.",
-      "Doppler of the descending aorta from the suprasternal view showing reversed flow throughout diastole suggests severe regurgitation."
+      "Doppler of the descending aorta from the suprasternal view showing prominent reversed flow throughout diastole is a specific sign of severe regurgitation."
     ],
     "significance": "Severe regurgitation loads the LV with volume, and surgery is timed to symptoms, LV size and LV function. Acute severe regurgitation, from dissection or endocarditis, is an emergency.",
     "pearls": [
@@ -280,7 +272,6 @@
       "Turbulent LVOT flow from outflow obstruction"
     ],
     "compareView": "plax",
-    "reviewed": false,
     "sources": [
       "Zoghbi WA et al. Recommendations for Noninvasive Evaluation of Native Valvular Regurgitation. J Am Soc Echocardiogr 2017;30:303-371. PMID 28314623.",
       "Otto CM et al. 2020 ACC/AHA Guideline for the Management of Patients With Valvular Heart Disease. Circulation 2021;143:e72-e227. PMID 33332150."
@@ -293,9 +284,9 @@
     "summary": "Billowing of one or both mitral leaflets above the annulus into the left atrium during systole, usually from myxomatous valve disease.",
     "findings": [
       "Use the parasternal long axis and picture a line joining the two hinge points of the mitral annulus.",
-      "In systole, a leaflet that moves above that line into the left atrium is prolapsing.",
+      "In systole, a leaflet that moves 2 mm or more above that line into the left atrium is prolapsing.",
       "Look at leaflet thickness. Myxomatous leaflets look thick, long and redundant.",
-      "Note which leaflet is involved. The posterior leaflet is most often affected.",
+      "Note which leaflet is involved. The posterior leaflet is often affected.",
       "Check for a flail segment whose tip turns into the left atrium, which suggests ruptured chords.",
       "Color Doppler shows late systolic or holosystolic regurgitation, usually aimed away from the prolapsing leaflet."
     ],
@@ -310,7 +301,6 @@
       "Vegetation on a leaflet"
     ],
     "compareView": "plax",
-    "reviewed": false,
     "sources": [
       "Zoghbi WA et al. Recommendations for Noninvasive Evaluation of Native Valvular Regurgitation. J Am Soc Echocardiogr 2017;30:303-371. PMID 28314623.",
       "Otto CM et al. 2020 ACC/AHA Guideline for the Management of Patients With Valvular Heart Disease. Circulation 2021;143:e72-e227. PMID 33332150."
@@ -329,10 +319,10 @@
       "Look around the aortic root for a thickened or echo-free space that may be an abscess.",
       "Check the right sided valves, especially the tricuspid valve, in people who inject drugs."
     ],
-    "significance": "Echo findings are a major diagnostic criterion and reveal complications that may need surgery. Transesophageal echo is more sensitive and is used when transthoracic images are negative but suspicion stays high, and for prosthetic valves.",
+    "significance": "Echo findings are a major diagnostic criterion and reveal complications that may need surgery. Transesophageal echo is more sensitive. It is used when transthoracic images are negative or unclear but suspicion stays high, and it helps when a prosthetic valve limits the transthoracic view.",
     "pearls": [
       "A normal transthoracic echo does not exclude endocarditis.",
-      "Larger and more mobile vegetations carry a higher risk of embolism.",
+      "Larger vegetations, especially mobile ones, are thought to carry a higher risk of embolism.",
       "Compare with earlier studies, because old healed vegetations and degenerative nodules can look alike."
     ],
     "mimics": [
@@ -341,7 +331,6 @@
       "Nonbacterial thrombotic endocarditis"
     ],
     "compareView": "plax",
-    "reviewed": false,
     "sources": [
       "Delgado V et al. 2023 ESC Guidelines for the management of endocarditis. Eur Heart J 2023;44:3948-4042. PMID 37622656."
     ]
@@ -371,7 +360,6 @@
       "Apical hypertrophic cardiomyopathy"
     ],
     "compareView": "a4c",
-    "reviewed": false,
     "sources": [
       "Levine GN et al. Management of Patients at Risk for and With Left Ventricular Thrombus: A Scientific Statement From the American Heart Association. Circulation 2022;146:e205-e223. PMID 36106537.",
       "Lang RM et al. Recommendations for Cardiac Chamber Quantification by Echocardiography in Adults. J Am Soc Echocardiogr 2015;28:1-39. PMID 25559473."
@@ -386,7 +374,7 @@
       "Start in the parasternal short axis at the papillary muscle level, where all three coronary territories are seen at once.",
       "Watch each segment thicken inward in systole. Thickening is more reliable than motion, because a segment can be pulled along by its neighbors.",
       "Grade each segment as normal, hypokinetic, akinetic or dyskinetic.",
-      "Use the apical four, two and three chamber views to cover all 17 segments of the standard model.",
+      "Use the apical four, two and three chamber views to see every LV segment from base to apex.",
       "Match abnormal segments to a coronary territory. The LAD supplies the anterior wall, anterior septum and apex, the right coronary the inferior wall, and the circumflex the lateral walls.",
       "A thin, bright segment that does not thicken suggests an old infarct with scar.",
       "Look for complications such as thrombus, aneurysm, ventricular septal rupture and mitral regurgitation."
@@ -395,7 +383,7 @@
     "pearls": [
       "Coronary territories vary between people, especially at the apex and the inferolateral wall.",
       "Left bundle branch block, pacing and the septum after heart surgery can move abnormally without ischemia.",
-      "An aneurysm bulges outward in diastole as well as systole."
+      "An aneurysm is a thinned, dilated segment, so its outward bulge is still there in diastole."
     ],
     "mimics": [
       "Takotsubo syndrome",
@@ -403,7 +391,6 @@
       "Left bundle branch block or a paced rhythm"
     ],
     "compareView": "psax-pm",
-    "reviewed": false,
     "sources": [
       "Lang RM et al. Recommendations for Cardiac Chamber Quantification by Echocardiography in Adults. J Am Soc Echocardiogr 2015;28:1-39. PMID 25559473.",
       "Mitchell C et al. Guidelines for Performing a Comprehensive Transthoracic Echocardiographic Examination in Adults. J Am Soc Echocardiogr 2019;32:1-64. PMID 30282592."
@@ -413,19 +400,19 @@
     "id": "takotsubo",
     "name": "Takotsubo syndrome",
     "system": "lv-function",
-    "summary": "Sudden and usually reversible LV dysfunction, often triggered by emotional or physical stress and most common in older women. It closely mimics an acute coronary syndrome.",
+    "summary": "Sudden and usually reversible LV dysfunction, often triggered by physical or emotional stress and most common in older women. It closely mimics an acute coronary syndrome.",
     "findings": [
       "In the apical four and two chamber views, the mid and apical segments move poorly while the base contracts strongly.",
       "The apex balloons outward in systole, giving the shape of a Japanese octopus pot.",
       "The abnormal area usually extends beyond the territory of a single coronary artery.",
       "Look for less common patterns, such as mid-ventricular, basal or focal forms.",
-      "The vigorous base can cause LVOT obstruction with systolic anterior motion of the mitral valve.",
+      "The strongly contracting base can narrow the LVOT, sometimes with systolic anterior motion of the mitral valve.",
       "Check the RV, which is involved in some patients, and the apex for thrombus."
     ],
-    "significance": "Takotsubo needs coronary angiography to exclude infarction, because the two can look alike. Function usually recovers over days to weeks, which a follow-up echo confirms.",
+    "significance": "Takotsubo needs coronary angiography to exclude infarction, because the two can look alike. Function usually recovers, which a follow-up echo confirms.",
     "pearls": [
-      "Involvement of the whole apex all the way around favors takotsubo over an infarct from one artery.",
-      "LVOT obstruction changes treatment, because inotropes can make it worse.",
+      "Poor wall motion that reaches beyond the territory of one coronary artery, often all the way around the apex, favors takotsubo over an infarct.",
+      "Look for LVOT obstruction and report it, because it changes treatment.",
       "Recovery on a follow-up study supports the diagnosis."
     ],
     "mimics": [
@@ -433,7 +420,6 @@
       "Myocarditis"
     ],
     "compareView": "a4c",
-    "reviewed": false,
     "sources": [
       "Ghadri JR et al. International Expert Consensus Document on Takotsubo Syndrome (Part I). Eur Heart J 2018;39:2032-2046. PMID 29850871.",
       "Lang RM et al. Recommendations for Cardiac Chamber Quantification by Echocardiography in Adults. J Am Soc Echocardiogr 2015;28:1-39. PMID 25559473."

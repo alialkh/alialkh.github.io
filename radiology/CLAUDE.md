@@ -1,5 +1,5 @@
 # radiology
-Self-contained teaching module for med students. CT/MRI viewer, CT angiogram tour, echo library, POCUS simulator. Static files only, no build step, hosted free on GitHub Pages.
+Self-contained teaching module for med students. `index.html` picks a modality: echo case viewer (live), CT/MRI viewer, CT angiogram tour and POCUS simulator (coming). Static files only, no build step, hosted free on GitHub Pages.
 
 Run: serve this folder over http, for example `python -m http.server 8000` (ES modules do not load from file://).
 Test: `node --test radiology/` from the repo root (Node 22, no install). Then open the page for the area you changed.
@@ -11,10 +11,10 @@ This folder must lift out into its own site (for example "The Budding Radiology"
 - Native ES modules, no bundler. Third-party code goes in `core/vendor/` with its version and license noted.
 
 ## Map
-- `core/`   shared shell, loaders, tour and quiz engine. Read `core/CLAUDE.md`.
+- `core/`   shared theme, disclaimer and loaders. Read `core/CLAUDE.md`.
 - `viewer/` CT/MRI stack and 3-plane viewer. Read `viewer/CLAUDE.md`.
 - `cta/`    guided CT angiogram tour on the viewer. Read `cta/CLAUDE.md`.
-- `echo/`   cine loops, view atlas, quiz. Read `echo/CLAUDE.md`.
+- `echo/`   echo case viewer, every clip a case with teaching overlays. Read `echo/CLAUDE.md`.
 - `pocus/`  ultrasound simulator game. Read `pocus/CLAUDE.md`.
 - `data/`   cases and clips. Read `data/INDEX.md`, never the files.
 - `docs/`   dataset licenses, content schemas. Open on demand.

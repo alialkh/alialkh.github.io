@@ -1,26 +1,64 @@
 [
   {
-    "id": "pericardial-effusion", "name": "Pericardial effusion", "system": "pericardium",
+    "id": "pericardial-effusion",
+    "name": "Pericardial effusion",
+    "system": "pericardium",
     "summary": "Fixture summary for an effusion.",
-    "findings": ["Fixture finding one.", "Fixture finding two.", "Fixture finding three."],
+    "findings": [
+      "Fixture finding one.",
+      "Fixture finding two.",
+      "Fixture finding three."
+    ],
     "significance": "Fixture significance.",
-    "pearls": ["Fixture pearl."], "mimics": ["Fixture mimic"],
-    "compareView": "plax", "reviewed": false, "sources": ["Fixture source, not a real reference."]
+    "pearls": [
+      "Fixture pearl."
+    ],
+    "mimics": [
+      "Fixture mimic"
+    ],
+    "compareView": "plax",
+    "sources": [
+      "Fixture source, not a real reference."
+    ]
   },
   {
-    "id": "cardiac-tamponade", "name": "Cardiac tamponade", "system": "pericardium",
+    "id": "cardiac-tamponade",
+    "name": "Cardiac tamponade",
+    "system": "pericardium",
     "summary": "Fixture summary for tamponade.",
-    "findings": ["Fixture tamponade finding."],
+    "findings": [
+      "Fixture tamponade finding."
+    ],
     "significance": "Fixture significance.",
-    "pearls": ["Fixture pearl."], "mimics": ["Fixture mimic"],
-    "compareView": "sc-ivc", "reviewed": true, "sources": ["Fixture source, not a real reference."]
+    "pearls": [
+      "Fixture pearl."
+    ],
+    "mimics": [
+      "Fixture mimic"
+    ],
+    "compareView": "sc-ivc",
+    "sources": [
+      "Fixture source, not a real reference."
+    ]
   },
   {
-    "id": "mitral-stenosis", "name": "Mitral stenosis", "system": "valves",
+    "id": "mitral-stenosis",
+    "name": "Mitral stenosis",
+    "system": "valves",
     "summary": "Fixture summary for mitral stenosis.",
-    "findings": ["Fixture stenosis finding."],
+    "findings": [
+      "Fixture stenosis finding."
+    ],
     "significance": "Fixture significance.",
-    "pearls": ["Fixture pearl."], "mimics": ["Fixture mimic"],
-    "compareView": "a4c", "reviewed": false, "sources": ["Fixture source, not a real reference."]
+    "pearls": [
+      "Fixture pearl."
+    ],
+    "mimics": [
+      "Fixture mimic"
+    ],
+    "compareView": "a4c",
+    "sources": [
+      "Fixture source, not a real reference."
+    ]
   }
 ]

@@ -38,6 +38,11 @@
     "markers": [
       { "structure": "lv", "at": [0.5, 0.517], "r": 0.06 }
     ],
+    "pins": [
+      { "at": [0.5, 0.3], "text": "Fixture pin one. Dark band above the disc." },
+      { "at": [0.8, 0.8], "text": "Fixture pin two, near the right edge so its label opens to the left." }
+    ],
+    "notes": "Synthetic fixture with two pins. Not patient data.",
     "source": {
       "author": "Synthetic, generated with ffmpeg lavfi",
       "license": "CC0 1.0",
@@ -57,7 +62,7 @@
     "width": 720,
     "height": 540,
     "markers": [],
-    "notes": "Second PLAX entry so the clip picker has a choice. Shares the B file.",
+    "notes": "Second normal PLAX case. Shares the effusion file.",
     "source": {
       "author": "Synthetic, generated with ffmpeg lavfi",
       "license": "CC0 1.0",
@@ -87,6 +92,27 @@
       "url": "https://ffmpeg.org/ffmpeg-filters.html",
       "attribution": "",
       "modified": "Re-encoded to H.264 MP4, scaled to at most 720 px wide, audio and metadata removed."
+    }
+  },
+  {
+    "id": "synth-plax-tamponade",
+    "view": "plax",
+    "condition": "cardiac-tamponade",
+    "src": "synth-plax-effusion.mp4",
+    "poster": "synth-plax-effusion.jpg",
+    "fps": 25,
+    "durationSec": 2.4,
+    "width": 720,
+    "height": 540,
+    "markers": [],
+    "notes": "Its compareView has no normal clip, so no compare button.",
+    "source": {
+      "author": "Synthetic, generated with ffmpeg lavfi",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "url": "https://ffmpeg.org/ffmpeg-filters.html",
+      "attribution": "",
+      "modified": ""
     }
   }
 ]

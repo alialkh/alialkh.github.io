@@ -1,0 +1,212 @@
+/* The stage: the clip on black, its labels, the overlays on top and the credit line under it. */
+:root {
+  --marker: #ffe066;
+  --marker-hi: #7df9ff;
+  --pin: #ff9ec0;
+}
+
+.stage {
+  --panel-w: 320px;
+  --gutter: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: #000;
+}
+.stage:focus { outline: none; }
+.stage:fullscreen { width: 100%; height: 100%; }
+.stage.idle { cursor: none; }
+
+/* The image fits inside the padding, so the panel and the control bar never cover it. */
+.viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: var(--gutter);
+}
+.stage.info-open .viewport { padding-right: calc(var(--panel-w) + 2 * var(--gutter)); }
+
+.players { display: flex; gap: var(--gutter); min-width: 0; min-height: 0; }
+.cell { position: relative; flex: 1 1 0; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.frame { position: relative; flex: none; }
+.frame video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: #000; }
+.frame-error { position: absolute; inset: auto 0 0; margin: 0; padding: 8px 12px; background: rgb(0 0 0 / 0.8); color: var(--bad); font-size: var(--fs-sm); }
+/* Compare captions sit just under each frame, in the letterbox. */
+.cell-tag {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.stage.comparing .cell-tag { display: block; }
+
+.empty-state { margin: auto; max-width: 30rem; padding: 32px 16px; text-align: center; }
+.empty-state h2 { font-size: var(--fs-xl); }
+.empty-state p { color: var(--muted); }
+
+/* Markers and pins sit at fractions of the frame. */
+.labels { position: absolute; z-index: 0; inset: 0; pointer-events: none; }
+.app.no-labels .labels, .app.testing .labels { display: none; }
+.marker, .pin { position: absolute; pointer-events: auto; border-radius: 50%; }
+.pin { transform: translate(-50%, -50%); }
+/* padding-top and margins in % follow the frame width like the width does, so the ring stays round without aspect-ratio.
+   Margins center it instead of a transform, which would trap its chip under the rings drawn after it. */
+.marker { width: var(--d); height: 0; padding-top: var(--d); margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2); }
+.marker .ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--marker);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.6), inset 0 0 0 1px rgb(0 0 0 / 0.6);
+  transition: border-color var(--fast), border-width var(--fast);
+}
+/* Chips never take the pointer from the video. Their marker or pin does the hovering. */
+.marker .chip, .pin .chip {
+  position: absolute;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: rgb(6 8 12 / 0.84);
+  color: var(--marker);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  box-shadow: var(--shadow-1);
+  pointer-events: none;
+}
+/* label-layout.js sets --x and --y, the chip's corner from the ring center. */
+.marker .chip { z-index: 1; left: calc(50% + var(--x, 0px)); top: calc(50% + var(--y, 0px)); }
+.pin .chip { top: 50%; left: calc(100% + 6px); transform: translateY(-50%); }
+.pin.chip-left .chip { left: auto; right: calc(100% + 6px); }
+/* A marker with no room for its name shows its number. The name shows on hover and focus, and in the Structures list. Hidden, not removed, so the chip can still be measured. */
+.marker .num { display: none; }
+.marker.badged .num {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--marker);
+  color: #1f1a05;
+  font-size: 0.6875rem;
+  font-weight: 750;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.6);
+}
+.marker.badged .chip { visibility: hidden; }
+.marker.badged:is(:hover, :focus-visible, .hi, .pulse) .chip { visibility: visible; }
+.marker:is(:hover, :focus-visible, .hi, .pulse), .pin:is(:hover, :focus-visible, .hi, .pulse) { z-index: 2; }
+.marker:is(:hover, :focus-visible, .hi, .pulse) .ring { border-width: 3px; border-color: var(--marker-hi); }
+.marker:is(:hover, :focus-visible, .hi, .pulse) .chip { color: var(--marker-hi); }
+.marker:is(:hover, :focus-visible, .hi, .pulse) .num { background: var(--marker-hi); }
+.marker:focus-visible, .pin:focus-visible { outline-offset: 4px; }
+.marker.pulse .ring, .pin.pulse .dot { animation: pulse 0.5s ease-in-out 3; }
+@keyframes pulse { 50% { transform: scale(1.6); } }
+
+.pin .dot {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--pin);
+  color: #1f0812;
+  font-size: var(--fs-xs);
+  font-weight: 750;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.6), var(--shadow-1);
+}
+.pin .chip { display: none; width: max-content; max-width: 15rem; white-space: normal; color: var(--text); border-radius: var(--r-sm); }
+.pin:is(:hover, :focus-visible, .hi, .pulse) .chip { display: block; }
+
+/* Overlays. */
+.top-bar {
+  position: absolute;
+  z-index: 5;
+  top: var(--gutter);
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none;
+}
+.top-bar > * { pointer-events: auto; }
+.title-chip { max-width: 20rem; padding: 10px 14px 11px; border-radius: var(--r-lg); }
+.chip-title { margin: 0; font-size: var(--fs-lg); font-weight: 650; }
+.chip-sub { margin: 2px 0 0; font-size: var(--fs-sm); color: var(--muted); }
+.title-chip .badge { margin-top: 8px; }
+/* Test mode takes the panel's place on the right, so it never covers the image. */
+.test-banner { display: none; align-items: center; gap: 12px; width: var(--panel-w); margin-left: auto; padding: 10px 10px 10px 14px; border-radius: var(--r-lg); }
+.test-banner p { margin: 0; font-size: var(--fs-sm); }
+.test-banner button { flex: none; white-space: nowrap; }
+.app.testing .test-banner { display: flex; }
+.app.testing .title-chip { display: none; }
+.cases-btn { display: none; align-items: center; gap: 6px; min-height: 2.5rem; padding: 0 12px 0 10px; border-color: var(--glass-border); background: var(--glass); font-size: var(--fs-sm); font-weight: 600; }
+.stage:fullscreen .cases-btn { display: none; }
+
+.notice {
+  position: absolute;
+  z-index: 6;
+  top: var(--gutter);
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(90%, 26rem);
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-sm);
+  animation: drop-in var(--slow) var(--ease);
+}
+@keyframes drop-in { from { opacity: 0; transform: translate(-50%, -6px); } }
+
+.credits {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2px 16px;
+  padding: 6px 14px 7px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+.credits p { margin: 0; }
+.credits .disclaimer { margin-left: auto; }
+.credits a { color: var(--muted); }
+.credits a:hover { color: var(--text); }
+
+/* On a phone the image spans the full width, so the title row sits above it instead of over the sector apex. */
+@media (max-width: 800px) {
+  .stage { --gutter: 8px; }
+  .cases-btn { display: inline-flex; flex: none; }
+  .viewport { grid-template-rows: auto minmax(0, 1fr) auto; padding-bottom: calc(var(--handle-h) + var(--gutter)); }
+  .stage.info-open .viewport { padding-right: var(--gutter); }
+  .top-bar { position: relative; top: auto; left: auto; right: auto; grid-row: 1; }
+  .players { grid-row: 2; }
+  .controls { grid-row: 3; }
+  .title-chip { min-width: 0; max-width: none; padding: 6px 12px 7px; }
+  .chip-title { font-size: var(--fs-base); }
+  .title-chip .badge { margin-top: 4px; }
+  .test-banner { flex: 1; width: auto; min-width: 0; padding: 6px 6px 6px 12px; }
+  .test-banner p { font-size: var(--fs-xs); }
+}
+@media (max-width: 800px) and (orientation: portrait) {
+  .stage.comparing .players { flex-direction: column; }
+}
