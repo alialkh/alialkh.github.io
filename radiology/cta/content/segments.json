@@ -1,0 +1,202 @@
+[
+  {
+    "id": "seg-1",
+    "name": "Proximal RCA",
+    "artery": "rca",
+    "syntax": "1",
+    "aha": 1,
+    "description": "Starts at the ostium of the right coronary artery and ends halfway to the acute margin of the heart."
+  },
+  {
+    "id": "seg-2",
+    "name": "Mid RCA",
+    "artery": "rca",
+    "syntax": "2",
+    "aha": 2,
+    "description": "Starts at the end of the proximal RCA and ends at the acute margin of the heart."
+  },
+  {
+    "id": "seg-3",
+    "name": "Distal RCA",
+    "artery": "rca",
+    "syntax": "3",
+    "aha": 3,
+    "description": "Starts at the acute margin of the heart and ends at the origin of the posterior descending artery."
+  },
+  {
+    "id": "seg-4",
+    "name": "Posterior descending artery from the RCA",
+    "artery": "rca",
+    "syntax": "4",
+    "aha": 4,
+    "description": "The posterior descending artery when it comes from the right coronary artery. It runs in the posterior interventricular groove. When this branch comes from the RCA, the system is right dominant."
+  },
+  {
+    "id": "seg-16",
+    "name": "Posterolateral branch from the RCA",
+    "artery": "rca",
+    "syntax": "16",
+    "aha": null,
+    "description": "A posterolateral branch that arises from the distal right coronary artery beyond the crux of the heart."
+  },
+  {
+    "id": "seg-16a",
+    "name": "First posterolateral branch from the RCA",
+    "artery": "rca",
+    "syntax": "16a",
+    "aha": null,
+    "description": "The first posterolateral branch that comes off segment 16."
+  },
+  {
+    "id": "seg-16b",
+    "name": "Second posterolateral branch from the RCA",
+    "artery": "rca",
+    "syntax": "16b",
+    "aha": null,
+    "description": "The second posterolateral branch that comes off segment 16."
+  },
+  {
+    "id": "seg-16c",
+    "name": "Third posterolateral branch from the RCA",
+    "artery": "rca",
+    "syntax": "16c",
+    "aha": null,
+    "description": "The third posterolateral branch that comes off segment 16."
+  },
+  {
+    "id": "seg-5",
+    "name": "Left main",
+    "artery": "left-main",
+    "syntax": "5",
+    "aha": 5,
+    "description": "Starts at the ostium of the left coronary artery and ends where it divides into the left anterior descending and left circumflex arteries."
+  },
+  {
+    "id": "seg-6",
+    "name": "Proximal LAD",
+    "artery": "lad",
+    "syntax": "6",
+    "aha": 6,
+    "description": "The first part of the left anterior descending artery, up to and including the origin of the first major septal branch."
+  },
+  {
+    "id": "seg-7",
+    "name": "Mid LAD",
+    "artery": "lad",
+    "syntax": "7",
+    "aha": 7,
+    "description": "Starts just after the origin of the first septal branch and ends where the LAD forms an angle, as seen in a RAO view. If no angle can be seen, it ends halfway between the first septal branch and the apex of the heart."
+  },
+  {
+    "id": "seg-8",
+    "name": "Apical LAD",
+    "artery": "lad",
+    "syntax": "8",
+    "aha": 8,
+    "description": "The last part of the LAD. It starts at the end of the mid LAD and runs to the apex or beyond it."
+  },
+  {
+    "id": "seg-9",
+    "name": "First diagonal",
+    "artery": "lad",
+    "syntax": "9",
+    "aha": 9,
+    "description": "The first diagonal branch. It arises from the proximal or mid LAD (segment 6 or 7)."
+  },
+  {
+    "id": "seg-9a",
+    "name": "First diagonal a",
+    "artery": "lad",
+    "syntax": "9a",
+    "aha": null,
+    "description": "An additional first diagonal branch. It also arises from segment 6 or 7, before segment 8 begins."
+  },
+  {
+    "id": "seg-10",
+    "name": "Second diagonal",
+    "artery": "lad",
+    "syntax": "10",
+    "aha": 10,
+    "description": "The second diagonal branch. It arises from the apical LAD (segment 8) or from the junction of segments 7 and 8."
+  },
+  {
+    "id": "seg-10a",
+    "name": "Second diagonal a",
+    "artery": "lad",
+    "syntax": "10a",
+    "aha": null,
+    "description": "An additional second diagonal branch that arises from segment 8."
+  },
+  {
+    "id": "seg-11",
+    "name": "Proximal circumflex",
+    "artery": "lcx",
+    "syntax": "11",
+    "aha": 11,
+    "description": "The main stem of the circumflex. It starts at its origin from the left main and ends after the origin of the first obtuse marginal branch, which it includes."
+  },
+  {
+    "id": "seg-12",
+    "name": "Intermediate or anterolateral branch",
+    "artery": "lcx",
+    "syntax": "12",
+    "aha": null,
+    "description": "The third branch of a left main that divides into three, other than the proximal LAD and the circumflex. SYNTAX counts it in the circumflex territory."
+  },
+  {
+    "id": "seg-12a",
+    "name": "Obtuse marginal a",
+    "artery": "lcx",
+    "syntax": "12a",
+    "aha": null,
+    "description": "The first side branch of the circumflex that runs toward the obtuse margin of the heart."
+  },
+  {
+    "id": "seg-12b",
+    "name": "Obtuse marginal b",
+    "artery": "lcx",
+    "syntax": "12b",
+    "aha": null,
+    "description": "A second additional side branch of the circumflex. The SYNTAX definition says it runs in the same direction as segment 12."
+  },
+  {
+    "id": "seg-13",
+    "name": "Distal circumflex",
+    "artery": "lcx",
+    "syntax": "13",
+    "aha": 13,
+    "description": "The stem of the circumflex beyond the origin of the last obtuse marginal branch. It runs along the posterior left atrioventricular groove. It may be small or absent."
+  },
+  {
+    "id": "seg-14",
+    "name": "Left posterolateral",
+    "artery": "lcx",
+    "syntax": "14",
+    "aha": 14,
+    "description": "A branch that runs to the posterolateral surface of the left ventricle. It may be absent, or it may be a division of an obtuse marginal branch."
+  },
+  {
+    "id": "seg-14a",
+    "name": "Left posterolateral a",
+    "artery": "lcx",
+    "syntax": "14a",
+    "aha": null,
+    "description": "A branch beyond segment 14 that runs in the same direction."
+  },
+  {
+    "id": "seg-14b",
+    "name": "Left posterolateral b",
+    "artery": "lcx",
+    "syntax": "14b",
+    "aha": null,
+    "description": "A branch beyond segments 14 and 14a that runs in the same direction."
+  },
+  {
+    "id": "seg-15",
+    "name": "Posterior descending artery from the circumflex",
+    "artery": "lcx",
+    "syntax": "15",
+    "aha": 15,
+    "description": "The most distal part of a dominant left circumflex, when present. It gives rise to septal branches. When this segment is present, segment 4 is usually absent and the system is left dominant."
+  }
+]

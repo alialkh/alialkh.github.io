@@ -1,0 +1,237 @@
+/* The cath lab screens: outlines on stills, artery colours, the title row, the control bar without cine and the panel extras.
+   The stage shell is in ../core, the cine frame, pins and label links reuse ../echo/stage.css and ../echo/panel.css. */
+:root {
+  --a-rca: #ff8a65;
+  --a-left-main: #e8edf3;
+  --a-lad: #7cb7ff;
+  --a-lcx: #6fdc95;
+  --a-other: #c3a6ff;
+  --role-over: #e879f9;
+}
+.a-rca { --c: var(--a-rca); }
+.a-left-main { --c: var(--a-left-main); }
+.a-lad { --c: var(--a-lad); }
+.a-lcx { --c: var(--a-lcx); }
+.a-other { --c: var(--a-other); }
+
+/* Four tabs need more room than echo's three. */
+.stage { --panel-w: 352px; }
+.tabs [role="tab"] { padding: 0 8px; }
+
+/* The title row sits above the image at every width, so the chip never covers it. */
+.viewport { grid-template-rows: auto minmax(0, 1fr) auto; }
+.top-bar { position: relative; top: auto; left: auto; right: auto; grid-row: 1; }
+.players { grid-row: 2; }
+.controls { grid-row: 3; }
+.stage.info-open .test-banner { margin-right: calc(-1 * (var(--panel-w) + var(--gutter))); }
+.case .thumb { filter: brightness(1.1); }
+.thumb.refthumb { display: grid; place-items: center; color: var(--accent); background: var(--surface-2); }
+.thumb.refthumb .icon { width: 1.75rem; height: 1.75rem; }
+
+/* Cine controls are hidden on stills and reference screens, and the toggles stand alone. */
+.controls.static { width: auto; }
+.controls.static .scrub, .controls.static .buttons > .group:not(.toggles) { display: none; }
+.controls.static .toggles { margin: 0; }
+
+/* The still fills its frame, so the outlines, which are fractions of the frame, sit on the vessels. */
+.frame img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: none; background: #000; user-select: none; }
+
+/* Outlines and names on a still. Fractions of the frame, so they stay on the vessels at any size. */
+.regions { position: absolute; inset: 0; pointer-events: none; }
+.regions svg { display: block; width: 100%; height: 100%; max-width: none; }
+.region { fill: var(--c); fill-opacity: 0.28; stroke: var(--c); stroke-width: 1.5; vector-effect: non-scaling-stroke; pointer-events: all; outline: none; cursor: pointer; transition: fill-opacity var(--fast); }
+.region:hover, .region.hi { fill-opacity: 0.55; stroke: #fff; stroke-width: 2.5; }
+.region:focus-visible { fill-opacity: 0.6; stroke: var(--focus); stroke-width: 3.5; }
+.region.pulse { animation: region-pulse 0.5s ease-in-out 3; }
+@keyframes region-pulse { 50% { fill-opacity: 0.9; } }
+.rlabels { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.rlabel { position: absolute; width: 0; height: 0; }
+.rlabel .dot {
+  position: absolute;
+  white-space: nowrap;
+  display: grid;
+  place-items: center;
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--c);
+  color: #0a0f14;
+  font-size: 0;
+  font-weight: 750;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.7);
+  pointer-events: auto;
+}
+.rlabel.badged .dot { width: auto; min-width: 22px; height: 20px; padding: 0 3px; border-radius: 10px; font-size: 0.65rem; }
+.rlabel .chip {
+  position: absolute;
+  left: var(--x, 12px);
+  top: var(--y, -10px);
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: rgb(6 8 12 / 0.84);
+  color: var(--c);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  box-shadow: var(--shadow-1);
+}
+.rlabel.badged .chip { visibility: hidden; }
+.rlabel.badged:is(.hi, .pulse) .chip { visibility: visible; z-index: 2; }
+.app.no-labels :is(.regions, .rlabels, .seg-card, .outline-note), .app.testing :is(.regions, .rlabels, .seg-card, .outline-note) { display: none; }
+.seg-card { position: absolute; z-index: 3; left: 8px; right: 8px; bottom: 8px; display: none; gap: 2px; padding: 8px 12px; border-radius: var(--r-md); font-size: var(--fs-sm); line-height: 1.45; pointer-events: none; }
+.seg-card.top { top: 8px; bottom: auto; }
+.seg-card.shown { display: grid; }
+.seg-card span { color: var(--muted); }
+
+/* The panel's extras. */
+.tab-body .note { padding: 8px 10px; border-left: 3px solid var(--warn); border-radius: var(--r-sm); background: rgb(242 193 78 / 0.08); font-size: var(--fs-sm); }
+.tab-body .credit { font-size: var(--fs-sm); }
+.tab-body .sources a { color: var(--accent); }
+.seg-num { display: inline-grid; place-items: center; min-width: 22px; height: 20px; margin-right: 8px; padding: 0 5px; border-radius: 10px; background: var(--c); color: #0a0f14; font-size: 0.6875rem; font-weight: 750; text-decoration: none; vertical-align: 1px; }
+.seg-list { list-style: none; padding: 0 !important; }
+.seg-list .label-link { color: var(--text); text-decoration: none; }
+.seg-list .label-link:hover { color: #fff; }
+.seg-list .label-link .seg-num { margin-top: 0; }
+.views { list-style: none; padding: 0 !important; }
+.views li { display: grid; gap: 1px; margin-bottom: 10px; }
+.views span, .concept p { color: var(--muted); font-size: var(--fs-sm); }
+.concept { margin-bottom: 8px; padding: 6px 0; border-bottom: 1px solid var(--glass-border); }
+.concept summary { cursor: pointer; font-weight: 600; }
+.concept[open] summary { margin-bottom: 6px; }
+.proj-title { margin: 0 0 4px; font-size: var(--fs-lg); }
+
+/* Reference screens. */
+.ref { flex: 1 1 0; min-width: 0; min-height: 0; display: grid; gap: 10px 16px; overflow: auto; align-content: start; padding: 2px 2px 6px; scrollbar-width: thin; scrollbar-color: var(--surface-3) transparent; }
+.ref-tools { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.segmented { display: inline-flex; border: 1px solid var(--control-border); border-radius: var(--r-md); overflow: hidden; }
+.seg-btn { min-height: 2.25rem; padding: 0 12px; border: 0; border-radius: 0; background: var(--surface); font-size: var(--fs-sm); font-weight: 600; }
+.seg-btn + .seg-btn { border-left: 1px solid var(--control-border); }
+.seg-btn[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+.ref-card { min-height: 7rem; padding: 10px 12px; border: 1px solid var(--glass-border); border-radius: var(--r-md); background: var(--surface); font-size: var(--fs-sm); line-height: 1.5; }
+.ref-card p { margin: 0 0 6px; }
+.ref-card ul, .ref-card ol { margin: 0 0 6px; padding-left: 1.1rem; }
+.ref-card li { margin-bottom: 3px; }
+.ref-card .sources a { color: var(--accent); }
+.card-sub { margin: 8px 0 4px; font-size: var(--fs-xs); font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ref-card p:last-child { margin: 0; }
+.ref-card-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; font-size: var(--fs-md); }
+.ref-card-title .seg-num { margin-right: 0; }
+.ref-hint, .ref-summary { margin: 0; font-size: var(--fs-sm); color: var(--muted); }
+.ref-summary { flex: 1 1 14rem; color: var(--text); }
+.legend, .role-key { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: var(--fs-xs); }
+.legend li, .role-key li { display: flex; align-items: center; gap: 6px; }
+.swatch { flex: none; width: 12px; height: 12px; border-radius: 3px; background: var(--c); }
+.role-sw { flex: none; width: 22px; height: 0; border-top: 4px solid #fff; border-radius: 2px; }
+.role-sw.foreshortened { border-top: 4px dashed var(--warn); }
+.role-sw.overlapped { border-top-color: var(--role-over); box-shadow: 0 0 6px var(--role-over); }
+.role-sw.best { box-shadow: 0 0 6px #fff; }
+
+/* Tree: the diagram on the left, the card, legend and notes on the right. */
+.ref-tree { grid-template-columns: minmax(0, 1fr) minmax(13rem, 17rem); grid-template-rows: auto minmax(0, 1fr); height: 100%; }
+.ref-side > * + * { margin-top: 10px; }
+.tree-box { min-height: 0; display: grid; }
+.tree { display: block; width: 100%; height: 100%; max-width: none; }
+.tree .outline { fill: var(--surface-2); stroke: #3a4552; stroke-width: 2; }
+.tree .aorta { fill: none; stroke: #667385; stroke-width: 3; }
+.tree .root { fill: var(--surface-3); stroke: #667385; stroke-width: 2; }
+.tree .crux { fill: #667385; }
+.tree .septal { fill: none; stroke: #667385; stroke-width: 2.5; stroke-linecap: round; }
+.tree .notes text { fill: var(--muted); font: 14px var(--font); }
+.tree .glow, .tree .halo, .tree .line, .tree .hit { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.tree .glow, .tree .hit { stroke: transparent; }
+.tree .halo { stroke: var(--surface-2); }
+.tree .line { stroke: var(--c); transition: opacity var(--fast); }
+.tree .hit { pointer-events: stroke; cursor: pointer; }
+.tree .badge { cursor: pointer; outline: none; transition: opacity var(--fast); }
+.tree .badge circle { fill: #090c11; stroke: var(--c); stroke-width: 2; }
+.tree .badge text { fill: #fff; font: 700 13px var(--font); text-anchor: middle; pointer-events: none; }
+.tree .badge:focus-visible circle { stroke: var(--focus); stroke-width: 4; }
+.tree.no-numbers .badges { display: none; }
+.tree .glow.hi { stroke: #fff; stroke-opacity: 0.4; }
+.tree .glow.sel { stroke: var(--accent); stroke-opacity: 0.5; }
+.tree .badge.sel circle { fill: var(--c); }
+.tree .badge.sel text { fill: #0a0f14; }
+/* A segment the table says is usually absent in this dominance. */
+.tree[data-dominance="right"] [data-seg="seg-15"]:is(.line, .badge), .tree[data-dominance="left"] [data-seg="seg-4"]:is(.line, .badge) { opacity: 0.32; }
+.tree[data-dominance="right"] .line[data-seg="seg-15"], .tree[data-dominance="left"] .line[data-seg="seg-4"] { stroke-dasharray: 7 7; }
+/* Projection roles. */
+.tree.has-roles .line:not(.best, .fore, .over), .tree.has-roles .badge:not(.best, .fore, .over) { opacity: 0.3; }
+.tree .glow.best { stroke: #fff; stroke-opacity: 0.6; }
+.tree .glow.over:not(.best) { stroke: var(--role-over); stroke-opacity: 0.65; }
+.tree .line.fore { stroke-dasharray: 10 7; }
+.tree .badge.fore circle { stroke: var(--warn); stroke-width: 3.5; }
+.tree .badge.over circle { stroke: var(--role-over); stroke-width: 3.5; }
+.tree .badge.best circle { stroke: #fff; stroke-width: 3.5; }
+
+/* Projection guide: the C-arm on the left, the coronary diagram on the right. */
+.ref-views { grid-template-columns: minmax(15rem, 20rem) minmax(0, 1fr); }
+.ref-left, .ref-right { min-width: 0; }
+.ref-left > * + *, .ref-right > * + * { margin-top: 10px; }
+.ref-right .tree-box { height: min(60vh, 620px); }
+.carm { display: grid; gap: 10px; }
+.carm-figs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.carm-fig { margin: 0; }
+.carm-fig svg { display: block; width: 100%; height: auto; border-radius: var(--r-md); background: var(--surface); }
+.carm-fig figcaption { margin-top: 4px; font-size: var(--fs-xs); line-height: 1.4; color: var(--muted); }
+.carm .body { fill: var(--surface-3); stroke: #3a4552; stroke-width: 2; }
+.carm .lung { fill: rgb(124 183 255 / 0.1); }
+.carm .heart { fill: rgb(255 138 128 / 0.35); stroke: #ff8a80; stroke-width: 1.5; }
+.carm .bone { fill: none; stroke: var(--muted); stroke-width: 2; opacity: 0.6; }
+.carm .table { fill: #667385; }
+.carm .ray { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 4; }
+.carm .detector rect { fill: var(--accent); }
+.carm .tube circle { fill: var(--warn); }
+.carm .tube path { fill: none; stroke: #1a1405; stroke-width: 1.6; }
+.carm .side { fill: var(--muted); font: 600 12px var(--font); }
+.carm-sliders { display: grid; gap: 4px; }
+.carm-sliders label { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) 5.5rem; align-items: center; gap: 8px; font-size: var(--fs-sm); }
+.carm-sliders input { width: 100%; margin: 0; accent-color: var(--accent); }
+.carm-value { font-variant-numeric: tabular-nums; font-weight: 600; }
+.view-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.view-btn { display: grid; gap: 1px; justify-items: start; padding: 6px 10px; text-align: left; font-size: var(--fs-sm); }
+.view-btn span { font-size: var(--fs-xs); color: var(--muted); }
+.view-btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+
+/* IVUS cross-section. */
+.ref-ivus { grid-template-columns: minmax(0, 1fr) minmax(13rem, 19rem); grid-template-rows: minmax(0, 1fr); height: 100%; }
+.ref-main { min-height: 0; display: grid; }
+.ivus-box { min-height: 0; display: grid; }
+.ivus-box svg { display: block; width: 100%; height: 100%; max-width: none; }
+.ivus-box .field { fill: #050607; }
+.ivus-box .speckle { opacity: 0.5; }
+.ivus-box .part { outline: none; cursor: pointer; }
+.ivus-box .media { fill: #2c3138; }
+.ivus-box .plaque { fill: #7b8089; }
+.ivus-box .lumen { fill: #07080a; }
+.ivus-box .edge { fill: none; stroke: #e6e9ed; stroke-width: 2.5; pointer-events: none; }
+.ivus-box .eem { fill: #d5d9de; }
+.ivus-box .calcium { fill: #fff; }
+.ivus-box .guidewire { fill: rgb(0 0 0 / 0.88); }
+.ivus-box .wire { fill: #fff; pointer-events: none; }
+.ivus-box .catheter .body { fill: #000; }
+.ivus-box .catheter .halo { fill: none; stroke: #fff; stroke-width: 4; opacity: 0.9; }
+.ivus-box .catheter .halo2 { fill: none; stroke: #fff; stroke-width: 2; opacity: 0.35; }
+.ivus-box .ticks circle { fill: #8a929c; }
+.ivus-box .part:hover, .ivus-box .part.hi { filter: brightness(1.4); stroke: var(--accent); stroke-width: 2; }
+.ivus-box .part.sel { stroke: var(--accent); stroke-width: 3; }
+.ivus-box .part:focus-visible { stroke: var(--focus); stroke-width: 3.5; }
+.part-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.part-btn { min-height: 2rem; padding: 0 10px; font-size: var(--fs-xs); }
+.part-btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.formula { margin: 0; padding: 8px 10px; border-left: 3px solid var(--accent); border-radius: var(--r-sm); background: var(--accent-soft); font-size: var(--fs-sm); line-height: 1.5; }
+
+/* A reference screen stacks its columns when its own box is narrow, whatever the viewport and the panel are doing. */
+.ref.narrow { display: block; height: auto; }
+.ref.narrow > * + * { margin-top: 10px; }
+.ref.narrow :is(.tree-box, .ivus-box) { display: block; }
+.ref.narrow :is(.tree, .ivus-box svg) { height: auto; }
+.ref.narrow .ref-right .tree-box { height: auto; }
+
+@media (max-width: 800px) {
+  .stage.info-open .test-banner { margin-right: 0; }
+  .carm-sliders label { grid-template-columns: 5rem minmax(0, 1fr) 5rem; }
+  .seg-btn { padding: 0 9px; font-size: var(--fs-xs); }
+  .ref-tools { gap: 6px 8px; }
+}

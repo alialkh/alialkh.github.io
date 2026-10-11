@@ -1,0 +1,231 @@
+[
+  {
+    "id": "pullback",
+    "name": "Pullback",
+    "definition": "A pullback moves the IVUS transducer back through the artery while it records cross-sections. The consensus highly recommends an automatic motorized pullback, at a fixed speed that ranges from 0.5 to 10 mm per second in current systems. Because the speed is known, length on IVUS equals the number of seconds multiplied by the pullback speed.",
+    "howToSee": "The run is a series of cross-sections recorded from distal to proximal. The consensus recommends starting at least 10 mm beyond the area of interest and ideally continuing until the aorta is seen. Intracoronary nitrate is given first to dilate the artery and prevent spasm.",
+    "pitfalls": [
+      "With a manual pullback, length cannot be measured.",
+      "The transducer can move along the artery by as much as 5 mm between diastole and systole.",
+      "To image a lesion at the aortic ostium, the guiding catheter must be pulled back out of the ostium."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "catheter-and-guidewire",
+    "name": "Catheter and guidewire artefacts",
+    "definition": "The IVUS catheter lies in the lumen and appears in the image. Ring-down artefact is a bright halo of variable thickness around the catheter. The guidewire casts an acoustic shadow.",
+    "howToSee": "Find the catheter with its ring-down halo and the guidewire with its shadow. Take both into account before you trace the lumen and the vessel wall.",
+    "pitfalls": [
+      "Measure lumen diameters from the centre of the lumen, not the centre of the catheter.",
+      "In phased array systems ring-down can be partly removed by subtracting a reference mask. Done badly, this can remove real information or add false targets.",
+      "Skip frames where the catheter lies obliquely in the artery.",
+      "Non-uniform rotational distortion happens only with mechanical catheters, usually in tortuous vessels or sharp bends, and smears part of the image into a wedge.",
+      "Motion artefact from the beating heart can distort a frame. Avoid measuring frames where the leading edge of the wall is unclear.",
+      "Side lobes are false echoes from strong reflectors such as stent struts and calcium."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "lumen",
+    "name": "Lumen and lumen area",
+    "definition": "The lumen is the channel where blood flows. Lumen area is the area inside the luminal border, which is the leading edge of the intima. The intima is the innermost echogenic layer and is brighter than the lumen and the media.",
+    "howToSee": "Trace the inner edge of the first bright layer of the wall, all the way round. Always trace leading edges, never trailing edges.",
+    "pitfalls": [
+      "Measurements at the trailing edge are inconsistent and often wrong.",
+      "If there is a dissection, say whether the lumen area is the true lumen alone or the true and false lumen together.",
+      "Stagnant blood can be hard to tell from thrombus. A flush of contrast or saline clears stagnant blood."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "eem",
+    "name": "External elastic membrane and vessel area",
+    "definition": "The external elastic membrane (EEM) lies at the border between the media and the adventitia. EEM area is the area inside that border. It includes the lumen, the plaque and the media. EEM area is the recommended term, and vessel area is a common alternative name.",
+    "howToSee": "Look for the discrete interface between the media and the adventitia and trace its leading edge. The media is less echogenic than the intima.",
+    "pitfalls": [
+      "The EEM cannot be traced reliably where a large side branch leaves or where calcium casts a wide shadow.",
+      "If calcium shadows less than 90 degrees of the circle, the EEM can be extrapolated from the nearest visible border. If it shadows more than 90 degrees, do not measure EEM area.",
+      "Diseased arteries may not be circular, so measure EEM diameters through the centre of the vessel, not the catheter."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "plaque-burden",
+    "name": "Plaque plus media area and plaque burden",
+    "definition": "IVUS cannot see the inner edge of the media well, so plaque is measured together with the media. Plaque plus media area = EEM area minus lumen area. Plaque burden = plaque plus media area divided by EEM area, which is (EEM area minus lumen area) divided by EEM area. The consensus writes plaque burden thresholds as percentages.",
+    "howToSee": "Trace the lumen and the EEM in the same frame. The ring between the two tracings is plaque plus media.",
+    "pitfalls": [
+      "Plaque burden is not the same as lumen narrowing. It tells you how much of the vessel is plaque, whatever the lumen size.",
+      "Plaque plus media area is the recommended term. Plaque area is a common alternative name."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "minimum-lumen-area",
+    "name": "Minimum lumen area",
+    "definition": "The minimum lumen area (MLA) is the smallest lumen area in a lesion. The worst stenosis is the one with the smallest lumen, which may not be where the plaque is largest. Lumen area stenosis = (reference lumen area minus MLA) divided by reference lumen area. On IVUS a stenosis is a lesion that narrows the lumen by at least 50 percent by area compared with the reference.",
+    "howToSee": "Scroll through the whole lesion frame by frame and find the frame with the smallest lumen, then trace it.",
+    "pitfalls": [
+      "Survey the whole lesion for its plaque type and calcium, not only the frame with the smallest lumen.",
+      "State which reference you used for lumen area stenosis.",
+      "The consensus says no IVUS feature defines a plaque as vulnerable for certain. Plaque burden of 70 percent or more, an MLA under 4 mm² and thin-cap fibroatheroma on virtual histology IVUS were independent predictors of events in a study it cites."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "reference-segments",
+    "name": "Reference segments",
+    "definition": "The proximal reference is the frame with the largest lumen proximal to a stenosis within the same segment, usually within 10 mm and with no major branch in between. The distal reference is the same on the distal side. The largest reference is the bigger of the two, and the average reference is their mean. A reference frame is not always the frame with the least plaque.",
+    "howToSee": "Look upstream and downstream of the stenosis, within the same segment, for the frame with the largest lumen. Measure lumen, EEM and plaque there too.",
+    "pitfalls": [
+      "Decide in advance which reference you will use and say which one it was.",
+      "Two narrowings less than 5 mm apart count as one lesion.",
+      "Use the same reference frames before and after treatment. Side branches and calcium make good landmarks for finding them again."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "calcium",
+    "name": "Calcium and acoustic shadowing",
+    "definition": "Calcium appears as bright echoes that block the ultrasound, so a dark acoustic shadow lies behind it. Calcium is superficial when the leading edge of the shadow is in the inner half of the plaque plus media thickness, and deep when it is in the outer half. Spotty calcium means only small deposits within an arc of less than 90 degrees.",
+    "howToSee": "Look for a bright arc with a dark acoustic shadow behind it. Calcium may also cause reverberations, which are repeated concentric arcs at regular distances. Measure the arc with a protractor centred on the lumen and the length from the pullback.",
+    "pitfalls": [
+      "IVUS sees only the front edge of calcium, so it cannot measure how thick the calcium is.",
+      "Wide calcium hides the EEM behind it.",
+      "A dissection can hide behind calcium."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "soft-plaque",
+    "name": "Soft (lipid) plaque",
+    "definition": "Soft plaque is less echogenic than the adventitia nearby. The word soft describes the darker ultrasound signal, not how firm the plaque is. It usually reflects high lipid content.",
+    "howToSee": "Compare the plaque with the adventitia in the same frame. Soft plaque looks darker.",
+    "pitfalls": [
+      "A dark zone can also be a necrotic core, bleeding within the wall or thrombus.",
+      "Grey-scale IVUS cannot name tissue types the way histology can."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "fibrous-plaque",
+    "name": "Fibrous plaque",
+    "definition": "Fibrous plaque has an echogenicity between dark soft plaque and very bright calcified plaque. The more fibrous tissue it has, the brighter it looks. A plaque with more than one of these types is called mixed.",
+    "howToSee": "Look for plaque of medium brightness without a shadow behind it.",
+    "pitfalls": [
+      "Bright plaque that casts a shadow is calcified, not fibrous."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "attenuated-plaque",
+    "name": "Attenuated plaque",
+    "definition": "Attenuated plaque is plaque with the signal fading behind it, without dense calcium. It is linked to a large necrotic core, to no-flow during PCI and to later coronary events.",
+    "howToSee": "Look for plaque where the image fades out behind it but there is no bright calcium at the front edge.",
+    "pitfalls": [
+      "Do not call it calcium. Attenuated plaque has no dense calcium, while calcium shows bright echoes at its front edge."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "dissection",
+    "name": "Dissection",
+    "definition": "A dissection is a tear in the vessel wall, either from PCI or spontaneous. The consensus has five types. Intimal stays in the intima or plaque. Medial reaches the media. Adventitial goes through the EEM. Intramural haematoma is blood within the media. Intra-stent separates new tissue from stent struts after treatment of in-stent restenosis.",
+    "howToSee": "Look for a flap, which may be mobile, and for a false lumen. Record its depth, its arc in degrees, its length on the pullback, the remaining lumen area and the dissection area. Dissections from PCI usually lie in the ballooned segment or at the edge of a stent.",
+    "pitfalls": [
+      "The imaging catheter can hold a dissection closed, and calcium can hide one.",
+      "A flush of contrast or saline can show a dissection more clearly."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "intramural-haematoma",
+    "name": "Intramural haematoma",
+    "definition": "An intramural haematoma is blood collected within the media. It pushes the internal elastic membrane inward and the EEM outward. The consensus counts it as one type of dissection.",
+    "howToSee": "Look for blood inside the wall that pushes the inner layers toward the lumen and the EEM outward.",
+    "pitfalls": [
+      "An entry or exit point may not be visible.",
+      "Like other dissections, it can be hidden by the imaging catheter or behind calcium."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "side-branches",
+    "name": "Side branches",
+    "definition": "Side branches are landmarks along the pullback. They help you find the same frame again on a later run. Side branches connect with the true lumen, not with a false lumen.",
+    "howToSee": "Note the distance from the frame you care about to the nearest side branch, then find that branch on the next run and measure the same distance.",
+    "pitfalls": [
+      "Do not measure areas where a large side branch leaves, because the EEM cannot be traced reliably there.",
+      "Choose reference frames with no major branch between them and the stenosis."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "thrombus",
+    "name": "Thrombus",
+    "definition": "Thrombus usually appears as a mass inside the lumen, often layered, lobulated or on a stalk. It may be relatively dark or have a variable grey speckled or sparkling texture. Some thrombi show small channels of flowing blood.",
+    "howToSee": "Look for a mass in the lumen, then flush contrast or saline. Stagnant blood clears with a flush while thrombus stays.",
+    "pitfalls": [
+      "IVUS diagnosis of thrombus is always presumptive.",
+      "Thrombus can hide plaque fissuring or ulceration underneath it."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "stent-apposition",
+    "name": "Stent apposition",
+    "definition": "Apposition is how closely the stent struts touch the artery wall. Struts are well apposed when they are close enough that no blood flows between any strut and the wall. Incomplete apposition, also called malapposition, is reported by its arc and length.",
+    "howToSee": "Metal struts are bright points or arcs around the vessel. Look for blood between a strut and the wall, and flush contrast or saline if unsure.",
+    "pitfalls": [
+      "Stent area is traced along the leading edge of the struts. With malapposition the stent area is smaller than the lumen area.",
+      "Side lobes from struts can blur the lumen and stent borders."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  },
+  {
+    "id": "stent-expansion",
+    "name": "Stent expansion",
+    "definition": "Stent expansion compares the minimum stent area with a predefined reference area. Underexpansion is usually defined as expansion under 80 percent of the reference, or as a minimum stent area under a single cut-off such as 5.0 or 5.5 mm².",
+    "howToSee": "Trace the stent along the leading edge of its struts in every frame, find the smallest stent area and compare it with the reference you chose.",
+    "pitfalls": [
+      "Say which reference you used, because the percentage depends on it.",
+      "In the ULTIMATE trial, as summarised by the consensus, better outcomes went with an MLA in the stented segment over 5.0 mm² or over 90 percent of the distal reference MLA, plaque burden under 50 percent at the stent edges and no edge dissection."
+    ],
+    "sources": [
+      "Saito Y et al. CVIT 2025 clinical expert consensus document on intravascular ultrasound. Cardiovasc Interv Ther 2025;40:211-225. PMID 39870989."
+    ]
+  }
+]

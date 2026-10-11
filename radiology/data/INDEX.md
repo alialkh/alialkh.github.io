@@ -6,10 +6,12 @@ Add a row to the table in the same change as each case or clip.
 ## Layout
 - `cases/manifest.json` (Case[]) plus one folder per volume, `cases/<case-id>/<series-id>/` and `cases/<case-id>/labels/`, each holding `vol.json` and gzip chunks `c0000.gz` and so on
 - `clips/manifest.json` plus `clips/<clip-id>.mp4`
+- `cath/manifest.json` (CathCase[]) plus, beside it, `<id>.jpg` and `<id>-thumb.jpg` per still, `<id>.mp4` and `<id>.jpg` per clip
 
 ## Shapes
 - Case, Series, Label set and Finding: see `../docs/viewer-content.md`. All series and the labels of a case share one grid.
 - Clip: see `../docs/echo-content.md`
+- CathCase: see `../docs/cta-content.md`
 
 ## Ingest notes for CT and MRI
 - Convert with `../tools/to-lps.py`, pack with `../tools/pack-volume.mjs`. Chunks hold whole slices. Pick `--chunk-slices` so one chunk is about 0.3 to 0.5 MB gzipped, because the loader pulls three at once and the first image waits for them. That is 1 for 512 by 512 CT, 4 for 256 by 256 CT, 6 to 16 for brain MRI and 32 for the spine.
@@ -20,8 +22,14 @@ Add a row to the table in the same change as each case or clip.
 - UPENN-GBM: a box in front of the eyes (first 40 voxels from the front, below voxel 85 from the bottom) is zero in all four series to remove the eyelid and nose contour.
 - FUMPE: the MATLAB mask is `Mask[row, column, slice]` and lines up with the CT as `[slice, row, column]` with no flips, found by testing all 16 flips and transposes against the CT.
 
+## Ingest notes for the cath lab
+- Encode with `../tools/add-cath.mjs`. It refuses anything the validator in `../cta/content.js` rejects and writes nothing in that case.
+- ARCADE: the COCO category id is an index, not the segment number, so the category name is the key and maps to `seg-<name>`. A name the segment table lacks is dropped and reported. Polygons are simplified to 0.7 px and stored as fractions of the 512 by 512 frame. The dataset gives no projection, so no case names one.
+- CADICA: frames are PNGs, assembled at 10 fps (the rate the dataset states). Lesion boxes exist on key frames only and drift between frames, so a pin goes in only where a box lines up with a visible narrowing in the frames checked. One pin of 5 clips met that test. The band names (p0_20 to p90_98) are not defined in the dataset files and are read as percent ranges.
+- IVUS: the source video is stretched sideways by about 4:3. The 1 mm ticks are 58 px apart vertically and 77.5 px horizontally, so the width is scaled by 0.75 (`--stretch 0.75`) and the cross-section comes out round. Encoded at CRF 30, because speckle makes IVUS expensive. Audio is dropped.
+
 ## Budget
-GitHub Pages guidance is about 1 GB per site and 100 MB per file. Keep this folder under about 300 MB and move overflow to external static storage. The CT and MRI cases take about 115 MB so far.
+GitHub Pages guidance is about 1 GB per site and 100 MB per file. Keep this folder under about 300 MB and move overflow to external static storage. The CT and MRI cases take about 115 MB so far and the cath lab media about 11 MB.
 
 | id | kind | size | license |
 |---|---|---|---|
@@ -55,3 +63,19 @@ GitHub Pages guidance is about 1 GB per site and 100 MB per file. Keep this fold
 | hcctace-hcc010 | CT case, abdomen, pre-contrast liver | 5.0 MB | CC BY 4.0 |
 | spider-patient1 | MR case, spine, T1 and T2, 15 labels | 11.8 MB | CC BY 4.0 |
 | msd-la005 | MR case, cardiac, left atrium label | 10.8 MB | CC BY-SA 4.0 |
+| arcade-12 | angiogram still, 4 outlined segments | 34 KB | CC0 1.0 |
+| arcade-100 | angiogram still, 5 outlined segments | 42 KB | CC0 1.0 |
+| arcade-145 | angiogram still, 3 outlined segments | 17 KB | CC0 1.0 |
+| arcade-14 | angiogram still, 8 outlined segments | 36 KB | CC0 1.0 |
+| arcade-10 | angiogram still, 3 outlined segments | 26 KB | CC0 1.0 |
+| arcade-102 | angiogram still, 6 outlined segments | 43 KB | CC0 1.0 |
+| arcade-119 | angiogram still, 7 outlined segments | 37 KB | CC0 1.0 |
+| arcade-1 | angiogram still, 6 outlined segments | 39 KB | CC0 1.0 |
+| arcade-33 | angiogram still, 11 outlined segments | 38 KB | CC0 1.0 |
+| arcade-154 | angiogram still, 8 outlined segments | 37 KB | CC0 1.0 |
+| cadica-p12-v1 | angiogram cine, 1 lesion pin | 465 KB | CC BY 4.0 |
+| cadica-p40-v1 | angiogram cine | 390 KB | CC BY 4.0 |
+| cadica-p40-v7 | angiogram cine | 347 KB | CC BY 4.0 |
+| cadica-p12-v7 | angiogram cine | 769 KB | CC BY 4.0 |
+| cadica-p40-v11 | angiogram cine | 337 KB | CC BY 4.0 |
+| ivus-scad-haematoma | IVUS clip, square pixels | 8.3 MB | CC BY 2.0 |

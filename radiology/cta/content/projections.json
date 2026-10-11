@@ -1,0 +1,418 @@
+[
+  {
+    "id": "lao-cranial",
+    "name": "LAO cranial (left coronary)",
+    "aliases": [
+      "Left cranial"
+    ],
+    "primary": {
+      "side": "LAO",
+      "angle": 45
+    },
+    "secondary": {
+      "direction": "cranial",
+      "angle": 20
+    },
+    "system": "left",
+    "bestSeen": [
+      "seg-5",
+      "seg-6",
+      "seg-7",
+      "seg-9",
+      "seg-13"
+    ],
+    "foreshortened": [],
+    "overlapped": [],
+    "whenToUse": "Use it to straighten the proximal and mid LAD and to show septal branches leaving on one side and diagonal branches on the other. It is a key view for the bifurcation of the LAD with a diagonal and for the left main ostium. It also shows the mid and distal circumflex, especially when the circumflex is dominant. Sources give different angles. Aquilina shows LAO 45 with 20 cranial, Tarighatnia uses LAO 40 with 20 cranial, Naber shows LAO 60 with 30 cranial, and Di Mario gives LAO 30 to 45 with 25 to 35 cranial. Sources also disagree on the left main. Tarighatnia says this view is generally used to show the left main, while Di Mario rates it ideal for the left main ostium but not recommended for the left main bifurcation.",
+    "pitfalls": [
+      "If the LAD lies over the spine the image is poor. Di Mario suggests turning further left, to 40 to 45 degrees, especially in obese patients.",
+      "Ask for a deep breath and a breath hold during the injection. This lengthens the LAD and moves the diaphragm out of the image.",
+      "A vertical heart may need a steeper cranial tilt of 35 to 40 degrees.",
+      "In one published example the proximal LAD looked foreshortened and the aortic sinus overlapped it, although the view showed a mid LAD lesion best.",
+      "In one study the operator received the highest radiation dose of the six standard views in LAO cranial."
+    ],
+    "sources": [
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378.",
+      "Naber CK et al. Tools & Techniques: angiographic views. EuroIntervention 2010;6:424-425. PMID 20884425.",
+      "Aquilina O et al. Normal adult coronary angiography. Images Paediatr Cardiol 2006;8:1-16. PMID 22368661.",
+      "Tarighatnia A et al. Beam projections and radiation exposure in transradial and transfemoral approaches during coronary angiography. Anatol J Cardiol 2017;18:298-303. PMID 28777096.",
+      "Kern M. Angiographic projections made simple: an easy guide to understanding oblique views. Cath Lab Digest, August 2011. https://www.hmpgloballearningnetwork.com/site/cathlab/articles/angiographic-projections-made-simple-easy-guide-understanding-oblique-views"
+    ]
+  },
+  {
+    "id": "lao-caudal",
+    "name": "LAO caudal (spider view)",
+    "aliases": [
+      "Spider view",
+      "Left caudal"
+    ],
+    "primary": {
+      "side": "LAO",
+      "angle": 45
+    },
+    "secondary": {
+      "direction": "caudal",
+      "angle": 30
+    },
+    "system": "left",
+    "bestSeen": [
+      "seg-5",
+      "seg-6",
+      "seg-9",
+      "seg-11",
+      "seg-12"
+    ],
+    "foreshortened": [
+      "seg-7"
+    ],
+    "overlapped": [],
+    "whenToUse": "Its main strength is showing where the left main divides into the LAD and circumflex, or into three when an intermediate branch is present. Di Mario suggests it as the first left coronary view so that left main disease is not missed. It also shows the proximal LAD and the origin of the first diagonal. Di Mario's text says the circumflex is shown best in its proximal and mid parts here, but his table rates the proximal circumflex only as occasionally useful in this view. Sources give different angles. Aquilina shows LAO 45 with 30 caudal, Tarighatnia uses LAO 50 with 30 caudal, and Naber shows LAO 60 with 30 caudal. Di Mario's text gives 30 to 50 degrees LAO with 25 to 40 caudal, while his table gives LAO 40 to 50. A more horizontal or vertical heart needs a steeper caudal tilt or a more lateral angle.",
+    "pitfalls": [
+      "The spider view is LAO caudal. Do not confuse it with RAO caudal, which is a separate view.",
+      "The mid LAD is greatly foreshortened, so a mid LAD lesion can be missed in this view.",
+      "The left main shaft is foreshortened and its ostium can be partly hidden, so check the ostium in another view.",
+      "X-rays penetrate poorly at this angle, so images in obese patients are often grainy.",
+      "It is rarely usable as a working view for angioplasty.",
+      "In one study this view gave the patient the highest radiation dose of the six standard views."
+    ],
+    "sources": [
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378.",
+      "Aquilina O et al. Normal adult coronary angiography. Images Paediatr Cardiol 2006;8:1-16. PMID 22368661.",
+      "Naber CK et al. Tools & Techniques: angiographic views. EuroIntervention 2010;6:424-425. PMID 20884425.",
+      "Tarighatnia A et al. Beam projections and radiation exposure in transradial and transfemoral approaches during coronary angiography. Anatol J Cardiol 2017;18:298-303. PMID 28777096.",
+      "Kern M. Angiographic projections made simple: an easy guide to understanding oblique views. Cath Lab Digest, August 2011. https://www.hmpgloballearningnetwork.com/site/cathlab/articles/angiographic-projections-made-simple-easy-guide-understanding-oblique-views"
+    ]
+  },
+  {
+    "id": "rao-cranial",
+    "name": "RAO cranial (left coronary)",
+    "aliases": [
+      "Right cranial"
+    ],
+    "primary": {
+      "side": "RAO",
+      "angle": 30
+    },
+    "secondary": {
+      "direction": "cranial",
+      "angle": 30
+    },
+    "system": "left",
+    "bestSeen": [
+      "seg-6",
+      "seg-7"
+    ],
+    "foreshortened": [
+      "seg-11"
+    ],
+    "overlapped": [
+      "seg-9",
+      "seg-10",
+      "seg-11"
+    ],
+    "whenToUse": "A cranial view of the LAD. Naber and Kern both say cranial views are the most useful for the LAD and its diagonal branches. Sources give different angles. Naber shows RAO 30 with 30 cranial, Tarighatnia uses RAO 15 with 35 cranial, and Aquilina shows RAO 10 with 20 cranial and RAO 35 with 20 cranial. Di Mario prefers a smaller turn to the right of 5 to 10 degrees with 35 to 45 degrees cranial, close to AP cranial, because a 30 degree turn to the right overlaps the diagonal branches more.",
+    "pitfalls": [
+      "Cranial tilt in RAO tips the circumflex upward, so it is foreshortened and overlaps the LAD.",
+      "With a 30 degree turn to the right the diagonal branches overlap more, and the diaphragm moves widely in the background with breathing."
+    ],
+    "sources": [
+      "Naber CK et al. Tools & Techniques: angiographic views. EuroIntervention 2010;6:424-425. PMID 20884425.",
+      "Kern M. Angiographic projections made simple: an easy guide to understanding oblique views. Cath Lab Digest, August 2011. https://www.hmpgloballearningnetwork.com/site/cathlab/articles/angiographic-projections-made-simple-easy-guide-understanding-oblique-views",
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378.",
+      "Aquilina O et al. Normal adult coronary angiography. Images Paediatr Cardiol 2006;8:1-16. PMID 22368661.",
+      "Tarighatnia A et al. Beam projections and radiation exposure in transradial and transfemoral approaches during coronary angiography. Anatol J Cardiol 2017;18:298-303. PMID 28777096."
+    ]
+  },
+  {
+    "id": "rao-caudal",
+    "name": "RAO caudal (left coronary)",
+    "aliases": [
+      "Right caudal"
+    ],
+    "primary": {
+      "side": "RAO",
+      "angle": 30
+    },
+    "secondary": {
+      "direction": "caudal",
+      "angle": 30
+    },
+    "system": "left",
+    "bestSeen": [
+      "seg-5",
+      "seg-11",
+      "seg-12a",
+      "seg-13",
+      "seg-8"
+    ],
+    "foreshortened": [],
+    "overlapped": [
+      "seg-6",
+      "seg-7"
+    ],
+    "whenToUse": "The usual working view for the circumflex. Caudal tilt in RAO tips the circumflex downward and away from the LAD. It shows the proximal and mid circumflex and the origins of its marginal branches. Di Mario calls it the most important view for the distal LAD and the view to use for a TIMI frame count. Occasionally an ostial LAD or intermediate branch lesion shows better here than in the spider view. Sources give different angles. Naber shows RAO 30 with 30 caudal, Tarighatnia uses RAO 20 with 25 caudal, and Aquilina shows RAO 20 with 20 caudal and RAO 35 with 30 caudal. Di Mario gives a classic RAO 30 to 45 with 30 to 40 caudal and an easier working version with only 10 to 20 degrees of RAO.",
+    "pitfalls": [
+      "This is not the spider view. The spider view is LAO caudal.",
+      "Diagonal and septal branches often overlap the proximal and mid LAD, so Di Mario's text calls this view of limited value there. His own table still rates the proximal LAD as ideal in this view, so the source is not consistent. Check the LAD in a cranial view."
+    ],
+    "sources": [
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378.",
+      "Kern M. Angiographic projections made simple: an easy guide to understanding oblique views. Cath Lab Digest, August 2011. https://www.hmpgloballearningnetwork.com/site/cathlab/articles/angiographic-projections-made-simple-easy-guide-understanding-oblique-views",
+      "Naber CK et al. Tools & Techniques: angiographic views. EuroIntervention 2010;6:424-425. PMID 20884425.",
+      "Aquilina O et al. Normal adult coronary angiography. Images Paediatr Cardiol 2006;8:1-16. PMID 22368661.",
+      "Tarighatnia A et al. Beam projections and radiation exposure in transradial and transfemoral approaches during coronary angiography. Anatol J Cardiol 2017;18:298-303. PMID 28777096."
+    ]
+  },
+  {
+    "id": "ap-cranial",
+    "name": "AP cranial (left coronary)",
+    "aliases": [
+      "PA cranial"
+    ],
+    "primary": {
+      "side": "AP",
+      "angle": 0
+    },
+    "secondary": {
+      "direction": "cranial",
+      "angle": 40
+    },
+    "system": "left",
+    "bestSeen": [
+      "seg-5",
+      "seg-6",
+      "seg-7",
+      "seg-13",
+      "seg-14"
+    ],
+    "foreshortened": [
+      "seg-8",
+      "seg-11"
+    ],
+    "overlapped": [
+      "seg-11"
+    ],
+    "whenToUse": "Di Mario calls it the ideal working view for most proximal and mid LAD lesions. A steep cranial tilt of 40 degrees or more separates the LAD from the diagonal branches, which run to the right of the screen, and from the septal branches, which run to the left. It also lengthens the left main shaft, shows the left main ostium and lengthens the distal posterolateral branches of the circumflex. Treatment can continue in this view without breath holding. Di Mario's range is AP to RAO 5 to 10 degrees with 35 to 45 degrees cranial. Aquilina shows PA cranial at 30 degrees, with the first and second septal perforator branches marked.",
+    "pitfalls": [
+      "The distal LAD and the proximal circumflex are foreshortened.",
+      "The proximal circumflex can overlap the proximal LAD.",
+      "At the left main bifurcation the LAD and circumflex can be completely superimposed. Di Mario rates the caudal views best for the bifurcation.",
+      "The catheter and the spine can overlap the LAD. A 5 to 10 degree turn to the right avoids this."
+    ],
+    "sources": [
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378.",
+      "Aquilina O et al. Normal adult coronary angiography. Images Paediatr Cardiol 2006;8:1-16. PMID 22368661."
+    ]
+  },
+  {
+    "id": "ap-caudal",
+    "name": "AP caudal (left coronary)",
+    "aliases": [],
+    "primary": {
+      "side": "AP",
+      "angle": 0
+    },
+    "secondary": {
+      "direction": "caudal",
+      "angle": 30
+    },
+    "system": "left",
+    "bestSeen": [
+      "seg-5",
+      "seg-6",
+      "seg-11",
+      "seg-12a"
+    ],
+    "foreshortened": [],
+    "overlapped": [],
+    "whenToUse": "Di Mario groups AP and a shallow RAO of 5 to 15 degrees with 30 degrees caudal. He rates it ideal for the left main bifurcation, the proximal circumflex and the obtuse marginal bifurcations, and very useful for the proximal LAD. In his section on right caudal views he describes an easier working version with only 10 to 20 degrees of RAO and 30 to 40 degrees caudal, which has less breathing movement. In one example at RAO 15 with 30 caudal he credits better image quality, less breathing movement and less operator radiation, and names it the preferred working view for a distal left main and ostial LAD lesion. The only typical value the source gives is 30 degrees caudal, so the AP angle here is 0.",
+    "pitfalls": [
+      "Di Mario rates this view only occasionally useful for the left main ostium and the mid and distal LAD. He rates cranial views better for the left main ostium and the mid LAD, and the RAO caudal and lateral views better for the distal LAD."
+    ],
+    "sources": [
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378."
+    ]
+  },
+  {
+    "id": "lateral-left",
+    "name": "Lateral (left coronary)",
+    "aliases": [],
+    "primary": {
+      "side": "LAO",
+      "angle": 90
+    },
+    "secondary": {
+      "direction": "none",
+      "angle": 0
+    },
+    "system": "left",
+    "bestSeen": [
+      "seg-7",
+      "seg-8"
+    ],
+    "foreshortened": [],
+    "overlapped": [],
+    "whenToUse": "Not a standard view in modern practice. Di Mario says it shows only the mid LAD and the distal LAD around the apex optimally, which mostly adds to the RAO caudal view. It can show an eccentric proximal or mid LAD lesion that branches hide in every other view, often with 10 to 30 degrees of cranial or caudal tilt. It is the ideal view for the distal anastomosis of a left internal mammary artery graft. Occasionally it clarifies an eccentric circumflex lesion. The source gives no typical rotation angle. This app records a lateral view as 90 degrees on the patient's left, which is a convention of the app and not a value from the source.",
+    "pitfalls": [
+      "The patient must hold both arms above the head, which is hard to keep up during a long procedure and can interfere with intravenous lines.",
+      "In most patients it adds little information."
+    ],
+    "sources": [
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378."
+    ]
+  },
+  {
+    "id": "rca-lao",
+    "name": "LAO (right coronary)",
+    "aliases": [
+      "LAO straight"
+    ],
+    "primary": {
+      "side": "LAO",
+      "angle": 45
+    },
+    "secondary": {
+      "direction": "none",
+      "angle": 0
+    },
+    "system": "right",
+    "bestSeen": [
+      "seg-1",
+      "seg-2",
+      "seg-3"
+    ],
+    "foreshortened": [],
+    "overlapped": [],
+    "whenToUse": "The first view of the right coronary artery. Naber says it gives the best view of the ostial and proximal RCA. Di Mario rates LAO 45 to 60 as very useful for the proximal, mid and distal RCA. LAO is also the view Di Mario uses to engage both coronary ostia, because the aortic sinus does not overlap them. With the RAO view it is often enough to find every RCA stenosis. Aquilina shows LAO 45, Naber LAO 40, and Di Mario LAO 45 to 60 with an example at LAO 50.",
+    "pitfalls": [
+      "Stenoses at the crux and at the origins of the PDA and posterolateral branches are hard to read in the standard views, especially when the RCA is very large and dominant. Add about 30 degrees of cranial tilt or use AP cranial.",
+      "Di Mario rates the PDA only occasionally useful in this view."
+    ],
+    "sources": [
+      "Naber CK et al. Tools & Techniques: angiographic views. EuroIntervention 2010;6:424-425. PMID 20884425.",
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378.",
+      "Aquilina O et al. Normal adult coronary angiography. Images Paediatr Cardiol 2006;8:1-16. PMID 22368661."
+    ]
+  },
+  {
+    "id": "rca-lao-cranial",
+    "name": "LAO cranial (right coronary)",
+    "aliases": [],
+    "primary": {
+      "side": "LAO",
+      "angle": 45
+    },
+    "secondary": {
+      "direction": "cranial",
+      "angle": 20
+    },
+    "system": "right",
+    "bestSeen": [
+      "seg-1",
+      "seg-3",
+      "seg-4",
+      "seg-16"
+    ],
+    "foreshortened": [],
+    "overlapped": [],
+    "whenToUse": "Use it to open the distal RCA where it divides at the crux into the PDA and the posterolateral branches. Naber says the distal RCA bifurcation is best seen in LAO cranial. Kern notes that the cranial tilt shows the PDA running along the bottom of the heart without foreshortening. Di Mario rates the proximal RCA and the crux as ideal in this view. Sources give different angles. Aquilina shows LAO 45 with 20 cranial, Naber LAO 20 with 20 cranial, Tarighatnia LAO 30 with 15 cranial, and Di Mario 30 degrees cranial in his text and LAO 30 to 45 with 25 to 35 cranial in his table.",
+    "pitfalls": [
+      "Di Mario rates the mid RCA only occasionally useful in this view.",
+      "In one study the operator dose for this view was higher with radial access than with femoral access."
+    ],
+    "sources": [
+      "Naber CK et al. Tools & Techniques: angiographic views. EuroIntervention 2010;6:424-425. PMID 20884425.",
+      "Kern M. Angiographic projections made simple: an easy guide to understanding oblique views. Cath Lab Digest, August 2011. https://www.hmpgloballearningnetwork.com/site/cathlab/articles/angiographic-projections-made-simple-easy-guide-understanding-oblique-views",
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378.",
+      "Aquilina O et al. Normal adult coronary angiography. Images Paediatr Cardiol 2006;8:1-16. PMID 22368661.",
+      "Tarighatnia A et al. Beam projections and radiation exposure in transradial and transfemoral approaches during coronary angiography. Anatol J Cardiol 2017;18:298-303. PMID 28777096."
+    ]
+  },
+  {
+    "id": "rca-rao",
+    "name": "RAO (right coronary)",
+    "aliases": [
+      "RAO straight"
+    ],
+    "primary": {
+      "side": "RAO",
+      "angle": 30
+    },
+    "secondary": {
+      "direction": "none",
+      "angle": 0
+    },
+    "system": "right",
+    "bestSeen": [
+      "seg-2",
+      "seg-4"
+    ],
+    "foreshortened": [],
+    "overlapped": [],
+    "whenToUse": "The second standard RCA view. With the LAO view it is often enough to find every RCA stenosis, including eccentric ones. Di Mario rates it ideal for the mid RCA. It shows the long PDA at the bottom of the image with its septal branches pointing up, and Kern notes that the PDA is seen lengthwise from base to apex. Aquilina and Tarighatnia use RAO 30, and Di Mario gives RAO 30 to 45. In one study RAO 30 gave the patient the lowest radiation dose of the six standard views.",
+    "pitfalls": [
+      "Di Mario does not recommend this view for the proximal RCA or the crux."
+    ],
+    "sources": [
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378.",
+      "Kern M. Angiographic projections made simple: an easy guide to understanding oblique views. Cath Lab Digest, August 2011. https://www.hmpgloballearningnetwork.com/site/cathlab/articles/angiographic-projections-made-simple-easy-guide-understanding-oblique-views",
+      "Aquilina O et al. Normal adult coronary angiography. Images Paediatr Cardiol 2006;8:1-16. PMID 22368661.",
+      "Tarighatnia A et al. Beam projections and radiation exposure in transradial and transfemoral approaches during coronary angiography. Anatol J Cardiol 2017;18:298-303. PMID 28777096."
+    ]
+  },
+  {
+    "id": "rca-ap-cranial",
+    "name": "AP cranial (right coronary)",
+    "aliases": [],
+    "primary": {
+      "side": "AP",
+      "angle": 0
+    },
+    "secondary": {
+      "direction": "cranial",
+      "angle": 30
+    },
+    "system": "right",
+    "bestSeen": [
+      "seg-3",
+      "seg-4",
+      "seg-16"
+    ],
+    "foreshortened": [],
+    "overlapped": [],
+    "whenToUse": "Many operators use an AP view with 30 degrees of cranial tilt as a routine RCA view, because it clearly shows the crux and lesions of the PDA and posterolateral branches. Di Mario calls it a more suitable working view for angioplasty. In his example it also showed the RCA ostium well. His text gives 30 degrees cranial, while his table column is AP to RAO 5 to 10 degrees with 35 to 45 degrees cranial.",
+    "pitfalls": [
+      "It can hide a stenosis of the mid RCA, so do not rely on it alone. Di Mario does not recommend it for the mid RCA."
+    ],
+    "sources": [
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378."
+    ]
+  },
+  {
+    "id": "rca-lateral",
+    "name": "Lateral (right coronary)",
+    "aliases": [],
+    "primary": {
+      "side": "LAO",
+      "angle": 90
+    },
+    "secondary": {
+      "direction": "none",
+      "angle": 0
+    },
+    "system": "right",
+    "bestSeen": [
+      "seg-2"
+    ],
+    "foreshortened": [],
+    "overlapped": [],
+    "whenToUse": "Di Mario says the lateral view may be ideal for the mid RCA. It is occasionally used as a working view for occlusions in this segment or for stent positioning. The source gives no typical rotation angle. This app records a lateral view as 90 degrees on the patient's left, which is a convention of the app and not a value from the source.",
+    "pitfalls": [
+      "Di Mario does not recommend it for the proximal RCA, the crux or the PDA.",
+      "The patient must hold both arms above the head, which is hard to keep up during a long procedure."
+    ],
+    "sources": [
+      "Di Mario C, Sutaria N. Coronary angiography in the angioplasty era: projections with a meaning. Heart 2005;91:968-976. PMID 15958378."
+    ]
+  }
+]
