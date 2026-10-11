@@ -1,0 +1,985 @@
+[
+  {
+    "id": "totalseg-s0289",
+    "modality": "CT",
+    "region": "head",
+    "title": "Head and neck CT angiogram with labelled structures",
+    "summary": "A CT angiogram of the head and neck from the TotalSegmentator CT dataset. The dataset's metadata lists the study type as CT angiography head and the pathology as none. It labels 48 structures within this volume, among them the brain, skull, cervical spine, thyroid gland and the carotid and subclavian arteries.",
+    "series": [
+      {
+        "id": "cta",
+        "name": "CT angiogram",
+        "url": "totalseg-s0289/cta/",
+        "windows": [
+          {
+            "name": "Angio",
+            "center": 200,
+            "width": 700
+          },
+          {
+            "name": "Brain",
+            "center": 40,
+            "width": 80
+          },
+          {
+            "name": "Subdural",
+            "center": 75,
+            "width": 215
+          },
+          {
+            "name": "Bone",
+            "center": 400,
+            "width": 1800
+          }
+        ],
+        "defaultWindow": "Angio"
+      }
+    ],
+    "labels": {
+      "url": "totalseg-s0289/labels/",
+      "names": {
+        "1": "Aorta",
+        "2": "Autochthon (left)",
+        "3": "Autochthon (right)",
+        "4": "Brachiocephalic trunk",
+        "5": "Brachiocephalic vein (left)",
+        "6": "Brachiocephalic vein (right)",
+        "7": "Brain",
+        "8": "Clavicula (left)",
+        "9": "Clavicula (right)",
+        "10": "Common carotid artery (left)",
+        "11": "Common carotid artery (right)",
+        "12": "Costal cartilages",
+        "13": "Esophagus",
+        "15": "Humerus (left)",
+        "18": "Lung upper lobe (left)",
+        "19": "Lung upper lobe (right)",
+        "21": "Rib 1 (left)",
+        "22": "Rib 2 (left)",
+        "23": "Rib 3 (left)",
+        "24": "Rib 4 (left)",
+        "25": "Rib 5 (left)",
+        "27": "Rib 1 (right)",
+        "28": "Rib 2 (right)",
+        "29": "Rib 3 (right)",
+        "30": "Rib 4 (right)",
+        "31": "Rib 5 (right)",
+        "33": "Scapula (left)",
+        "34": "Scapula (right)",
+        "35": "Skull",
+        "36": "Spinal cord",
+        "37": "Sternum",
+        "38": "Subclavian artery (left)",
+        "39": "Subclavian artery (right)",
+        "40": "Superior vena cava",
+        "41": "Thyroid gland",
+        "42": "Trachea",
+        "43": "Vertebra C1",
+        "44": "Vertebra C2",
+        "45": "Vertebra C3",
+        "46": "Vertebra C4",
+        "47": "Vertebra C5",
+        "48": "Vertebra C6",
+        "49": "Vertebra C7",
+        "50": "Vertebra T1",
+        "51": "Vertebra T2",
+        "52": "Vertebra T3",
+        "53": "Vertebra T4",
+        "54": "Vertebra T5"
+      },
+      "centroids": {
+        "1": [
+          85.6,
+          92.9,
+          5.6
+        ],
+        "2": [
+          85.4,
+          124.9,
+          37.4
+        ],
+        "3": [
+          61.5,
+          126.3,
+          34.1
+        ],
+        "4": [
+          65.3,
+          79.2,
+          14.1
+        ],
+        "5": [
+          74.4,
+          74.1,
+          10.5
+        ],
+        "6": [
+          52.8,
+          78.9,
+          14.9
+        ],
+        "7": [
+          73.0,
+          79.3,
+          164.1
+        ],
+        "8": [
+          103.1,
+          71.6,
+          40.6
+        ],
+        "9": [
+          37.7,
+          69.8,
+          28.6
+        ],
+        "10": [
+          81.5,
+          80.1,
+          44.6
+        ],
+        "11": [
+          55.3,
+          78.8,
+          51.0
+        ],
+        "12": [
+          76.8,
+          64.1,
+          4.2
+        ],
+        "13": [
+          73.2,
+          92.6,
+          24.4
+        ],
+        "15": [
+          142.9,
+          75.6,
+          57.5
+        ],
+        "18": [
+          108.5,
+          101.4,
+          13.4
+        ],
+        "19": [
+          40.3,
+          104.7,
+          12.2
+        ],
+        "21": [
+          106.8,
+          83.8,
+          23.9
+        ],
+        "22": [
+          121.2,
+          98.2,
+          22.1
+        ],
+        "23": [
+          123.6,
+          116.1,
+          17.0
+        ],
+        "24": [
+          120.4,
+          129.1,
+          8.5
+        ],
+        "25": [
+          108.4,
+          136.5,
+          0.9
+        ],
+        "27": [
+          38.1,
+          90.0,
+          24.3
+        ],
+        "28": [
+          25.2,
+          102.5,
+          21.9
+        ],
+        "29": [
+          24.9,
+          120.7,
+          16.6
+        ],
+        "30": [
+          30.7,
+          132.7,
+          8.5
+        ],
+        "31": [
+          44.8,
+          138.5,
+          0.0
+        ],
+        "33": [
+          130.2,
+          112.2,
+          43.8
+        ],
+        "34": [
+          11.7,
+          123.7,
+          30.6
+        ],
+        "35": [
+          73.3,
+          70.8,
+          153.9
+        ],
+        "36": [
+          72.8,
+          100.7,
+          61.1
+        ],
+        "37": [
+          69.9,
+          59.4,
+          3.9
+        ],
+        "38": [
+          91.3,
+          87.4,
+          28.7
+        ],
+        "39": [
+          43.4,
+          85.5,
+          28.3
+        ],
+        "40": [
+          56.0,
+          80.7,
+          3.9
+        ],
+        "41": [
+          66.0,
+          74.9,
+          45.5
+        ],
+        "42": [
+          69.4,
+          84.5,
+          25.5
+        ],
+        "43": [
+          73.0,
+          79.6,
+          112.4
+        ],
+        "44": [
+          73.3,
+          82.4,
+          103.0
+        ],
+        "45": [
+          72.5,
+          86.2,
+          91.1
+        ],
+        "46": [
+          72.2,
+          88.9,
+          81.2
+        ],
+        "47": [
+          71.6,
+          91.9,
+          71.8
+        ],
+        "48": [
+          71.9,
+          95.1,
+          61.9
+        ],
+        "49": [
+          71.6,
+          100.0,
+          51.8
+        ],
+        "50": [
+          72.7,
+          105.6,
+          41.2
+        ],
+        "51": [
+          74.0,
+          111.3,
+          29.6
+        ],
+        "52": [
+          75.0,
+          117.7,
+          16.6
+        ],
+        "53": [
+          75.0,
+          123.6,
+          5.1
+        ],
+        "54": [
+          76.5,
+          129.1,
+          0.2
+        ]
+      }
+    },
+    "findings": [
+      {
+        "id": "brain-label",
+        "title": "Brain label",
+        "text": "The dataset's brain label covers this region of the head.",
+        "plane": "axial",
+        "index": 164,
+        "at": [
+          0.507,
+          0.548
+        ],
+        "series": "cta",
+        "window": "Brain"
+      },
+      {
+        "id": "thyroid-gland-label",
+        "title": "Thyroid gland label",
+        "text": "The dataset's thyroid gland label lies here.",
+        "plane": "axial",
+        "index": 46,
+        "at": [
+          0.424,
+          0.507
+        ],
+        "series": "cta",
+        "window": "Angio"
+      },
+      {
+        "id": "right-common-carotid-label",
+        "title": "Right common carotid artery label",
+        "text": "The dataset's right common carotid artery label lies here.",
+        "plane": "axial",
+        "index": 51,
+        "at": [
+          0.376,
+          0.569
+        ],
+        "series": "cta",
+        "window": "Angio"
+      },
+      {
+        "id": "left-common-carotid-label",
+        "title": "Left common carotid artery label",
+        "text": "The dataset's left common carotid artery label lies here.",
+        "plane": "axial",
+        "index": 45,
+        "at": [
+          0.555,
+          0.562
+        ],
+        "series": "cta",
+        "window": "Angio"
+      },
+      {
+        "id": "aorta-label",
+        "title": "Aorta label",
+        "text": "The dataset's aorta label lies here, at the lower edge of this volume.",
+        "plane": "axial",
+        "index": 6,
+        "at": [
+          0.597,
+          0.645
+        ],
+        "series": "cta",
+        "window": "Angio"
+      }
+    ],
+    "source": {
+      "author": "Jakob Wasserthal, University Hospital Basel (TotalSegmentator CT dataset)",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "url": "https://zenodo.org/records/22688904",
+      "attribution": "TotalSegmentator CT dataset v3.0.0, case s0289. Wasserthal J, Department of Research and Analysis, University Hospital Basel. Zenodo, doi 10.5281/zenodo.22688904. Please cite Wasserthal J et al., TotalSegmentator: robust segmentation of 104 anatomical structures in CT images, Radiology: Artificial Intelligence 2023, doi 10.1148/ryai.230024.",
+      "modified": "The lowest 16 slices of the source volume were cut off, which keeps the head, the neck and the upper chest down to the aortic arch. Converted to LPS voxel order. The per-structure masks were merged into one label volume and the 48 that are not empty after the cut are kept, with names written out in full. Where two masks overlapped (3,071 voxels in the source), the one later in alphabetical order won. CT values are unchanged. Stored as gzip chunks."
+    }
+  },
+  {
+    "id": "openneuro-ds000221-sub010003",
+    "modality": "MR",
+    "region": "head",
+    "title": "Brain MRI of an adult research participant",
+    "summary": "A brain MRI of an adult research participant from the MPI Leipzig Mind-Brain-Body dataset. The dataset states no diagnosis for this participant. The series are a T1-weighted MP2RAGE image and a T2-weighted image. The dataset states that all anatomical images were defaced.",
+    "series": [
+      {
+        "id": "t1w",
+        "name": "T1-weighted (MP2RAGE)",
+        "url": "openneuro-ds000221-sub010003/t1w/",
+        "windows": [],
+        "defaultWindow": ""
+      },
+      {
+        "id": "t2w",
+        "name": "T2-weighted",
+        "url": "openneuro-ds000221-sub010003/t2w/",
+        "windows": [],
+        "defaultWindow": ""
+      }
+    ],
+    "findings": [],
+    "source": {
+      "author": "Babayan A, Baczkowski B and colleagues, MPI Leipzig Mind-Brain-Body dataset (OpenNeuro ds000221)",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "url": "https://openneuro.org/datasets/ds000221",
+      "attribution": "This data was obtained from the OpenfMRI database. Its accession number is ds000221. Babayan A, Baczkowski B, Cozatl R and colleagues (last author Villringer A), MPI-Leipzig Mind-Brain-Body, OpenNeuro, doi 10.18112/openneuro.ds000221.v1.0.0, participant sub-010003.",
+      "modified": "T1w and T2w only, the FLAIR is not used. The T2w was resampled onto the T1w grid by linear interpolation using the headers of both files, which also removes a 1 degree tilt of the T2w. Converted to LPS voxel order and stored as whole-number int16 values. No other change. The defacing is the dataset's own."
+    }
+  },
+  {
+    "id": "upenngbm-00001",
+    "modality": "MR",
+    "region": "head",
+    "title": "Glioblastoma, four MRI sequences",
+    "summary": "A brain MRI from the UPENN-GBM collection, whose collection page describes its patients as having de novo glioblastoma. There is no per-case diagnosis column. The collection's tumour masks are not part of the DICOM release, so this case has no labels and no findings. The sequences are T1, T1 post-contrast, T2 and FLAIR.",
+    "series": [
+      {
+        "id": "t1",
+        "name": "T1",
+        "url": "upenngbm-00001/t1/",
+        "windows": [],
+        "defaultWindow": ""
+      },
+      {
+        "id": "t1gd",
+        "name": "T1 post-contrast",
+        "url": "upenngbm-00001/t1gd/",
+        "windows": [],
+        "defaultWindow": ""
+      },
+      {
+        "id": "t2",
+        "name": "T2",
+        "url": "upenngbm-00001/t2/",
+        "windows": [],
+        "defaultWindow": ""
+      },
+      {
+        "id": "flair",
+        "name": "FLAIR",
+        "url": "upenngbm-00001/flair/",
+        "windows": [],
+        "defaultWindow": ""
+      }
+    ],
+    "findings": [],
+    "source": {
+      "author": "Bakas S, Sako C, Akbari H and colleagues, University of Pennsylvania Health System (UPENN-GBM)",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "url": "https://doi.org/10.7937/TCIA.709X-DN49",
+      "attribution": "Bakas, S., Sako, C., Akbari, H., Bilello, M., Sotiras, A., Shukla, G., Rudie, J. D., Flores Santamaria, N., Fathi Kazerooni, A., Pati, S., Rathore, S., Mamourian, E., Ha, S. M., Parker, W., Doshi, J., Baid, U., Bergman, M., Binder, Z. A., Verma, R., ... Davatzikos, C. (2021). Multi-parametric magnetic resonance imaging (mpMRI) scans for de novo Glioblastoma (GBM) patients from the University of Pennsylvania Health System (UPENN-GBM) (Version 2) [Data set]. The Cancer Imaging Archive. https://doi.org/10.7937/TCIA.709X-DN49. TCIA Data Usage Policy: https://www.cancerimagingarchive.net/data-usage-policies-and-restrictions/",
+      "modified": "The CaPTk-processed T1, T1 post-contrast, T2 (a sagittal 3D acquisition) and FLAIR (3 mm slices) series were resampled onto the T1 grid by linear interpolation using the DICOM geometry, so the T2 and FLAIR are smoother across slices than they were acquired. Residual misregistration between series was measured at about 2 mm or less and not corrected. Converted to LPS voxel order. A box in front of the eyes and below the brow, the front 39 mm of the volume up to 85 mm above its bottom edge, was set to zero in all four series to remove the eyelid and nose contour left by the dataset's own face removal. No names, IDs or dates are kept."
+    }
+  },
+  {
+    "id": "covidctmd-p148",
+    "modality": "CT",
+    "region": "chest",
+    "title": "Chest CT, COVID-19",
+    "summary": "A chest CT from the COVID-CT-MD dataset. The dataset's clinical table lists the diagnosis for this patient as COVID-19. This patient has no slice or lobe labels in the dataset, so there are no findings.",
+    "series": [
+      {
+        "id": "ct",
+        "name": "Chest CT, 2 mm slices",
+        "url": "covidctmd-p148/ct/",
+        "windows": [
+          {
+            "name": "Lung",
+            "center": -600,
+            "width": 1500
+          },
+          {
+            "name": "Mediastinum",
+            "center": 40,
+            "width": 400
+          }
+        ],
+        "defaultWindow": "Lung"
+      }
+    ],
+    "findings": [],
+    "source": {
+      "author": "Oikonomou A, Plataniotis K, Mohammadi A, Afshar P, Naderkhani F, Heidarian S and colleagues (COVID-CT-MD)",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "url": "https://doi.org/10.6084/m9.figshare.12991592.v1",
+      "attribution": "Oikonomou, Anastasia; Plataniotis, Konstantinos; Mohammadi, Arash; Afshar, Parnian; Naderkhani, Farnoosh; Heidarian, Shahin; et al. (2021). COVID-CT-MD: COVID-19 Computed Tomography Scan Dataset Applicable in Machine Learning and Deep Learning. figshare. Dataset. https://doi.org/10.6084/m9.figshare.12991592.v1. The dataset is CC0, so credit is a courtesy.",
+      "modified": "Converted from DICOM to LPS voxel order. The in-plane size was reduced from 512 to 256 pixels by averaging 2 by 2 pixels. The slices are unchanged. Stored as gzip chunks. No header fields are kept."
+    }
+  },
+  {
+    "id": "lungdx-a0020",
+    "modality": "CT",
+    "region": "chest",
+    "title": "Chest CT, lung adenocarcinoma",
+    "summary": "A 5 mm chest CT series from the Lung-PET-CT-Dx collection. The collection states that patients whose code contains the letter A were diagnosed with adenocarcinoma, and this patient's code contains an A. The series covers about 9.5 cm of the chest and has no tumour annotation, so there are no findings.",
+    "series": [
+      {
+        "id": "ct",
+        "name": "Chest CT, 5 mm slices",
+        "url": "lungdx-a0020/ct/",
+        "windows": [
+          {
+            "name": "Lung",
+            "center": -600,
+            "width": 1500
+          },
+          {
+            "name": "Mediastinum",
+            "center": 40,
+            "width": 400
+          }
+        ],
+        "defaultWindow": "Lung"
+      }
+    ],
+    "findings": [],
+    "source": {
+      "author": "Li P, Wang S, Li T, Lu J, HuangFu Y, Wang D (Lung-PET-CT-Dx)",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "url": "https://doi.org/10.7937/TCIA.2020.NNC2-0461",
+      "attribution": "Li, P., Wang, S., Li, T., Lu, J., HuangFu, Y., & Wang, D. (2020). A Large-Scale CT and PET/CT Dataset for Lung Cancer Diagnosis (Lung-PET-CT-Dx) [Data set]. The Cancer Imaging Archive. https://doi.org/10.7937/TCIA.2020.NNC2-0461. TCIA Data Usage Policy: https://www.cancerimagingarchive.net/data-usage-policies-and-restrictions/",
+      "modified": "Converted from DICOM to LPS voxel order and stored as gzip chunks. Pixel values are unchanged. No names, IDs, dates or other header fields are kept."
+    }
+  },
+  {
+    "id": "fumpe-pat034",
+    "modality": "CT",
+    "region": "chest",
+    "title": "CT pulmonary angiogram with embolism regions marked",
+    "summary": "A CT angiogram from the FUMPE dataset, which describes it as a pulmonary embolism CT angiography with 189 slices. The dataset provides a ground-truth mask in which the embolism regions are marked, and it marks regions on slices 11 to 140. This copy keeps the first 145 slices.",
+    "series": [
+      {
+        "id": "cta",
+        "name": "CT pulmonary angiogram",
+        "url": "fumpe-pat034/cta/",
+        "windows": [
+          {
+            "name": "Angio",
+            "center": 200,
+            "width": 700
+          },
+          {
+            "name": "Mediastinum",
+            "center": 40,
+            "width": 400
+          },
+          {
+            "name": "Lung",
+            "center": -600,
+            "width": 1500
+          }
+        ],
+        "defaultWindow": "Angio"
+      }
+    ],
+    "labels": {
+      "url": "fumpe-pat034/labels/",
+      "names": {
+        "1": "Pulmonary embolism region (dataset ground truth)"
+      },
+      "centroids": {
+        "1": [
+          107.9,
+          133.3,
+          101.6
+        ]
+      }
+    },
+    "findings": [
+      {
+        "id": "marked-region-1",
+        "title": "Marked embolism region 1 of 3",
+        "text": "The dataset's ground-truth mask marks a pulmonary embolism region here. It is one of the three largest marked regions.",
+        "plane": "axial",
+        "index": 117,
+        "at": [
+          0.385,
+          0.486
+        ],
+        "series": "cta",
+        "window": "Angio"
+      },
+      {
+        "id": "marked-region-2",
+        "title": "Marked embolism region 2 of 3",
+        "text": "The dataset's ground-truth mask marks a pulmonary embolism region here. It is one of the three largest marked regions.",
+        "plane": "axial",
+        "index": 73,
+        "at": [
+          0.338,
+          0.627
+        ],
+        "series": "cta",
+        "window": "Angio"
+      },
+      {
+        "id": "marked-region-3",
+        "title": "Marked embolism region 3 of 3",
+        "text": "The dataset's ground-truth mask marks a pulmonary embolism region here. It is one of the three largest marked regions.",
+        "plane": "axial",
+        "index": 91,
+        "at": [
+          0.354,
+          0.494
+        ],
+        "series": "cta",
+        "window": "Angio"
+      }
+    ],
+    "source": {
+      "author": "Masoudi M, Saadatmand-Tarzjan M, Ferdowsi University of Mashhad (FUMPE)",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "url": "https://doi.org/10.6084/m9.figshare.6265679.v1",
+      "attribution": "Masoudi, Mojtaba (2018). Patient34. figshare. Dataset. https://doi.org/10.6084/m9.figshare.6265679.v1. Part of Masoudi, Mojtaba; Saadatmand-Tarzjan, Mahdi (2018). FUMPE. figshare. Collection. https://doi.org/10.6084/m9.figshare.c.4107803.v1. Described in Masoudi M et al., Scientific Data 2018, doi 10.1038/sdata.2018.180.",
+      "modified": "Converted from DICOM to LPS voxel order. The in-plane size was reduced from 512 to 256 pixels (2 by 2 averaging for the CT, nearest neighbour for the mask). Only the first 145 slices are kept, and the mask has no marked region above slice 140. The mask was reordered from the source MATLAB layout to match the CT, checked against the CT because the source does not state the order. Stored as gzip chunks. No header fields are kept."
+    }
+  },
+  {
+    "id": "msd-pancreas148",
+    "modality": "CT",
+    "region": "abdomen",
+    "title": "Abdominal CT with pancreas and cancer labels",
+    "summary": "A CT from the Medical Segmentation Decathlon pancreas task, whose description is pancreas and cancer segmentation. This case carries a pancreas label and a label named cancer. The dataset gives no diagnosis or report for the case.",
+    "series": [
+      {
+        "id": "ct",
+        "name": "Abdominal CT, 5 mm slices",
+        "url": "msd-pancreas148/ct/",
+        "windows": [
+          {
+            "name": "Soft tissue",
+            "center": 40,
+            "width": 400
+          },
+          {
+            "name": "Liver",
+            "center": 60,
+            "width": 160
+          },
+          {
+            "name": "Lung",
+            "center": -600,
+            "width": 1500
+          }
+        ],
+        "defaultWindow": "Soft tissue"
+      }
+    ],
+    "labels": {
+      "url": "msd-pancreas148/labels/",
+      "names": {
+        "1": "Pancreas",
+        "2": "Cancer (dataset label)"
+      },
+      "centroids": {
+        "1": [
+          278.0,
+          208.0,
+          20.5
+        ],
+        "2": [
+          335.8,
+          245.1,
+          21.9
+        ]
+      }
+    },
+    "findings": [
+      {
+        "id": "pancreas-and-cancer-labels",
+        "title": "Pancreas and cancer labels",
+        "text": "The pancreas label and the tumour label (labelled cancer in the dataset) lie here.",
+        "plane": "axial",
+        "index": 22,
+        "at": [
+          0.657,
+          0.479
+        ],
+        "series": "ct",
+        "window": "Soft tissue"
+      },
+      {
+        "id": "pancreas-label",
+        "title": "Pancreas label",
+        "text": "The pancreas label lies here.",
+        "plane": "axial",
+        "index": 20,
+        "at": [
+          0.515,
+          0.364
+        ],
+        "series": "ct",
+        "window": "Soft tissue"
+      }
+    ],
+    "source": {
+      "author": "Medical Segmentation Decathlon (Simpson AL, Antonelli M, Bakas S and colleagues), pancreas data from Memorial Sloan Kettering Cancer Center",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "url": "https://registry.opendata.aws/msd",
+      "attribution": "Medical Segmentation Decathlon, Task07 Pancreas, case pancreas_148, accessed on 2026-10-10 from https://registry.opendata.aws/msd. Simpson AL, Antonelli M, Bakas S et al. A large annotated medical image dataset for the development and evaluation of segmentation algorithms, arXiv:1902.09063. Antonelli M et al. The Medical Segmentation Decathlon, Nature Communications 2022. CC BY-SA 4.0 share-alike applies to this derived copy.",
+      "modified": "Converted from NIfTI to LPS voxel order. Float values were rounded to whole numbers and stored as int16. The labels are stored as uint8 on the same grid. Stored as gzip chunks. This derived copy is shared under the same CC BY-SA 4.0 license."
+    }
+  },
+  {
+    "id": "hcctace-hcc010",
+    "modality": "CT",
+    "region": "abdomen",
+    "title": "Pre-contrast liver CT, hepatocellular carcinoma",
+    "summary": "A pre-contrast axial CT of the upper abdomen from the HCC-TACE-Seg collection, which holds patients with hepatocellular carcinoma. The collection's clinical table lists this patient's tumour as moderately differentiated and uninodular. The dataset's segmentation belongs to a different series, so this case has no labels and no findings.",
+    "series": [
+      {
+        "id": "ct",
+        "name": "Pre-contrast CT, 10 mm slices",
+        "url": "hcctace-hcc010/ct/",
+        "windows": [
+          {
+            "name": "Liver",
+            "center": 60,
+            "width": 160
+          },
+          {
+            "name": "Soft tissue",
+            "center": 40,
+            "width": 400
+          },
+          {
+            "name": "Lung",
+            "center": -600,
+            "width": 1500
+          }
+        ],
+        "defaultWindow": "Liver"
+      }
+    ],
+    "findings": [],
+    "source": {
+      "author": "Moawad AW, Fuentes D, Morshid A, Khalaf AM, Elmohr MM, Abusaif A, Hazle JD, Kaseb AO, Hassan M, Mahvash A, Szklaruk J, Qayyom A, Elsayes K (HCC-TACE-Seg)",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "url": "https://doi.org/10.7937/TCIA.5FNA-0924",
+      "attribution": "Moawad, A. W., Fuentes, D., Morshid, A., Khalaf, A. M., Elmohr, M. M., Abusaif, A., Hazle, J. D., Kaseb, A. O., Hassan, M., Mahvash, A., Szklaruk, J., Qayyom, A., & Elsayes, K. (2021). Multimodality annotated HCC cases with and without advanced imaging segmentation [Data set]. The Cancer Imaging Archive. https://doi.org/10.7937/TCIA.5FNA-0924. TCIA Data Usage Policy: https://www.cancerimagingarchive.net/data-usage-policies-and-restrictions/",
+      "modified": "Converted from DICOM to LPS voxel order and stored as gzip chunks. Pixel values are unchanged. No names, IDs, dates or other header fields are kept."
+    }
+  },
+  {
+    "id": "spider-patient1",
+    "modality": "MR",
+    "region": "spine",
+    "title": "Lumbar spine MRI with vertebrae, discs and canal labelled",
+    "summary": "Sagittal T1 and T2 lumbar spine MRI of patient 1 from the SPIDER dataset, which collects patients with a history of low back pain. The dataset labels the vertebrae, the intervertebral discs and the spinal canal. It gives per-level radiological gradings but no single diagnosis for this patient. Vertebrae and discs are numbered from the bottom, and the dataset says these numbers are not anatomical levels.",
+    "series": [
+      {
+        "id": "t1",
+        "name": "T1-weighted, sagittal",
+        "url": "spider-patient1/t1/",
+        "windows": [],
+        "defaultWindow": ""
+      },
+      {
+        "id": "t2",
+        "name": "T2-weighted, sagittal",
+        "url": "spider-patient1/t2/",
+        "windows": [],
+        "defaultWindow": ""
+      }
+    ],
+    "labels": {
+      "url": "spider-patient1/labels/",
+      "names": {
+        "100": "Spinal canal",
+        "1": "Vertebra 1 (counted from the bottom)",
+        "201": "Disc 201 (below vertebra 1)",
+        "2": "Vertebra 2 (counted from the bottom)",
+        "202": "Disc 202 (below vertebra 2)",
+        "3": "Vertebra 3 (counted from the bottom)",
+        "203": "Disc 203 (below vertebra 3)",
+        "4": "Vertebra 4 (counted from the bottom)",
+        "204": "Disc 204 (below vertebra 4)",
+        "5": "Vertebra 5 (counted from the bottom)",
+        "205": "Disc 205 (below vertebra 5)",
+        "6": "Vertebra 6 (counted from the bottom)",
+        "206": "Disc 206 (below vertebra 6)",
+        "7": "Vertebra 7 (counted from the bottom)",
+        "207": "Disc 207 (below vertebra 7)"
+      },
+      "centroids": {
+        "1": [
+          19.7,
+          216.2,
+          193.0
+        ],
+        "2": [
+          22.3,
+          214.4,
+          252.5
+        ],
+        "3": [
+          27.2,
+          219.4,
+          307.5
+        ],
+        "4": [
+          30.2,
+          230.3,
+          367.1
+        ],
+        "5": [
+          29.9,
+          240.2,
+          430.7
+        ],
+        "6": [
+          27.8,
+          246.8,
+          488.7
+        ],
+        "7": [
+          26.5,
+          246.6,
+          535.8
+        ],
+        "100": [
+          24.7,
+          247.7,
+          337.1
+        ],
+        "201": [
+          19.4,
+          206.6,
+          155.3
+        ],
+        "202": [
+          21.4,
+          196.6,
+          219.6
+        ],
+        "203": [
+          26.0,
+          200.2,
+          280.6
+        ],
+        "204": [
+          31.0,
+          207.7,
+          338.8
+        ],
+        "205": [
+          32.4,
+          220.2,
+          404.1
+        ],
+        "206": [
+          30.6,
+          232.3,
+          467.4
+        ],
+        "207": [
+          27.3,
+          242.3,
+          525.7
+        ]
+      }
+    },
+    "findings": [
+      {
+        "id": "canal-vertebrae-discs-labels",
+        "title": "Spinal canal, vertebra and disc labels",
+        "text": "The dataset's labels for the spinal canal, the vertebrae and the discs lie in this slice. The vertebrae and discs are numbered from the bottom.",
+        "plane": "sagittal",
+        "index": 25,
+        "at": [
+          0.53,
+          0.442
+        ],
+        "series": "t2"
+      },
+      {
+        "id": "lowest-disc-label",
+        "title": "Lowest disc label",
+        "text": "The lowest disc label (label 201) lies here, below the lowest labelled vertebra.",
+        "plane": "sagittal",
+        "index": 19,
+        "at": [
+          0.463,
+          0.731
+        ],
+        "series": "t2"
+      }
+    ],
+    "source": {
+      "author": "van der Graaf JW, van Hooff ML, Buckens CFM, Rutten M, van Susante JLC, Kroeze RJ, de Kleuver M, van Ginneken B, Lessmann N (SPIDER)",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "url": "https://doi.org/10.5281/zenodo.10159290",
+      "attribution": "SPIDER lumbar spine MRI dataset, patient 1. van der Graaf JW, van Hooff ML, Buckens CFM, Rutten M, van Susante JLC, Kroeze RJ, de Kleuver M, van Ginneken B, Lessmann N. Zenodo, doi 10.5281/zenodo.10159290. Described in van der Graaf JW et al., Lumbar spine segmentation in MR images: a dataset and a public benchmark, Scientific Data 2024, doi 10.1038/s41597-024-03090-w.",
+      "modified": "Converted from MHA to LPS voxel order, with no resampling. Image values are as given in the source. The T1 and T2 masks in the source are identical, and one copy is stored as uint8. Stored as gzip chunks."
+    }
+  },
+  {
+    "id": "msd-la005",
+    "modality": "MR",
+    "region": "cardiac",
+    "title": "Cardiac MRI with the left atrium labelled",
+    "summary": "A whole-heart MRI from the Medical Segmentation Decathlon left atrium task, with the left atrium labelled. The dataset gives only the task description, left atrium segmentation, and no diagnosis for the case.",
+    "series": [
+      {
+        "id": "mr",
+        "name": "Whole-heart MRI",
+        "url": "msd-la005/mr/",
+        "windows": [],
+        "defaultWindow": ""
+      }
+    ],
+    "labels": {
+      "url": "msd-la005/labels/",
+      "names": {
+        "1": "Left atrium"
+      },
+      "centroids": {
+        "1": [
+          49.9,
+          173.4,
+          176.5
+        ]
+      }
+    },
+    "findings": [
+      {
+        "id": "left-atrium-label",
+        "title": "Left atrium label",
+        "text": "The dataset's left atrium label lies here.",
+        "plane": "axial",
+        "index": 176,
+        "at": [
+          0.421,
+          0.542
+        ]
+      }
+    ],
+    "source": {
+      "author": "Medical Segmentation Decathlon (Simpson AL, Antonelli M, Bakas S and colleagues), heart data from King's College London",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "url": "https://registry.opendata.aws/msd",
+      "attribution": "Medical Segmentation Decathlon, Task02 Heart, case la_005, accessed on 2026-10-10 from https://registry.opendata.aws/msd. Simpson AL, Antonelli M, Bakas S et al. A large annotated medical image dataset for the development and evaluation of segmentation algorithms, arXiv:1902.09063. Antonelli M et al. The Medical Segmentation Decathlon, Nature Communications 2022. CC BY-SA 4.0 share-alike applies to this derived copy.",
+      "modified": "Converted from NIfTI to LPS voxel order after correcting the file's header. The header axes did not match the anatomy, so the voxel axes were assigned from the anatomy: along the file axes, anterior, superior and the patient's right. Float values were rounded to whole numbers and stored as int16, and the label is stored as uint8 on the same grid. Stored as gzip chunks. This derived copy is shared under the same CC BY-SA 4.0 license."
+    }
+  }
+]

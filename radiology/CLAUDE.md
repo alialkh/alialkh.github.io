@@ -22,6 +22,6 @@ This folder must lift out into its own site (for example "The Budding Radiology"
 
 ## Rules
 - Educational use only. Every page shows the disclaimer from `core/`.
-- No real patient data. A dataset goes in `docs/LICENSES.md` with a license that allows republishing before any of its files enter `data/`.
+- No identifiable patient data. Real scans come only from public datasets, and a dataset goes in `docs/LICENSES.md` with a license that allows republishing before any of its files enter `data/`. Nothing from DICOM headers is kept, and every head volume is checked for a face surface before it ships.
 - First image in about 2 seconds. Volumes stream in chunks from the middle slice outward, so one small download shows the first image.
 - When a folder's purpose changes, its `CLAUDE.md` changes in the same commit.

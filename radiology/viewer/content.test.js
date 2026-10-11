@@ -170,7 +170,7 @@ test('an invalid manifest stops with every problem listed', async () => {
 });
 
 const FIXTURE = new URL('./test-fixtures/cases/manifest.json', import.meta.url);
-const REAL = new URL('../../data/cases/manifest.json', import.meta.url);
+const REAL = new URL('../data/cases/manifest.json', import.meta.url);
 
 // The table rules, then the grid rules against every vol.json on disk, the way the page checks them at load.
 function problemsOf(manifest) {
