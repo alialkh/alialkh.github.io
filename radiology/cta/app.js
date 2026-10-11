@@ -14,6 +14,7 @@ import { createProjectionsRef } from './ref-projections.js';
 import { createIvusRef } from './ref-ivus.js';
 import { icon } from './icons.js';
 import { stackWhenNarrow } from './ui.js';
+import { caseSystem, entryAngle } from './views.js';
 
 const narrow = matchMedia('(max-width: 800px)');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -44,6 +45,8 @@ function start(content) {
   let still = null;
   let ref = null;
   let stackObserver = null;
+  // The picker opens on this when a case sends it there, then forgets it.
+  let pick = null;
 
   const caseLink = s => h('a', { class: 'case', href: `#/${s.id}`, title: `${s.title}, ${s.subtitle}` },
     s.c ? h('img', { class: 'thumb', src: s.c.poster, alt: '', loading: 'lazy', width: s.c.width, height: s.c.height }) : h('span', { class: 'thumb refthumb' }, icon(THUMBS[s.kind])),
@@ -79,6 +82,10 @@ function start(content) {
       // A pin selector goes to the clip, a segment id to the still.
       find: target => (player ? player.pulse(target) : still?.pulse(target)),
       hover: target => (player ? player.highlight(target) : still?.highlight(target)),
+      pick: c => {
+        pick = { angle: entryAngle(c.angles), system: caseSystem(c, content) ?? 'left', title: c.title };
+        location.hash = '#/ref-projections';
+      },
     },
     onToggle: () => set({ info: !ui.info }),
   });
@@ -124,7 +131,8 @@ function start(content) {
     [player, still, ref] = [null, null, null];
     const clip = isClip(s);
     if (isRef(s)) {
-      ref = REFS[s.kind]({ content, refresh: () => panel.refresh() });
+      ref = REFS[s.kind]({ content, refresh: () => panel.refresh(), start: pick });
+      pick = null;
       stackObserver = stackWhenNarrow(ref.el);
       players.replaceChildren(ref.el);
     } else if (clip) {

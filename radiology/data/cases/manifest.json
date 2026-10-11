@@ -529,7 +529,7 @@
     "modality": "CT",
     "region": "chest",
     "title": "Chest CT, lung adenocarcinoma",
-    "summary": "A 5 mm chest CT series from the Lung-PET-CT-Dx collection. The collection states that patients whose code contains the letter A were diagnosed with adenocarcinoma, and this patient's code contains an A. The series covers about 9.5 cm of the chest and has no tumour annotation, so there are no findings.",
+    "summary": "A chest CT from the Lung-PET-CT-Dx collection. The collection states that patients whose code contains the letter A were diagnosed with adenocarcinoma, and this patient's code contains an A. The scan has three acquisitions of the same 46 slice positions at 5 mm, and this case shows the first. The collection says its annotation files indicate tumour location with bounding boxes, and seven annotated slices fall on this acquisition.",
     "series": [
       {
         "id": "ct",
@@ -550,7 +550,21 @@
         "defaultWindow": "Lung"
       }
     ],
-    "findings": [],
+    "findings": [
+      {
+        "id": "annotated-tumour-box",
+        "title": "Annotated tumour box",
+        "text": "The dataset's annotation for this patient is a bounding box around the tumour, and the box centre is marked here. The box is drawn on seven slices of this acquisition and this is the middle one. The marked mass lies in the left lung.",
+        "plane": "axial",
+        "index": 29,
+        "at": [
+          0.649,
+          0.476
+        ],
+        "series": "ct",
+        "window": "Lung"
+      }
+    ],
     "source": {
       "short": "Lung-PET-CT-Dx",
       "author": "Li P, Wang S, Li T, Lu J, HuangFu Y, Wang D (Lung-PET-CT-Dx)",
@@ -558,7 +572,7 @@
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "url": "https://doi.org/10.7937/TCIA.2020.NNC2-0461",
       "attribution": "Li, P., Wang, S., Li, T., Lu, J., HuangFu, Y., & Wang, D. (2020). A Large-Scale CT and PET/CT Dataset for Lung Cancer Diagnosis (Lung-PET-CT-Dx) [Data set]. The Cancer Imaging Archive. https://doi.org/10.7937/TCIA.2020.NNC2-0461. TCIA Data Usage Policy: https://www.cancerimagingarchive.net/data-usage-policies-and-restrictions/",
-      "modified": "Converted from DICOM to LPS voxel order and stored as gzip chunks. Pixel values are unchanged. No names, IDs, dates or other header fields are kept."
+      "modified": "Converted from DICOM to LPS voxel order and stored as gzip chunks. Only the first of the three acquisitions is kept. Pixel values are unchanged. No names, IDs, dates or other header fields are kept."
     }
   },
   {
@@ -748,13 +762,36 @@
     "id": "hcctace-hcc010",
     "modality": "CT",
     "region": "abdomen",
-    "title": "Pre-contrast liver CT, hepatocellular carcinoma",
-    "summary": "A pre-contrast axial CT of the upper abdomen from the HCC-TACE-Seg collection, which holds patients with hepatocellular carcinoma. The collection's clinical table lists this patient's tumour as moderately differentiated and uninodular. The dataset's segmentation belongs to a different series, so this case has no labels and no findings.",
+    "title": "Liver CT, hepatocellular carcinoma",
+    "summary": "A liver CT from the HCC-TACE-Seg collection, which holds patients with hepatocellular carcinoma. The series holds two acquisitions of the same slice positions, shown here as an earlier and a later series. The dataset's segmentation has four segments named Liver, Mass, Portal vein and Abdominal aorta, and it describes the Mass segment as Tumor. The collection's clinical table lists this patient's tumour as moderately differentiated and uninodular.",
     "series": [
       {
-        "id": "ct",
-        "name": "Pre-contrast CT, 10 mm slices",
-        "url": "hcctace-hcc010/ct/",
+        "id": "early",
+        "name": "Earlier acquisition, 2.5 mm slices",
+        "url": "hcctace-hcc010/early/",
+        "windows": [
+          {
+            "name": "Liver",
+            "center": 60,
+            "width": 160
+          },
+          {
+            "name": "Soft tissue",
+            "center": 40,
+            "width": 400
+          },
+          {
+            "name": "Lung",
+            "center": -600,
+            "width": 1500
+          }
+        ],
+        "defaultWindow": "Liver"
+      },
+      {
+        "id": "late",
+        "name": "Later acquisition, 2.5 mm slices",
+        "url": "hcctace-hcc010/late/",
         "windows": [
           {
             "name": "Liver",
@@ -775,7 +812,60 @@
         "defaultWindow": "Liver"
       }
     ],
-    "findings": [],
+    "findings": [
+      {
+        "id": "tumour-segmentation",
+        "title": "Tumour segmentation",
+        "text": "The dataset's tumour segmentation lies here. The segment is named Mass and described as Tumor, and its outline sits a little high on the earlier acquisition and a little low on the later one. The mass is brighter than the liver around it on the earlier acquisition and darker on the later one.",
+        "plane": "axial",
+        "index": 28,
+        "at": [
+          0.291,
+          0.553
+        ],
+        "series": "early",
+        "window": "Liver"
+      },
+      {
+        "id": "liver-segmentation",
+        "title": "Liver segmentation",
+        "text": "The dataset's liver segment lies here. It leaves out the mass and the portal vein segments. At the dome of the liver it fits the later acquisition and runs into the lung on the earlier one.",
+        "plane": "axial",
+        "index": 42,
+        "at": [
+          0.318,
+          0.463
+        ],
+        "series": "late",
+        "window": "Liver"
+      },
+      {
+        "id": "portal-vein-segmentation",
+        "title": "Portal vein segmentation",
+        "text": "The dataset's portal vein segment lies here. It is much brighter on the later acquisition than on the earlier one.",
+        "plane": "axial",
+        "index": 38,
+        "at": [
+          0.311,
+          0.479
+        ],
+        "series": "late",
+        "window": "Liver"
+      },
+      {
+        "id": "aorta-segmentation",
+        "title": "Abdominal aorta segmentation",
+        "text": "The dataset's abdominal aorta segment lies here. It covers only a short stretch of 7 slices. The vessel is much brighter on the earlier acquisition than on the later one.",
+        "plane": "axial",
+        "index": 44,
+        "at": [
+          0.529,
+          0.58
+        ],
+        "series": "early",
+        "window": "Liver"
+      }
+    ],
     "source": {
       "short": "HCC-TACE-Seg",
       "author": "Moawad AW, Fuentes D, Morshid A, Khalaf AM, Elmohr MM, Abusaif A, Hazle JD, Kaseb AO, Hassan M, Mahvash A, Szklaruk J, Qayyom A, Elsayes K (HCC-TACE-Seg)",
@@ -783,7 +873,38 @@
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "url": "https://doi.org/10.7937/TCIA.5FNA-0924",
       "attribution": "Moawad, A. W., Fuentes, D., Morshid, A., Khalaf, A. M., Elmohr, M. M., Abusaif, A., Hazle, J. D., Kaseb, A. O., Hassan, M., Mahvash, A., Szklaruk, J., Qayyom, A., & Elsayes, K. (2021). Multimodality annotated HCC cases with and without advanced imaging segmentation [Data set]. The Cancer Imaging Archive. https://doi.org/10.7937/TCIA.5FNA-0924. TCIA Data Usage Policy: https://www.cancerimagingarchive.net/data-usage-policies-and-restrictions/",
-      "modified": "Converted from DICOM to LPS voxel order and stored as gzip chunks. Pixel values are unchanged. No names, IDs, dates or other header fields are kept."
+      "modified": "Converted from DICOM to LPS voxel order, cropped to the 77 slice positions the segmentation covers, reduced in plane from 512 to 256 voxels by 2 by 2 averaging, and stored as gzip chunks. The DICOM segmentation was converted to a label volume on the same grid, reduced by nearest neighbour. No names, IDs, dates or other header fields are kept."
+    },
+    "labels": {
+      "url": "hcctace-hcc010/labels/",
+      "names": {
+        "1": "Liver",
+        "2": "Mass",
+        "3": "Portal vein",
+        "4": "Abdominal aorta"
+      },
+      "centroids": {
+        "1": [
+          81.3,
+          118.1,
+          42.2
+        ],
+        "2": [
+          74.2,
+          140.9,
+          28.1
+        ],
+        "3": [
+          77.9,
+          123.3,
+          38.3
+        ],
+        "4": [
+          134.6,
+          148.2,
+          44.1
+        ]
+      }
     }
   },
   {

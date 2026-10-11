@@ -4,6 +4,7 @@ import { credit } from '../core/credit.js';
 import { createTabPanel } from '../core/tabs.js';
 import { TAB_NAMES, isAngio } from './cases.js';
 import { creditGroups, shortAuthor } from './credits.js';
+import { describeAngle, entryAngle, TOLERANCE } from './views.js';
 import { section, list, note, sourceList, labelButton, segmentRows, segBadge, angleNote, ARTERY_NAMES } from './ui.js';
 
 export const shortCredit = (source, noun) => credit({ ...source, attribution: shortAuthor(source.author) }, { noun, changed: 're-encoded' });
@@ -11,8 +12,15 @@ export const nounOf = c => (c.kind.endsWith('still') ? 'Image' : 'Clip');
 
 function projectionNote(c, content) {
   const p = c.projection && content.projection.get(c.projection);
+  if (c.angles) {
+    return section('Projection',
+      h('p', {}, h('strong', {}, describeAngle(entryAngle(c.angles))), '. The source states these angles for this image.'),
+      h('p', {}, p
+        ? `Nearest listed view: ${p.name}, ${angleNote(p)}.`
+        : `No listed view is within ${TOLERANCE} degrees of these angles on both axes, so none is named here.`));
+  }
   return section('Projection', p
-    ? h('p', {}, h('strong', {}, p.name), `. Angle in this tool: ${angleNote(p)}.`)
+    ? h('p', {}, h('strong', {}, p.name), `. The source names this view and gives no angles. Angle in this tool: ${angleNote(p)}.`)
     : h('p', {}, 'Not stated. The source gives no projection angle for this image, so the view is not named here. The Projections tab explains how views are named.'));
 }
 
@@ -55,7 +63,7 @@ const TABS = {
       onmouseenter: () => on.hover(s.id), onmouseleave: () => on.hover(null), onfocus: () => on.hover(s.id), onblur: () => on.hover(null),
     }, segBadge(s), s.name);
     if (c.kind === 'angio-still') {
-      const outlined = new Set(c.regions.map(r => r.segment));
+      const outlined = new Set((c.regions ?? []).map(r => r.segment));
       const shown = content.segments.filter(s => outlined.has(s.id));
       return [h('p', { class: 'hint' }, 'The segments the dataset outlines in this image. Select one to find it.'), segmentRows(shown, { button: find })];
     }
@@ -66,7 +74,9 @@ const TABS = {
         segmentRows(content.segments.filter(s => s.artery === a), { button: s => h('strong', {}, segBadge(s), s.name) }))),
     ];
   },
-  projections: ({ content }) => [
+  projections: ({ c, content, on }) => [
+    c.angles && section('This image', h('p', {}, h('strong', {}, describeAngle(entryAngle(c.angles))), '. Open the picker to see these angles on the C-arm and the nearest listed view.'),
+      h('button', { type: 'button', class: 'primary', onclick: () => on.pick(c) }, 'Show in the C-arm picker')),
     section('How views are named', list('ul', [
       'LAO and RAO say which side of the patient the image intensifier sits on, left or right. AP means straight on.',
       'Cranial tilts it toward the head and caudal toward the feet.',

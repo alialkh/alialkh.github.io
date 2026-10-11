@@ -5,15 +5,16 @@ import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from '
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateContent, KINDS } from '../cta/content.js';
-import { regionsFromCoco } from './cath-lib.mjs';
+import { regionsFromCoco, anglesFromDicom } from './cath-lib.mjs';
+import { caseSystem, entryAngle, matchProjection, describeAngle, TOLERANCE } from '../cta/views.js';
 
 const USAGE = `Usage: node radiology/tools/add-cath.mjs <file or frame pattern like in/%05d.png> --id <id> --kind <${KINDS.join('|')}>
   --title <text> --summary <text> --author <text> --license <text> --license-url <url> --url <url> [--attribution <text>]
-  [--notes <text>] [--projection <id>] [--modified <text>] [--fps <n> for a frame pattern] [--stretch <x> scales the width to fix non-square pixels]
+  [--notes <text>] [--projection <id>] [--dicom-angles=<primary,secondary> signed as in DICOM, positive toward LAO and cranial, joined with = so a minus sign parses] [--modified <text>] [--fps <n> for a frame pattern] [--stretch <x> scales the width to fix non-square pixels]
   [--crf <n>] [--coco <annotations.json> --coco-file <name>] [--pin "x,y,text" ...] [--manifest <path>]
   default manifest radiology/data/cath/manifest.json, media are written beside it`;
 const REQUIRED = ['id', 'kind', 'title', 'summary', 'author', 'license', 'license-url', 'url'];
-const TEXT = ['projection', 'notes', 'attribution', 'modified', 'fps', 'stretch', 'crf', 'coco', 'coco-file', 'manifest'];
+const TEXT = ['projection', 'dicom-angles', 'notes', 'attribution', 'modified', 'fps', 'stretch', 'crf', 'coco', 'coco-file', 'manifest'];
 
 function fail(message) {
   console.error(message);
@@ -52,13 +53,31 @@ const defaultModified = still
   ? 'Converted from PNG to JPEG. Polygons were simplified to fewer points.'
   : `Re-encoded to H.264 MP4${o.stretch ? `, resampled to square pixels (width scaled by ${o.stretch})` : ''}, audio and metadata removed.`;
 const regions = o.coco ? regionsFromCoco(JSON.parse(readFileSync(o.coco, 'utf8')), o['coco-file'], new Set(tables.segments.map(s => s.id))) : null;
+let angles = null;
+try {
+  angles = o['dicom-angles'] ? anglesFromDicom(o['dicom-angles']) : null;
+} catch (e) {
+  fail(`--dicom-angles: ${e.message}`);
+}
+// The projection is set only when the stated angles are within the picker's tolerance of a listed view, so look for that view here.
+let projection = o.projection;
+if (angles && !projection) {
+  const byId = rows => new Map(rows.map(r => [r.id, r]));
+  const system = caseSystem({ regions: regions?.regions }, { projection: byId(tables.projections), segment: byId(tables.segments) });
+  const match = system && matchProjection(entryAngle(angles), tables.projections, system);
+  if (match) projection = match.entry.id;
+  const verdict = match ? `Nearest listed ${system} view ${match.entry.id}, ${+match.distance.toFixed(1)} degrees away.`
+    : system ? `No listed ${system} view is within ${TOLERANCE} degrees, so no projection is set.`
+      : 'No outlines say which system this is, so no projection is derived. Pass --projection to set one.';
+  console.log(`Stated ${describeAngle(entryAngle(angles))}. ${verdict}`);
+}
 const pins = (o.pin ?? []).map(p => {
   const [x, y, ...text] = p.split(',');
   return { at: [Number(x), Number(y)], text: text.join(',').trim() };
 });
 // fps, duration and size are placeholders until ffprobe measures the encoded file.
 const entry = {
-  id: o.id, kind: o.kind, ...(o.projection && { projection: o.projection }), title: o.title, summary: o.summary,
+  id: o.id, kind: o.kind, ...(projection && { projection }), ...(angles && { angles }), title: o.title, summary: o.summary,
   src: `${o.id}.${still ? 'jpg' : 'mp4'}`, poster: still ? `${o.id}-thumb.jpg` : `${o.id}.jpg`,
   ...(!still && { fps: 1, durationSec: 1 }), width: 1, height: 1, markers: [],
   ...(regions && { regions: regions.regions }), ...(pins.length && { pins }), ...(o.notes && { notes: o.notes }),

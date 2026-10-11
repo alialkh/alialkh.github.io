@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { entryAngle, describeAngle, matchProjection, segmentRoles, isLateral, TOLERANCE } from './views.js';
+import { entryAngle, describeAngle, matchProjection, segmentRoles, isLateral, angleDistance, caseSystem, TOLERANCE } from './views.js';
 
 const projections = JSON.parse(readFileSync(new URL('./content/projections.json', import.meta.url), 'utf8'));
 const entry = id => projections.find(p => p.id === id);
@@ -58,4 +58,31 @@ test('segment roles come from the table and nothing else', () => {
 
 test('only the two lateral views are marked as stored by convention', () => {
   assert.deepEqual(projections.filter(isLateral).map(p => p.id), ['lateral-left', 'rca-lateral']);
+});
+
+test('the distance between two angles is the larger of the two axis gaps', () => {
+  assert.equal(angleDistance({ rot: 0, tilt: 0 }, { rot: 3, tilt: -4 }), 4);
+  assert.equal(angleDistance({ rot: -30, tilt: 10 }, { rot: 30, tilt: 10 }), 60);
+});
+
+test('stated angles with decimals keep their decimals and keep their side', () => {
+  const angles = { primary: { side: 'RAO', angle: 2.7 }, secondary: { direction: 'cranial', angle: 28.7 } };
+  assert.deepEqual(entryAngle(angles), { rot: -2.7, tilt: 28.7 });
+  assert.equal(describeAngle(entryAngle(angles)), 'RAO 2.7, cranial 28.7');
+  assert.equal(matchProjection(entryAngle(angles), projections, 'left').entry.id, 'ap-cranial');
+});
+
+test('a case belongs to the system its named view or its outlines say', () => {
+  const content = {
+    projection: new Map(projections.map(p => [p.id, p])),
+    segment: new Map([['seg-1', { artery: 'rca' }], ['seg-2', { artery: 'rca' }], ['seg-6', { artery: 'lad' }], ['seg-11', { artery: 'lcx' }]]),
+  };
+  const regions = ids => ids.map(segment => ({ segment }));
+  assert.equal(caseSystem({ projection: 'rca-lao' }, content), 'right');
+  assert.equal(caseSystem({ projection: 'lao-caudal', regions: regions(['seg-1', 'seg-2']) }, content), 'left', 'a named view for one system wins over the outlines');
+  assert.equal(caseSystem({ regions: regions(['seg-1', 'seg-2', 'seg-6']) }, content), 'right');
+  assert.equal(caseSystem({ regions: regions(['seg-6', 'seg-11', 'seg-1']) }, content), 'left');
+  assert.equal(caseSystem({ regions: regions(['seg-1', 'seg-6']) }, content), 'left', 'a tie is not a right coronary image');
+  assert.equal(caseSystem({}, content), null);
+  assert.equal(caseSystem({ regions: [] }, content), null);
 });

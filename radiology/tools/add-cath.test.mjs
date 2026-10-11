@@ -55,3 +55,47 @@ test('add-cath encodes a still with regions, a stretched clip with a pin, and re
   assert.equal(existsSync(join(dir, 'out', 's2.jpg')) || existsSync(join(dir, 'out', 's3.jpg')), false);
   assert.equal(readFileSync(manifest, 'utf8'), before);
 });
+
+test('add-cath stores stated angles exactly, derives the projection only when a listed view is near, and refuses a far one', { skip: !hasFfmpeg && 'ffmpeg is not on PATH' }, t => {
+  const dir = mkdtempSync(join(tmpdir(), 'add-cath-angles-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const png = join(dir, '1.png');
+  const manifest = join(dir, 'out', 'manifest.json');
+  const lad = join(dir, 'lad.json');
+  const rca = join(dir, 'rca.json');
+  assert.equal(spawnSync('ffmpeg', ['-v', 'error', '-f', 'lavfi', '-i', 'testsrc2=s=64x64', '-frames:v', '1', png]).status, 0);
+  const coco = category => JSON.stringify({
+    images: [{ id: 1, file_name: '1.png', width: 64, height: 64 }], categories: [{ id: 1, name: category }],
+    annotations: [{ image_id: 1, category_id: 1, segmentation: [[0, 0, 32, 0, 32, 32]] }],
+  });
+  writeFileSync(lad, coco('6'));
+  writeFileSync(rca, coco('2'));
+  const add = (id, ...extra) => addCath([png, ...meta(id, 'angio-still'), '--license', 'CC BY 4.0', '--manifest', manifest, ...extra]);
+  const read = () => JSON.parse(readFileSync(manifest, 'utf8'));
+
+  const near = add('left-near', '--dicom-angles', '40.3,25.1', '--coco', lad, '--coco-file', '1.png');
+  assert.equal(near.status, 0, near.stderr);
+  assert.match(near.stdout, /Stated LAO 40\.3, cranial 25\.1\. Nearest listed left view lao-cranial, 5\.1 degrees away/);
+  assert.deepEqual(read()[0].angles, { primary: { side: 'LAO', angle: 40.3 }, secondary: { direction: 'cranial', angle: 25.1 } });
+  assert.equal(read()[0].projection, 'lao-cranial');
+
+  const right = add('right-near', '--dicom-angles', '41,0', '--coco', rca, '--coco-file', '1.png');
+  assert.equal(right.status, 0, right.stderr);
+  assert.equal(read()[1].projection, 'rca-lao', 'the same system rule picks the right coronary view for RCA outlines');
+
+  const far = add('left-far', '--dicom-angles=-80,0', '--coco', lad, '--coco-file', '1.png');
+  assert.match(far.stdout, /No listed left view is within 15 degrees, so no projection is set/);
+  assert.deepEqual([read()[2].projection, read()[2].angles.primary], [undefined, { side: 'RAO', angle: 80 }]);
+
+  const unknown = add('no-outlines', '--dicom-angles', '41,0');
+  assert.match(unknown.stdout, /No outlines say which system this is/);
+  assert.equal(read()[3].projection, undefined);
+
+  const before = readFileSync(manifest, 'utf8');
+  const mismatch = add('mismatch', '--dicom-angles=-30,-30', '--projection', 'lao-cranial');
+  assert.equal(mismatch.status, 1);
+  assert.match(mismatch.stderr, /projection "lao-cranial" is not within 15 degrees of the stated angles RAO 30, caudal 30/);
+  assert.equal(add('garbage', '--dicom-angles', '40').status, 1);
+  assert.equal(readFileSync(manifest, 'utf8'), before, 'a refused case writes nothing');
+  assert.equal(existsSync(join(dir, 'out', 'mismatch.jpg')), false);
+});

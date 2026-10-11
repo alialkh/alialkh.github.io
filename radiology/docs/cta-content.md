@@ -24,9 +24,11 @@ IDs are kebab-case strings, unique within their table. Image coordinates are fra
   - one angle per view, ranges that sources give are in `whenToUse`. A lateral view is stored as LAO 90 by app convention, no source states a rotation angle.
   - segments carry no per-item sources. Their credit is the SYNTAX score definitions page and Sianos 2005 (PMID 19758907), shown in the credits tab.
 - IvusConcept `{ id, name, definition, howToSee, pitfalls, sources }`
-- CathCase `{ id, kind, projection?, title, summary, src, poster, fps?, durationSec?, width, height, markers, regions?, pins?, notes?, source }`
+- CathCase `{ id, kind, projection?, angles?, title, summary, src, poster, fps?, durationSec?, width, height, markers, regions?, pins?, notes?, source }`
   - `kind` is angio-clip, angio-still, ivus-clip or ivus-still
-  - `projection` is a ProjectionId, present when the source states it
+  - `angles` is `{ primary: { side, angle }, secondary: { direction, angle } }`, the real angles the source states for this image. The shapes are the Projection ones, so side is LAO, RAO or AP, direction is cranial, caudal or none, and angle is 0 to 90 and may have decimals. An AP side or a direction of none takes angle 0. Leave it out unless the source gives numbers. A caption that only names a view sets `projection` and no `angles`.
+  - `projection` is a ProjectionId, present when the source names the view or states angles near a listed one. When `angles` is present, the view must be within 15 degrees of the stated angles on both axes, which is the C-arm picker's tolerance, measured from the listed view's typical angle. Where no listed view is that near, leave `projection` out and let `angles` carry the information.
+  - Signs. A source that stores DICOM angles has the primary angle positive toward LAO and negative toward RAO, and the secondary angle positive toward cranial and negative toward caudal. `side` and `direction` carry the sign, so `angle` is never negative. CARDIAG says its angles are compliant with the DICOM standard and its record does not restate the signs.
   - `markers` is `{ segment, at: [x, y], r }[]` placing SYNTAX segments on the image. `r` is a fraction of frame width.
   - `regions` is `{ segment, polygon: [[x, y], ...] }[]`, outlines of whole segments as fractions of the frame, used when a dataset supplies polygons. They are the dataset's own labels, shown as such.
   - `pins` is `{ at, text }[]`, on-image callouts such as a lesion, text 90 characters or fewer, only where unambiguous
@@ -34,4 +36,4 @@ IDs are kebab-case strings, unique within their table. Image coordinates are fra
   - `source` is `{ author, license, licenseUrl, url, attribution, modified }`
 
 ## What the app builds from this
-One screen in the echo and CT viewer design. The sidebar groups cases by kind. The stage shows the media with overlays. The panel has tabs for the case, the segment diagram with the projection's best-seen segments highlighted, and the credits. The segment diagram is an original drawing, not a copy of any published figure.
+One screen in the echo and CT viewer design. The sidebar puts cases that state their view (`angles` or `projection`) in a first group, "Angiography with stated projection", then groups the rest by kind, and its second line shows the stated angles or else the named view. The Overview tab states the angles and the nearest listed view, and the Projections tab can send the C-arm picker to the case's exact angles. The stage shows the media with overlays. The panel has tabs for the case, the segment diagram with the projection's best-seen segments highlighted, and the credits. The segment diagram is an original drawing, not a copy of any published figure.

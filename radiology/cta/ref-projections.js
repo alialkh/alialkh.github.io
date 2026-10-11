@@ -14,19 +14,21 @@ const ROLES = [
 ];
 const SYSTEM_NAMES = { left: 'left', right: 'right' };
 
-export function createProjectionsRef({ content, refresh }) {
-  const state = { system: 'left', angle: { rot: 45, tilt: 20 }, match: null };
+// start is { angle, system, title } when a case sends the picker to its stated angles.
+export function createProjectionsRef({ content, refresh, start }) {
+  const state = { system: start?.system ?? 'left', angle: start?.angle ?? { rot: 45, tilt: 20 }, match: null };
   const nameOf = id => content.segment.get(id).name;
   const card = createSegmentCard(content);
   const HINT = 'Move the sliders or pick a view. Point at a segment for its name.';
   const diagram = createDiagram({
-    segmentOf: id => content.segment.get(id), system: 'left',
+    segmentOf: id => content.segment.get(id), system: state.system,
     onHover: id => card.show(id, HINT),
   });
-  const system = segmented({ label: 'Coronary system', value: 'left', options: [{ value: 'left', label: 'Left coronary' }, { value: 'right', label: 'Right coronary' }], onChange: v => setSystem(v) });
+  const system = segmented({ label: 'Coronary system', value: state.system, options: [{ value: 'left', label: 'Left coronary' }, { value: 'right', label: 'Right coronary' }], onChange: v => setSystem(v) });
   const carm = createCarm({ angle: state.angle, onChange: angle => setAngle(angle, false) });
   const views = h('div', { class: 'view-btns', role: 'group', 'aria-label': 'Listed views' });
   const summary = h('p', { class: 'ref-summary', 'aria-live': 'polite' });
+  const from = start && h('p', { class: 'ref-hint' }, `Angles stated for ${start.title}.`);
   const roleKey = h('ul', { class: 'role-key', 'aria-label': 'What the marks mean' }, ROLES.map(([role, name, text]) => h('li', { title: text }, h('span', { class: `role-sw ${role}` }), name)));
 
   function drawViews() {
@@ -60,7 +62,7 @@ export function createProjectionsRef({ content, refresh }) {
 
   return {
     el: h('div', { class: 'ref ref-views' },
-      h('div', { class: 'ref-tools' }, system.el, summary),
+      h('div', { class: 'ref-tools' }, system.el, summary, from),
       h('div', { class: 'ref-left' }, carm.el, views),
       h('div', { class: 'ref-right' }, roleKey, diagram.el, card.el, legend(content),
         h('p', { class: 'ref-hint' }, 'Segments that are not marked are simply not listed for this view. That does not mean they cannot be seen.'))),

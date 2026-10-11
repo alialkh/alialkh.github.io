@@ -2,6 +2,7 @@
 import { fetchJson } from '../core/json.js';
 import { ALLOWED_LICENSES, licenseAllowed } from '../core/license.js';
 import { TYPES as BASE, checkShape as check } from '../core/shape.js';
+import { entryAngle, angleDistance, describeAngle, TOLERANCE } from './views.js';
 
 export { ALLOWED_LICENSES, licenseAllowed };
 export const KINDS = ['angio-clip', 'angio-still', 'ivus-clip', 'ivus-still'];
@@ -26,10 +27,11 @@ const TYPES = {
 };
 const checkShape = (value, shape, where, problems) => check(value, shape, where, problems, TYPES);
 
+const ANGLES = { primary: { side: SIDES, angle: 'degrees' }, secondary: { direction: DIRECTIONS, angle: 'degrees' } };
 const SHAPES = {
   segments: { id: 'id', name: 'text', artery: ARTERIES, syntax: 'text', aha: 'aha', description: 'text' },
   projections: {
-    id: 'id', name: 'text', aliases: 'texts', primary: { side: SIDES, angle: 'degrees' }, secondary: { direction: DIRECTIONS, angle: 'degrees' },
+    id: 'id', name: 'text', aliases: 'texts', ...ANGLES,
     system: SYSTEMS, bestSeen: 'ids', foreshortened: 'ids', overlapped: 'ids', whenToUse: 'text', pitfalls: 'texts', sources: 'texts',
   },
   ivus: { id: 'id', name: 'text', definition: 'text', howToSee: 'text', pitfalls: 'texts', sources: 'texts' },
@@ -44,6 +46,27 @@ const MARKER = { segment: 'id', at: 'point', r: 'radius' };
 const REGION = { segment: 'id', polygon: 'polygon' };
 const PIN = { at: 'point', text: 'pinText' };
 const SEGMENT_LISTS = ['bestSeen', 'foreshortened', 'overlapped'];
+
+// An AP view has no rotation and a view with no tilt has no angle, so a stray angle would draw a wrong picture.
+function degenerateAngles(a, where) {
+  const problems = [];
+  if (a.primary.side === 'AP' && a.primary.angle !== 0) problems.push(`${where} is AP, so primary.angle must be 0`);
+  if (a.secondary.direction === 'none' && a.secondary.angle !== 0) problems.push(`${where} has no tilt, so secondary.angle must be 0`);
+  return problems;
+}
+
+// Stated angles are the source's own numbers. A named view beside them is only the nearest listed one, so it has to be near.
+function anglesProblems(c, projections, where) {
+  const problems = [];
+  checkShape(c.angles, ANGLES, `${where}.angles`, problems);
+  if (problems.length) return problems;
+  problems.push(...degenerateAngles(c.angles, `${where}.angles`));
+  const view = projections.find(p => p.id === c.projection);
+  if (view && angleDistance(entryAngle(c.angles), entryAngle(view)) > TOLERANCE) {
+    problems.push(`${where}.projection "${c.projection}" is not within ${TOLERANCE} degrees of the stated angles ${describeAngle(entryAngle(c.angles))}`);
+  }
+  return problems;
+}
 
 // Pure, so node can run it over the real files. Returns a list of problems, empty when valid.
 export function validateContent(tables) {
@@ -75,9 +98,7 @@ export function validateContent(tables) {
     for (const list of SEGMENT_LISTS) {
       for (const id of p[list]) if (!ids.segments.has(id)) problems.push(`${where}.${list} lists unknown segment "${id}"`);
     }
-    // An AP view has no rotation and a view with no tilt has no angle, so a stray angle would draw a wrong picture.
-    if (p.primary.side === 'AP' && p.primary.angle !== 0) problems.push(`${where} is AP, so primary.angle must be 0`);
-    if (p.secondary.direction === 'none' && p.secondary.angle !== 0) problems.push(`${where} has no tilt, so secondary.angle must be 0`);
+    problems.push(...degenerateAngles(p, where));
   }
   for (const c of tables.cases) {
     const where = `cases["${c.id}"]`;
@@ -85,6 +106,7 @@ export function validateContent(tables) {
     if (c.id.startsWith('ref-')) problems.push(`${where}.id must not start with "ref-"`);
     if (c.projection !== undefined && !ids.projections.has(c.projection)) problems.push(`${where}.projection "${c.projection}" is not a projection`);
     if (CLIPS.includes(c.kind) && !(c.fps > 0 && c.durationSec > 0)) problems.push(`${where} is a clip, so it needs fps and durationSec`);
+    if (c.angles !== undefined) problems.push(...anglesProblems(c, tables.projections, where));
     if (!licenseAllowed(c.source.license)) problems.push(`${where} license "${c.source.license}" is not allowed. Use ${ALLOWED_LICENSES}.`);
     for (const [list, shape] of [['markers', MARKER], ['regions', REGION], ['pins', PIN]]) {
       for (const [i, item] of (c[list] ?? []).entries()) {

@@ -43,3 +43,17 @@ export function regionsFromCoco(coco, fileName, segmentIds, tolerancePx = 0.7) {
   }
   return { regions, dropped };
 }
+
+// DICOM stores the primary angle positive toward LAO and the secondary angle positive toward cranial.
+// CARDIAG says its metadata follows the DICOM standard. Returns the CathCase angles shape, or throws on text that is not two numbers.
+export function anglesFromDicom(text) {
+  const parts = text.split(',').map(t => t.trim());
+  const [primary, secondary] = parts.map(Number);
+  if (parts.length !== 2 || parts.some(t => t === '') || !Number.isFinite(primary) || !Number.isFinite(secondary)) {
+    throw new Error(`expected "primary,secondary" as two numbers, got "${text}"`);
+  }
+  return {
+    primary: { side: primary === 0 ? 'AP' : primary > 0 ? 'LAO' : 'RAO', angle: Math.abs(primary) },
+    secondary: { direction: secondary === 0 ? 'none' : secondary > 0 ? 'cranial' : 'caudal', angle: Math.abs(secondary) },
+  };
+}
