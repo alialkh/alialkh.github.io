@@ -153,9 +153,9 @@
 .tree .glow.sel { stroke: var(--accent); stroke-opacity: 0.5; }
 .tree .badge.sel circle { fill: var(--c); }
 .tree .badge.sel text { fill: #0a0f14; }
-/* A segment the table says is usually absent in this dominance. */
-.tree[data-dominance="right"] [data-seg="seg-15"]:is(.line, .badge), .tree[data-dominance="left"] [data-seg="seg-4"]:is(.line, .badge) { opacity: 0.32; }
-.tree[data-dominance="right"] .line[data-seg="seg-15"], .tree[data-dominance="left"] .line[data-seg="seg-4"] { stroke-dasharray: 7 7; }
+/* A segment the sources say is usually absent in this dominance. Left dominant: 4, and 16 with its branches, since the RCA then supplies no ventricle (Sianos 2005). */
+.tree[data-dominance="right"] [data-seg="seg-15"]:is(.line, .badge), .tree[data-dominance="left"] :is([data-seg="seg-4"], [data-seg^="seg-16"]):is(.line, .badge) { opacity: 0.32; }
+.tree[data-dominance="right"] .line[data-seg="seg-15"], .tree[data-dominance="left"] .line:is([data-seg="seg-4"], [data-seg^="seg-16"]) { stroke-dasharray: 7 7; }
 /* Projection roles. */
 .tree.has-roles .line:not(.best, .fore, .over), .tree.has-roles .badge:not(.best, .fore, .over) { opacity: 0.3; }
 .tree .glow.best { stroke: #fff; stroke-opacity: 0.6; }

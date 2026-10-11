@@ -6,7 +6,7 @@ import { section, list, note, segmented, segmentRows, segBadge, ARTERY_NAMES } f
 
 const DOMINANCE = {
   right: 'Right dominant. The PDA comes from the RCA as segment 4, and segment 15 is usually absent.',
-  left: 'Left dominant. The PDA is the end of the circumflex as segment 15, and segment 4 is usually absent.',
+  left: 'Left dominant. The PDA is the end of the circumflex as segment 15, and segment 4 is usually absent. Sianos 2005 says the RCA then does not supply the ventricle, so segment 16 and its branches are dimmed too.',
 };
 
 // Shared by the projection guide, which draws the same tree.

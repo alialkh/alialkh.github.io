@@ -65,7 +65,7 @@ export function createProjectionsRef({ content, refresh, start }) {
       h('div', { class: 'ref-tools' }, system.el, summary, from),
       h('div', { class: 'ref-left' }, carm.el, views),
       h('div', { class: 'ref-right' }, roleKey, diagram.el, card.el, legend(content),
-        h('p', { class: 'ref-hint' }, 'Segments that are not marked are simply not listed for this view. That does not mean they cannot be seen.'))),
+        h('p', { class: 'ref-hint' }, 'Segments that are not marked are simply not listed for this view. That does not mean they cannot be seen. Where the sources disagree with a mark, the Projection tab says so.'))),
     setLabels: diagram.setLabels,
     tab: id => ({
       guide: () => [

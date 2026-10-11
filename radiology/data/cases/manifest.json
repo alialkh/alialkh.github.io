@@ -816,7 +816,7 @@
       {
         "id": "tumour-segmentation",
         "title": "Tumour segmentation",
-        "text": "The dataset's tumour segmentation lies here. The segment is named Mass and described as Tumor, and its outline sits a little high on the earlier acquisition and a little low on the later one. The mass is brighter than the liver around it on the earlier acquisition and darker on the later one.",
+        "text": "The dataset's tumour segmentation lies here. The segment is named Mass and described as Tumor, and its outline is approximate, about 8 to 12 mm (3 to 5 slices) too high on the earlier acquisition and about 3 slices too low on the later one, so at the top and bottom of the mass the colour does not match the lesion and the mass should be judged from the image rather than from the colour. The mass is brighter than the liver around it on the earlier acquisition and darker on the later one.",
         "plane": "axial",
         "index": 28,
         "at": [
@@ -879,7 +879,7 @@
       "url": "hcctace-hcc010/labels/",
       "names": {
         "1": "Liver",
-        "2": "Mass",
+        "2": "Mass (dataset outline, approximate fit)",
         "3": "Portal vein",
         "4": "Abdominal aorta"
       },

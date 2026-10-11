@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { GEOMETRY, LINKS, ROOT, APEX, VIEW, BADGE_R, badgeAt, pointAt, curvePath } from './tree.js';
+import { GEOMETRY, LINKS, ROOT, APEX, VIEW, BADGE_R, SEPTALS, badgeAt, pointAt, curvePath } from './tree.js';
 
 const segments = JSON.parse(readFileSync(new URL('./content/segments.json', import.meta.url), 'utf8'));
 const pts = id => GEOMETRY[id].pts;
@@ -44,6 +44,8 @@ test('the descriptions that name a place are drawn there', () => {
   assert.ok(pts('seg-11').findIndex(v => same(v, pts('seg-12a')[0])) < pts('seg-11').length - 1);
   // 13 runs on from 11, past the last obtuse marginal, and the PDA from the circumflex continues it.
   assert.ok(same(pts('seg-13')[0], pts('seg-11').at(-1)) && same(pts('seg-15')[0], pts('seg-13').at(-1)));
+  // 6 ends at the origin of the first septal branch, which it includes, and 7 starts just after it.
+  assert.ok(same(SEPTALS[0][0], pts('seg-6').at(-1)));
   // 4 and 16 both leave the end of 3.
   assert.ok(same(pts('seg-4')[0], pts('seg-3').at(-1)) && same(pts('seg-16')[0], pts('seg-3').at(-1)));
   // The LAD, and the PDA from either artery, run to the apex.

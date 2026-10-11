@@ -53,8 +53,9 @@ export const GEOMETRY = {
 };
 
 // Thin septal branches drawn for orientation. The segment table gives them no number.
+// The first one leaves where 6 ends, because 6 includes its origin and 7 starts just after it.
 export const SEPTALS = [
-  [l6[2], [262, 266], [246, 300]],
+  [last(l6), [262, 322], [246, 356]],
   [l7[1], [270, 396], [256, 430]],
   [l7[2], [274, 456], [262, 494]],
 ];

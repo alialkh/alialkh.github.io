@@ -5,7 +5,7 @@ import { VIEW, ROOT, OUTLINE, SEPTALS, GEOMETRY, BADGE_R, curvePath, badgeAt, CR
 const esc = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const FRONT = new Set(['lad', 'left-main']);
 const NOTES = {
-  right: [['Aortic root', 314, 30], ['Acute margin', 72, 540], ['Crux', 214, 618], ['Apex', 372, 716]],
+  right: [['Aortic root', 314, 30], ['Acute margin', 72, 510], ['Crux', 214, 618], ['Apex', 372, 716]],
   left: [['Aortic root', 314, 30], ['Septal branches', 150, 318], ['Crux', 214, 618], ['Apex', 372, 716]],
 };
 
