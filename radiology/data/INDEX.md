@@ -25,11 +25,9 @@ GitHub Pages guidance is about 1 GB per site and 100 MB per file. Keep this fold
 | a3c-normal-1 | echo clip, a3c, normal | 312 KB | CC BY-SA 3.0 |
 | sc-4c-normal-1 | echo clip, sc-4c, normal | 126 KB | CC BY-SA 3.0 |
 | psax-av-aortic-regurgitation-2 | echo clip, psax-av, aortic-regurgitation | 326 KB | CC BY-SA 3.0 |
-| plax-pericardial-effusion-1 | echo clip, plax, pericardial-effusion | 156 KB | CC BY-SA 3.0 |
 | plax-dilated-cardiomyopathy-1 | echo clip, plax, dilated-cardiomyopathy | 176 KB | CC BY-SA 3.0 |
 | plax-hypertrophic-cardiomyopathy-1 | echo clip, plax, hypertrophic-cardiomyopathy | 154 KB | CC BY-SA 3.0 |
 | plax-hypertrophic-cardiomyopathy-2 | echo clip, plax, hypertrophic-cardiomyopathy | 565 KB | CC BY 3.0 |
-| a2c-hypertrophic-cardiomyopathy-1 | echo clip, a2c, hypertrophic-cardiomyopathy | 811 KB | CC BY 2.0 |
 | plax-mitral-regurgitation-1 | echo clip, plax, mitral-regurgitation | 145 KB | CC BY-SA 3.0 |
 | a4c-mitral-regurgitation-1 | echo clip, a4c, mitral-regurgitation | 134 KB | CC BY-SA 3.0 |
 | plax-mitral-stenosis-1 | echo clip, plax, mitral-stenosis | 158 KB | CC BY-SA 3.0 |

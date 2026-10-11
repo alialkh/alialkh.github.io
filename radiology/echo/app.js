@@ -111,7 +111,6 @@ function start(content) {
     chip.replaceChildren(...[
       h('h2', { class: 'chip-title' }, c.title),
       h('p', { class: 'chip-sub' }, c.condition ? `${c.view.name} (${c.view.abbrev})` : c.view.name),
-      c.draft && h('span', { class: 'badge draft' }, 'Draft, not yet medically reviewed'),
     ].filter(Boolean));
     credits.replaceChildren(credit(c.clip), disclaimer());
     const compareBtn = controls.pressed.compare;

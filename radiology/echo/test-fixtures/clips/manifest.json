@@ -105,7 +105,7 @@
     "width": 720,
     "height": 540,
     "markers": [],
-    "notes": "Reviewed condition on a reviewed view, so no draft badge. Its compareView has no normal clip, so no compare button.",
+    "notes": "Its compareView has no normal clip, so no compare button.",
     "source": {
       "author": "Synthetic, generated with ffmpeg lavfi",
       "license": "CC0 1.0",

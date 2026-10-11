@@ -20,8 +20,6 @@ export function caseOf(content, clip) {
     id: clip.id, clip, view, condition, kind,
     title: condition ? condition.name : view.abbrev,
     subtitle: (condition ? view.abbrev : WINDOW_NAMES[view.window]) + number,
-    // Both tables feed a pathology case's panel, so either one unreviewed makes it a draft.
-    draft: !view.reviewed || (condition !== null && !condition.reviewed),
     tabs: TABS[kind],
     compare: (condition && content.normalClips.get(condition.compareView)?.[0]) ?? null,
   };

@@ -3,25 +3,18 @@ import { h } from '../core/dom.js';
 import { icon } from './icons.js';
 import { TAB_NAMES } from './case-list.js';
 
-const NOTCH_ANGLES = { 'right shoulder': -135, 'left shoulder': -45, head: -90, left: 0, right: 180 };
-
-// shortcut: the arrow follows the first direction named in the notch sentence. Add an angle to the probe shape if a sentence ever misleads.
-export function notchAngle(sentence) {
-  const m = sentence.toLowerCase().match(/right shoulder|left shoulder|head|left|right/);
-  return m ? NOTCH_ANGLES[m[0]] : null;
-}
+// The scale is the figure's 200 by 240 viewBox.
+export const probeTransform = probe => ({ x: probe.chest[0] * 200, y: probe.chest[1] * 240, angle: probe.angle });
 
 function probeFigure(probe) {
-  const [x, y] = [probe.chest[0] * 200, probe.chest[1] * 240];
-  const angle = notchAngle(probe.notch);
-  const notch = angle === null ? '' : '<circle class="notch" cx="9" cy="0" r="2.5"/><path class="notch-arrow" d="M14 0 H34 M28 -5 L34 0 L28 5"/>';
+  const { x, y, angle } = probeTransform(probe);
   const fig = h('figure', { class: 'probe-figure' });
   fig.innerHTML = `<svg viewBox="0 0 200 240" role="img" aria-label="Probe position on the front of the chest">
     <path class="torso" d="M30 30 Q100 10 170 30 L178 120 Q172 200 150 236 H50 Q28 200 22 120 Z"/>
     <path class="bone" d="M42 30 Q70 40 94 34 M106 34 Q130 40 158 30 M94 34 H106 V138 H94 Z M100 140 L58 186 M100 140 L142 186"/>
-    <ellipse class="heart" cx="112" cy="110" rx="30" ry="22" transform="rotate(-25 112 110)"/>
+    <ellipse class="heart" cx="112" cy="110" rx="30" ry="22" transform="rotate(25 112 110)"/>
     <text x="10" y="18">R</text><text x="182" y="18">L</text>
-    <g transform="translate(${x} ${y}) rotate(${angle ?? 0})"><rect class="probe" x="-12" y="-5" width="24" height="10" rx="3"/>${notch}</g></svg>`;
+    <g transform="translate(${x} ${y}) rotate(${angle})"><rect class="probe" x="-12" y="-5" width="24" height="10" rx="3"/><circle class="notch" cx="9" cy="0" r="2.5"/><path class="notch-arrow" d="M14 0 H34 M28 -5 L34 0 L28 5"/></g></svg>`;
   fig.append(h('figcaption', {}, 'Front of the chest, patient\'s right on your left. The dot and arrow mark the notch.'));
   return fig;
 }

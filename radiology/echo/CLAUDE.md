@@ -8,7 +8,6 @@ Gotchas:
 - Markers and pins are fractions of the frame. The player sizes the frame to the clip's aspect ratio with a ResizeObserver, so they stay on their structures at any size.
 - Markers are static points, not per-frame tracking. Tracking needs segmentation masks and is out of scope.
 - Marker name chips are placed by `label-layout.js` whenever the frame size changes or hidden labels show, never per frame. A marker with no clear spot shows its number instead, and the Structures list shows the same number. Pin chips open on hover and focus only, so they stay out of the layout.
-- Teaching content ships `reviewed: false`. A case shows the draft badge when its view or its condition is unreviewed.
 - Dev only: `?clips=<url>` and `?content=<dir/>` swap the sources. Fixtures: `index.html?clips=test-fixtures/clips/manifest.json&content=test-fixtures/content/`. `test-fixtures/clips/empty.json` shows the zero-clip state.
 - Clip `src` and `poster` resolve against the manifest. A missing default manifest means zero clips. Any other load or rule failure stops the page with the list of problems.
 - The credit line is never hidden, in test mode and fullscreen included. Fullscreen targets the whole stage.

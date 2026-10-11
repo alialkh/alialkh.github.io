@@ -47,3 +47,7 @@ Ingest pass on 2026-10-10. 40 files were downloaded (rows 10 and 17 stayed out b
 | 40 | Takotsubo (A4C) | [Takotsubo-Syndrome-A-Pathway-through-the-Pituitary-Disease-9219018.f1.ogv](https://commons.wikimedia.org/wiki/File:Takotsubo-Syndrome-A-Pathway-through-the-Pituitary-Disease-9219018.f1.ogv) | CC BY 3.0 (Creative Commons Attribution 3.0 Unported) | 0.885 | 1.36 | Description: "Video 1: Two-dimensional transthoracic echocardiography, apical four-chamber | ingested as a4c-takotsubo-1 |
 | 41 | Takotsubo (A4C) | [A4CTTS_(CardioNetworks_ECHOpedia).webm](https://commons.wikimedia.org/wiki/File:A4CTTS_(CardioNetworks_ECHOpedia).webm) | CC BY-SA 3.0 (Creative Commons Attribution-Share Alike 3.0 Unported) | 0.199 | 1.745 | Description: "Apical 4 chamber view of a Takotsubo cardiomyopathy" | ingested as a4c-takotsubo-2 |
 | 42 | LV aneurysm (PLAX) | [Apical_aneurysm_of_LV_E00279_(CardioNetworks_ECHOpedia).webm](https://commons.wikimedia.org/wiki/File:Apical_aneurysm_of_LV_E00279_(CardioNetworks_ECHOpedia).webm) | CC BY-SA 3.0 (Creative Commons Attribution-Share Alike 3.0 Unported) | 0.306 | 0.981 | Title: "Apical aneurysm of LV". Description: "PLAX: dilated left ventricle, apical aneurys | skipped: LV aneurysm is not one of the 14 conditions |
+
+## Held after the label audit (2026-10-10)
+- plax-pericardial-effusion-1: the frames show a short-axis cut through a swinging heart, not a long axis. Held until the view can be confirmed.
+- a2c-hypertrophic-cardiomyopathy-1: the view could not be confirmed from the frames.

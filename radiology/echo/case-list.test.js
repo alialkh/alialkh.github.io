@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { indexContent } from './content.js';
 import { caseList, caseOf } from './case-list.js';
 
-const view = (id, abbrev, window, reviewed = false) => ({ id, name: `${abbrev} name`, abbrev, window, reviewed });
-const condition = (id, system, compareView, reviewed = false) => ({ id, name: `${id} name`, system, compareView, reviewed });
+const view = (id, abbrev, window) => ({ id, name: `${abbrev} name`, abbrev, window });
+const condition = (id, system, compareView) => ({ id, name: `${id} name`, system, compareView });
 const clip = (id, viewId, conditionId) => ({ id, view: viewId, ...(conditionId && { condition: conditionId }) });
 
 // Manifest order is deliberately unlike views.json and conditions.json order.
@@ -79,22 +79,6 @@ test('clips that would read the same, same title and same view, are numbered on 
   const subtitle = id => caseOf(content, content.clip.get(id)).subtitle;
   assert.deepEqual(['plax-1', 'plax-2', 'a4c-1'].map(subtitle), ['Parasternal, clip 1', 'Parasternal, clip 2', 'Apical']);
   assert.deepEqual(['eff-1', 'eff-2', 'eff-3', 'ms-1'].map(subtitle), ['PLAX, clip 1', 'A4C', 'PLAX, clip 2', 'PLAX']);
-});
-
-test('a case is a draft when its view or its condition is unreviewed', () => {
-  const content = indexContent(tables());
-  const draft = id => caseOf(content, content.clip.get(id)).draft;
-  assert.equal(draft('plax-1'), false, 'reviewed view');
-  assert.equal(draft('a4c-1'), true, 'unreviewed view');
-  assert.equal(draft('ms-1'), false, 'reviewed condition on a reviewed view');
-  assert.equal(draft('eff-1'), true, 'unreviewed condition on a reviewed view');
-  const t = tables();
-  t.conditions[2].reviewed = true;
-  const conditionOnly = indexContent(t);
-  assert.equal(caseOf(conditionOnly, conditionOnly.clip.get('tamp-1')).draft, true, 'reviewed condition on an unreviewed view');
-  t.views[2].reviewed = true;
-  const both = indexContent(t);
-  assert.equal(caseOf(both, both.clip.get('tamp-1')).draft, false, 'both reviewed');
 });
 
 test('compare offers the first normal clip of the condition compareView, or nothing', () => {

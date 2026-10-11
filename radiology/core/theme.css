@@ -113,7 +113,6 @@ button.primary:hover { background: #a3ccff; border-color: #a3ccff; }
   font-weight: 600;
   line-height: 1.5;
 }
-.badge.draft { color: var(--warn); background: rgb(242 193 78 / 0.1); }
 .disclaimer { margin: 0; font-size: var(--fs-xs); color: var(--muted); }
 
 .problems-page { max-width: 48rem; margin: 3rem auto; padding: 0 16px; }

@@ -13,12 +13,12 @@ IDs are kebab-case strings, unique within their table. Coordinates are fractions
 
 ## Shapes
 - Structure `{ id, name, description }`
-- View `{ id, name, abbrev, window, probe, screen, structures, tips, pitfalls, reviewed }`
+- View `{ id, name, abbrev, window, probe, screen, structures, tips, pitfalls }`
   - `window` is parasternal, apical, subcostal or suprasternal
-  - `probe` is `{ site, chest: [x, y], notch }`. `site` and `notch` are sentences. `chest` places the transducer on the front-of-chest schematic, patient's right on the viewer's left, sternum near x 0.5.
+  - `probe` is `{ site, chest: [x, y], notch, angle }`. `site` and `notch` are sentences. `chest` places the transducer on the front-of-chest schematic, patient's right on the viewer's left, sternum near x 0.5. `angle` is the notch direction on that schematic in degrees from 0 up to but not including 360, clockwise as drawn. 0 points to the viewer's right (the patient's left), 90 points down (toward the feet), 180 points to the viewer's left (the patient's right), 270 points up (toward the head).
   - `screen` says how the sector is laid out on screen
   - `structures` lists StructureIds visible in this view, in teaching order
-- Condition `{ id, name, system, summary, findings, significance, pearls, mimics, compareView, reviewed, sources }`
+- Condition `{ id, name, system, summary, findings, significance, pearls, mimics, compareView, sources }`
   - `system` is pericardium, lv-function, valves, right-heart, cardiomyopathy or masses
   - `findings` is the ordered list of things to look for, one sentence each
   - `compareView` is the ViewId whose normal clip is shown beside the case
@@ -33,7 +33,6 @@ IDs are kebab-case strings, unique within their table. Coordinates are fractions
 ## Rules the validator enforces
 - every referenced id exists
 - `source.license` is CC0 1.0, Public domain, CC BY x.y or CC BY-SA x.y. Anything NC or ND is rejected.
-- `reviewed: false` shows a "draft, not yet medically reviewed" badge in the UI
 
 ## Adding a clip
 1. Record the dataset and its license in `LICENSES.md`.

@@ -11,12 +11,12 @@ const base = () => ({
   ],
   views: [{
     id: 'plax', name: 'Parasternal long axis', abbrev: 'PLAX', window: 'parasternal',
-    probe: { site: 'Left sternal border.', chest: [0.56, 0.42], notch: 'Toward the right shoulder.' },
-    screen: 'Apex to the left.', structures: ['lv', 'la'], tips: ['Tip.'], pitfalls: ['Pitfall.'], reviewed: false,
+    probe: { site: 'Left sternal border.', chest: [0.56, 0.42], notch: 'Toward the right shoulder.', angle: 225 },
+    screen: 'Apex to the left.', structures: ['lv', 'la'], tips: ['Tip.'], pitfalls: ['Pitfall.'],
   }],
   conditions: [{
     id: 'effusion', name: 'Pericardial effusion', system: 'pericardium', summary: 'Fluid.', findings: ['Dark space.'],
-    significance: 'Tamponade.', pearls: ['Pearl.'], mimics: ['Pleural effusion'], compareView: 'plax', reviewed: false, sources: ['Ref.'],
+    significance: 'Tamponade.', pearls: ['Pearl.'], mimics: ['Pleural effusion'], compareView: 'plax', sources: ['Ref.'],
   }],
   clips: [{
     id: 'plax-1', view: 'plax', condition: 'effusion', src: 'plax-1.mp4', poster: 'plax-1.jpg',
@@ -92,6 +92,17 @@ test('rejects a wrong shape with the field named', () => {
     ['conditions["effusion"].findings must be a list of non-empty text']);
   assert.deepEqual(problemsAfter(t => { t.clips[0].markers[0].r = 0; }),
     ['clips["plax-1"].markers[0].r must be a fraction of frame width above 0']);
+});
+
+test('rejects a probe angle that is missing, not a number, 360 or negative, and accepts 0 and 359.9', () => {
+  const bad = ['views["plax"].probe.angle must be a number from 0 up to but not including 360'];
+  assert.deepEqual(problemsAfter(t => { delete t.views[0].probe.angle; }), bad);
+  for (const angle of ['90', 360, -1]) {
+    assert.deepEqual(problemsAfter(t => { t.views[0].probe.angle = angle; }), bad, JSON.stringify(angle));
+  }
+  for (const angle of [0, 359.9]) {
+    assert.deepEqual(problemsAfter(t => { t.views[0].probe.angle = angle; }), [], String(angle));
+  }
 });
 
 test('pins and notes are optional, and valid ones pass', () => {

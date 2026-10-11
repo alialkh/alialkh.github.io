@@ -20,6 +20,7 @@ const TYPES = {
   positive: ['a positive number', v => Number.isFinite(v) && v > 0],
   radius: ['a fraction of frame width above 0', v => fraction(v) && v > 0],
   point: ['[x, y] with each between 0 and 1', v => Array.isArray(v) && v.length === 2 && v.every(fraction)],
+  degrees: ['a number from 0 up to but not including 360', v => Number.isFinite(v) && v >= 0 && v < 360],
   list: ['a list', Array.isArray],
   pinText: [`non-empty text of ${PIN_TEXT_MAX} characters or fewer`, v => TYPES.text[1](v) && v.length <= PIN_TEXT_MAX],
 };
@@ -29,12 +30,12 @@ const SHAPES = {
   structures: { id: 'id', name: 'text', description: 'text' },
   views: {
     id: 'id', name: 'text', abbrev: 'text', window: WINDOWS,
-    probe: { site: 'text', chest: 'point', notch: 'text' },
-    screen: 'text', structures: 'ids', tips: 'texts', pitfalls: 'texts', reviewed: 'bool',
+    probe: { site: 'text', chest: 'point', notch: 'text', angle: 'degrees' },
+    screen: 'text', structures: 'ids', tips: 'texts', pitfalls: 'texts',
   },
   conditions: {
     id: 'id', name: 'text', system: SYSTEMS, summary: 'text', findings: 'texts', significance: 'text',
-    pearls: 'texts', mimics: 'texts', compareView: 'id', reviewed: 'bool', sources: 'texts',
+    pearls: 'texts', mimics: 'texts', compareView: 'id', sources: 'texts',
   },
   clips: {
     id: 'id', view: 'id', condition: 'id?', src: 'text', poster: 'text',

@@ -12,7 +12,7 @@
   {
     "id": "la",
     "name": "Left atrium",
-    "description": "The chamber that receives blood from the pulmonary veins. It lies behind the aortic root in the parasternal long axis and at the bottom right of apical views, and a large left atrium marks chronically raised filling pressure or mitral disease."
+    "description": "The chamber that receives blood from the pulmonary veins. It lies behind the aortic root in the parasternal long axis and at the bottom right of apical views. A large left atrium often reflects chronically raised filling pressure, mitral valve disease or atrial fibrillation."
   },
   {
     "id": "ra",
@@ -62,7 +62,7 @@
   {
     "id": "posterior-mitral-leaflet",
     "name": "Posterior mitral leaflet",
-    "description": "The shorter mitral leaflet attached to the posterior annulus. In the parasternal long axis it lies next to the inferolateral wall, and it is the leaflet that most often prolapses."
+    "description": "The shorter mitral leaflet attached to the posterior annulus. In the parasternal long axis it lies next to the inferolateral wall, and it is often the leaflet that prolapses."
   },
   {
     "id": "tricuspid-valve",
@@ -77,7 +77,7 @@
   {
     "id": "main-pulmonary-artery",
     "name": "Main pulmonary artery",
-    "description": "The arterial trunk beyond the pulmonic valve. In the short axis at the aortic level it runs toward the right of the screen and may show its bifurcation, and a dilated trunk suggests pulmonary hypertension."
+    "description": "The arterial trunk beyond the pulmonic valve. In the short axis at the aortic level it runs toward the right of the screen and may show its bifurcation. A dilated trunk can be a sign of pulmonary hypertension."
   },
   {
     "id": "rvot",
@@ -107,7 +107,7 @@
   {
     "id": "anterolateral-wall",
     "name": "Anterolateral wall",
-    "description": "The lateral LV wall, usually supplied by the circumflex artery with overlap from LAD branches. It is on the right of the screen in the apical four chamber and short axis views."
+    "description": "The lateral LV wall. Its blood supply varies between people and comes from the circumflex artery, branches of the left anterior descending artery, or both. It is on the right of the screen in the apical four chamber and short axis views."
   },
   {
     "id": "inferolateral-wall",
@@ -127,12 +127,12 @@
   {
     "id": "anterolateral-papillary-muscle",
     "name": "Anterolateral papillary muscle",
-    "description": "The papillary muscle on the right of the LV at about 3 to 4 o'clock in the short axis. It has a dual blood supply and is less prone to ischemic rupture than the posteromedial muscle."
+    "description": "The papillary muscle on the right of the LV at about 3 to 4 o'clock in the short axis. It usually has a dual blood supply, which makes it less prone to ischemic rupture than the posteromedial muscle."
   },
   {
     "id": "posteromedial-papillary-muscle",
     "name": "Posteromedial papillary muscle",
-    "description": "The papillary muscle on the lower left of the LV at about 7 to 8 o'clock in the short axis. It usually has a single blood supply, which makes it the one more likely to rupture after infarction."
+    "description": "The papillary muscle on the lower left of the LV at about 7 to 8 o'clock in the short axis. It usually depends on a single artery, which makes it the one more likely to rupture after infarction."
   },
   {
     "id": "moderator-band",
@@ -152,7 +152,7 @@
   {
     "id": "coronary-sinus",
     "name": "Coronary sinus",
-    "description": "The vein that drains the heart into the right atrium along the posterior atrioventricular groove. It is a small round space behind the mitral annulus in the long axis and enters the right atrium in the RV inflow view, and a dilated sinus suggests a persistent left superior vena cava or raised right atrial pressure."
+    "description": "The vein that drains the heart into the right atrium along the posterior atrioventricular groove. It is a small round space behind the mitral annulus in the long axis, may be seen entering the right atrium in the RV inflow view, and lies in the atrioventricular groove in the apical two chamber view. Causes of a dilated sinus include a persistent left superior vena cava and raised right atrial pressure."
   },
   {
     "id": "eustachian-valve",
@@ -177,7 +177,7 @@
   {
     "id": "diaphragm",
     "name": "Diaphragm",
-    "description": "The bright curved line between the liver and the heart in subcostal views. It marks where the abdomen ends and the pericardium begins."
+    "description": "The bright curved line between the liver and the heart in subcostal views. It separates the abdomen from the chest."
   },
   {
     "id": "descending-aorta",
@@ -202,7 +202,7 @@
   {
     "id": "left-subclavian-artery",
     "name": "Left subclavian artery",
-    "description": "The third branch of the aortic arch. It rises from the top of the arch on the right side of the suprasternal image, just before the descending aorta, which is where coarctation usually sits."
+    "description": "The third branch of the aortic arch. It rises from the top of the arch on the right side of the suprasternal image, just before the descending aorta. Coarctation usually sits just beyond its origin."
   },
   {
     "id": "right-pulmonary-artery",
@@ -212,6 +212,6 @@
   {
     "id": "left-atrial-appendage",
     "name": "Left atrial appendage",
-    "description": "A small finger-like pouch off the left atrium, sometimes seen near the mitral annulus in the apical two chamber view. It is the usual site of clot in atrial fibrillation, but transthoracic echo often cannot show it well."
+    "description": "A small finger-like pouch off the left atrium, sometimes seen on the right side of the sector in the apical two chamber view. It is the usual site of clot in atrial fibrillation, but transthoracic echo often cannot show it well."
   }
 ]
