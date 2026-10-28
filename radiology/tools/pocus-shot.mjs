@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 const { values: o } = parseArgs({
   options: {
     out: { type: 'string' }, name: { type: 'string', default: 'shot' }, page: { type: 'string', default: 'pocus/dev.html' },
-    query: { type: 'string', default: '' }, shots: { type: 'string' }, wait: { type: 'string', default: '180000' }, size: { type: 'string', default: '800x640' }, full: { type: 'boolean', default: false },
+    query: { type: 'string', default: '' }, shots: { type: 'string' }, wait: { type: 'string', default: '180000' }, size: { type: 'string', default: '800x640' }, full: { type: 'boolean', default: false }, clip: { type: 'string' },
   },
 });
 if (!o.out) throw new Error('--out is required');
@@ -45,9 +45,10 @@ for (const [name, query] of jobs) {
   const t0 = Date.now();
   await page.goto(`http://127.0.0.1:${port}/${o.page}${query ? `?${query}` : ''}`);
   await page.waitForFunction(() => window.__ready === true, null, { timeout: Number(o.wait) });
+  await page.waitForFunction(() => window.__still === undefined || window.__idle === true, null, { timeout: Number(o.wait) });
   const text = await page.evaluate(() => document.getElementById('log')?.textContent ?? '');
   console.log(`${name}: ${Date.now() - t0} ms  ${text.replace(/\n+/g, ' | ')}`);
-  await page.screenshot({ path: join(o.out, `${name}.png`), fullPage: o.full });
+  await page.screenshot({ path: join(o.out, `${name}.png`), fullPage: o.full, timeout: Number(o.wait), clip: o.clip ? Object.fromEntries(['x', 'y', 'width', 'height'].map((k, i) => [k, Number(o.clip.split(',')[i])])) : undefined });
 }
 await browser.close();
 server.close();

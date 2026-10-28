@@ -3,7 +3,7 @@
 
 import { Program, Target, requireContext, drawFull, dataTexture, updateTexture } from './gl.js';
 import {
-  lineShader, sampleShader, interfaceShader, scanInitShader, scanStepShader, axialShader, summaryShader, echoShader, levelShader, postShader, displayShader, LABELS,
+  lineShader, sampleShader, interfaceShader, scanInitShader, scanStepShader, axialShader, summaryShader, echoShader, levelShader, postShader, displayShader, mmodeShader, LABELS,
 } from './shaders.js';
 import { TISSUES, tissueUniform } from './tissues.js';
 import { TEXELS, FLOATS } from './anatomy.js';
@@ -13,7 +13,8 @@ import { axialSigma, effectiveFrequency, THI, AVERAGE_ALPHA, LATERAL_SCALE, CLUT
 // Calibration. These fix where the grey levels land and are the only tuning constants of the image.
 export const CAL = {
   specK: 22, // echo of a perfect reflector against liver speckle, as an amplitude ratio
-  noiseDb: -66, // receiver noise before gain
+  noiseDb: -74, // receiver noise before gain
+  dgcMaxDb: 62, // a machine cannot make up for depth without limit
   whiteDb: 32, // the level that shows as white
   lines: 192,
   samples: 640,
@@ -51,7 +52,7 @@ export class Sim {
       B: t(NL, NR, 'rgba32f'),
       scan: [t(NL, NR, 'r32f'), t(NL, NR, 'r32f')],
       D: t(NL, NR, 'rgba32f'),
-      sum: t(NL, 1, ['rgba32f', 'rgba32f']),
+      sum: t(NL, 1, ['rgba32f', 'rgba32f', 'rgba32f']),
       E: t(NL, NR, 'r32f'),
       level: t(NL, NR, 'r32f'),
       gray: [t(NL, NR, 'r8', { linear: true }), t(NL, NR, 'r8', { linear: true })],
@@ -108,7 +109,6 @@ export class Sim {
 
   // cfg: see machine.js for how the knobs become these numbers.
   frame(cfg) {
-    const gl = this.gl;
     const { NL, NR } = this;
     const P = this.programs;
     const T = this.targets;
@@ -131,7 +131,7 @@ export class Sim {
     };
     const anat = this.anatomyUniforms;
     const lab = this.labels ??= {
-      gel: LABELS.gel, air: LABELS.air, lung: LABELS.lung, ptx: LABELS.pleural_air,
+      gel: LABELS.gel, air: LABELS.air, lung: LABELS.lung, ptx: LABELS.pleural_air, liver: LABELS.liver, spleen: LABELS.spleen,
     };
 
     // 1. where each line meets the skin
@@ -161,51 +161,127 @@ export class Sim {
 
     // 6. first air interface per line
     this.run(P.summary, T.sum, {
-      ...frameU, uLabAir: lab.air, uLabLung: lab.lung, uLabPtx: lab.ptx, uSlide: cfg.slide, uBlines: cfg.blines,
-    }, { uLine: T.line.texture, uB: T.B.texture, uD: T.D.texture });
+      ...frameU, ...anat, uLabAir: lab.air, uLabLung: lab.lung, uLabPtx: lab.ptx, uLabLiver: lab.liver, uLabSpleen: lab.spleen, uSlide: cfg.slide, uBlines: cfg.blines,
+    }, { uAnat: this.anatomyTex, uLine: T.line.texture, uB: T.B.texture, uD: T.D.texture });
 
     // 7. beam width across lines, artefacts, envelope
     this.run(P.echo, T.E, {
-      ...frameU, uSigAxMm: sigAxMm, uTime: cfg.time, uSlide: cfg.slide, uLungHaze: cfg.lungHaze,
+      ...frameU, ...anat, uSigAxMm: sigAxMm, uTime: cfg.time, uSlide: cfg.slide, uLungHaze: cfg.lungHaze, uMirror: cfg.mirror ?? 1,
+      uCell: Math.min(0.45, Math.max(0.1, 1.5 * sigAxMm)),
       uClutter: 10 ** ((thi ? CLUTTER_DB.harmonic : CLUTTER_DB.fundamental) / 10),
-    }, { uD: T.D.texture, uSumA: T.sum.textures[0], uSumB: T.sum.textures[1], uB: T.B.texture });
+    }, { uAnat: this.anatomyTex, uD: T.D.texture, uSumA: T.sum.textures[0], uSumB: T.sum.textures[1], uSumC: T.sum.textures[2], uB: T.B.texture });
 
-    // 8. noise, gain, depth compensation, TGC, dynamic range
-    const attF = freq * (thi ? THI.attenuation : 1);
-    this.run(P.level, T.level, {
-      uDepth: cfg.depth, uNR: NR, uGainDb: cfg.gainDb, uTgc: cfg.tgc, uDr: cfg.dr, uWhite: CAL.whiteDb,
-      uNoise: 10 ** (CAL.noiseDb / 20), uSigAmp: 10 ** ((cfg.power + (thi ? THI.signalDb : 0)) / 20),
-      uDgcPerMm: (2 * AVERAGE_ALPHA * attF) / 10, uFrameSeed: this.frameNo & 0xffffff,
-    }, { uEnv: T.E.texture });
-
-    // 9. smoothing, sharpening, persistence, grey map
+    // 8 and 9. noise, gain, depth compensation, TGC, dynamic range, then smoothing, persistence and the grey map
     const prev = this.grayIndex;
     const next = 1 - prev;
-    this.run(P.post, T.gray[next], {
-      uNR: NR, uNL: NL, uSmooth: cfg.smooth, uSharp: cfg.sharp, uPersist: cfg.persist, uMap: cfg.map, uInvert: 0,
-    }, { uLevel: T.level.texture, uPrev: T.gray[prev].texture });
+    this.levelAndPost(cfg, prev, next, cfg.persist);
     this.grayIndex = next;
 
     // 10. into the cine ring
     this.layer = this.stored % this.cineFrames;
-    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, T.gray[next].fbo);
-    gl.readBuffer(gl.COLOR_ATTACHMENT0);
-    gl.bindTexture(gl.TEXTURE_2D_ARRAY, this.cine);
-    gl.copyTexSubImage3D(gl.TEXTURE_2D_ARRAY, 0, 0, 0, this.layer, 0, 0, NL, NR);
-    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
+    this.storeLayer(this.layer);
     this.stored++;
     this.frameNo++;
     this.lastFrameU = frameU;
+    this.lastCfg = cfg;
     return this.layer;
   }
 
-  // Scan convert one stored layer to the canvas. view: { u0, v0, mmPerPx } with the top left corner of the canvas in probe mm.
-  display(cfg, layer = this.layer) {
+  // The last two passes. They depend only on the envelope and the console, not on the patient, so they can run again on a frozen frame.
+  levelAndPost(cfg, prevIndex, nextIndex, persist) {
+    const T = this.targets;
+    const P = this.programs;
+    const { NL, NR } = this;
+    const thi = !!cfg.thi;
+    const attF = cfg.freq * (thi ? THI.attenuation : 1);
+    this.run(P.level, T.level, {
+      uDepth: cfg.depth, uNR: NR, uGainDb: cfg.gainDb, uTgc: cfg.tgc, uDr: cfg.dr, uWhite: CAL.whiteDb,
+      uNoise: 10 ** (CAL.noiseDb / 20), uSigAmp: 10 ** ((cfg.power + (thi ? THI.signalDb : 0)) / 20),
+      uDgcPerMm: (2 * AVERAGE_ALPHA * attF) / 10, uDgcMax: CAL.dgcMaxDb, uFrameSeed: this.frameNo & 0xffffff,
+    }, { uEnv: T.E.texture });
+    this.run(P.post, T.gray[nextIndex], {
+      uNR: NR, uNL: NL, uSmooth: cfg.smooth, uSharp: cfg.sharp, uPersist: persist, uMap: cfg.map, uInvert: 0,
+    }, { uLevel: T.level.texture, uPrev: T.gray[prevIndex].texture });
+  }
+
+  storeLayer(layer) {
     const gl = this.gl;
-    const { width, height } = this.canvas;
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, this.targets.gray[this.grayIndex].fbo);
+    gl.readBuffer(gl.COLOR_ATTACHMENT0);
+    gl.bindTexture(gl.TEXTURE_2D_ARRAY, this.cine);
+    gl.copyTexSubImage3D(gl.TEXTURE_2D_ARRAY, 0, 0, 0, layer, 0, 0, this.NL, this.NR);
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
+  }
+
+  // Start a new cine loop. The ring is overwritten from layer 0 as frames come in.
+  resetCine() {
+    this.stored = 0;
+  }
+
+  // Apply new gain, TGC, range or map to the newest frame, as the knobs do on a frozen image.
+  reprocess(cfg) {
+    if (!this.lastCfg) return;
+    const prev = this.grayIndex;
+    const next = 1 - prev;
+    this.levelAndPost({ ...this.lastCfg, gainDb: cfg.gainDb, tgc: cfg.tgc, dr: cfg.dr, power: cfg.power, smooth: cfg.smooth, sharp: cfg.sharp, map: cfg.map }, prev, next, 0);
+    this.grayIndex = next;
+    this.storeLayer(this.layer);
+  }
+
+  // Brightness of the newest image: the median grey in each of `bands` depth bands over the lines that carry tissue, and overall.
+  grayProfile(bands = 8) {
+    const gl = this.gl;
+    const { NL, NR } = this;
+    const px = new Uint8Array(NL * NR * 4);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.targets.gray[this.grayIndex].fbo);
+    gl.readBuffer(gl.COLOR_ATTACHMENT0);
+    gl.readPixels(0, 0, NL, NR, gl.RGBA, gl.UNSIGNED_BYTE, px);
+    const per = NR / bands;
+    const profile = [];
+    const all = [];
+    for (let b = 0; b < bands; b++) {
+      const vals = [];
+      for (let i = Math.floor(b * per); i < Math.floor((b + 1) * per); i += 2) {
+        for (let k = 0; k < NL; k += 2) {
+          const v = px[(i * NL + k) * 4] / 255;
+          if (v > 0.03) vals.push(v);
+        }
+      }
+      vals.sort((x, y) => x - y);
+      profile.push(vals.length > 40 ? vals[vals.length >> 1] : NaN);
+      all.push(...vals);
+    }
+    all.sort((x, y) => x - y);
+    return { profile, mean: all.length ? all[all.length >> 1] : NaN };
+  }
+
+  // Clear the canvas to the screen background.
+  clear(color = [0.02, 0.025, 0.03]) {
+    const gl = this.gl;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.disable(gl.SCISSOR_TEST);
+    gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    gl.clearColor(color[0], color[1], color[2], 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+  }
+
+  // Scan convert one stored layer into rect = { x, y, w, h } (pixels, y down from the top of the canvas), default the whole canvas.
+  // view: { u0, v0, mmPerPx } is the top left corner of the rect in probe mm.
+  display(cfg, layer = this.layer, rect = null) {
+    const gl = this.gl;
+    const width = rect ? rect.w : this.canvas.width;
+    const height = rect ? rect.h : this.canvas.height;
     const frameU = this.lastFrameU;
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    gl.viewport(0, 0, width, height);
+    if (rect) {
+      const y = this.canvas.height - rect.y - rect.h;
+      gl.viewport(rect.x, y, rect.w, rect.h);
+      gl.enable(gl.SCISSOR_TEST);
+      gl.scissor(rect.x, y, rect.w, rect.h);
+    } else {
+      gl.disable(gl.SCISSOR_TEST);
+      gl.viewport(0, 0, width, height);
+    }
     const prog = this.programs.display;
     prog.use().set({
       ...frameU,
@@ -220,6 +296,65 @@ export class Sim {
       uColors: this.tissueColors,
     }).textures({ uGray: this.cine, uLabels: this.targets.A.textures[1] });
     drawFull(gl, this.vao);
+    gl.disable(gl.SCISSOR_TEST);
+  }
+
+  // ---- M-mode: the grey values along one scan line, scrolling sideways in time ----
+  // One column per step of the sweep. Fast frames fill several columns, slow ones repeat the newest line, as a real strip does.
+  initMMode(width = 640) {
+    const gl = this.gl;
+    this.mWidth = width;
+    this.mHead = 0;
+    this.mTime = 0;
+    this.mTex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, this.mTex);
+    gl.texStorage2D(gl.TEXTURE_2D, 1, gl.R8, width, this.NR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    this.programs.mmode ??= new Program(gl, mmodeShader(), 'mmode');
+  }
+
+  resetMMode() {
+    const gl = this.gl;
+    const zero = new Uint8Array(this.mWidth * this.NR);
+    gl.bindTexture(gl.TEXTURE_2D, this.mTex);
+    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, this.mWidth, this.NR, gl.RED, gl.UNSIGNED_BYTE, zero);
+    this.mTime = 0;
+  }
+
+  // Add `seconds` of time to the strip, taking the line at fraction s (0 to 1 across the fan) of the newest image.
+  pushMMode(s, seconds, sweepSeconds) {
+    const gl = this.gl;
+    const colTime = sweepSeconds / this.mWidth;
+    this.mTime += seconds;
+    let n = Math.floor(this.mTime / colTime);
+    if (n <= 0) return;
+    this.mTime -= n * colTime;
+    n = Math.min(n, this.mWidth);
+    const line = Math.min(this.NL - 1, Math.max(0, Math.round(s * this.NL - 0.5)));
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, this.targets.gray[this.grayIndex].fbo);
+    gl.readBuffer(gl.COLOR_ATTACHMENT0);
+    gl.bindTexture(gl.TEXTURE_2D, this.mTex);
+    for (let i = 0; i < n; i++) {
+      gl.copyTexSubImage2D(gl.TEXTURE_2D, 0, this.mHead, 0, line, 0, 1, this.NR);
+      this.mHead = (this.mHead + 1) % this.mWidth;
+    }
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
+  }
+
+  // Draw the strip into rect. The newest column is at the right edge. scroll shifts back in time, in columns.
+  displayMMode(rect, { tint = [1, 1, 1], invert = false, scroll = 0 } = {}) {
+    const gl = this.gl;
+    const y = this.canvas.height - rect.y - rect.h;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(rect.x, y, rect.w, rect.h);
+    gl.enable(gl.SCISSOR_TEST);
+    gl.scissor(rect.x, y, rect.w, rect.h);
+    this.programs.mmode.use().set({ uHead: (this.mHead - scroll) / this.mWidth, uTint: tint, uInvert: invert ? 1 : 0 }).textures({ uStrip: { texture: this.mTex } });
+    drawFull(gl, this.vao);
+    gl.disable(gl.SCISSOR_TEST);
   }
 
   // For tests: the grey values of the newest beam space image, as bytes.

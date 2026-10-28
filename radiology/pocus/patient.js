@@ -195,8 +195,8 @@ export function buildPatient() {
   B.ell('dome-spleen', 'spleen', { c: P => [50, -10, -141 - 26 * P.breath], r: P => [98 - 0.55 * P.fluidLUQ, 100 - 0.55 * P.fluidLUQ, 150 - 0.55 * P.fluidLUQ], hidden: true });
   const spleenC = P => [108, 40, -52 - 20 * P.breath];
   const spleenRot = { x: [0.1, -0.55, -0.83], y: [0, 1, 0] };
-  B.ell('spleen-halo', 'fluid', { c: spleenC, r: P => [58 + 0.55 * P.fluidLUQ, 36 + 0.55 * P.fluidLUQ, 20 + 0.55 * P.fluidLUQ], rot: spleenRot, active: P => P.fluidLUQ > 0.5, clip: [['dome-L', 'inside'], ['abd-cavity', 'inside']] });
-  B.ell('spleen', 'spleen', { c: spleenC, r: [58, 36, 20], rot: spleenRot, clip: [['dome-spleen', 'inside']] });
+  B.ell('spleen-halo', 'fluid', { c: spleenC, r: P => [62 + 0.55 * P.fluidLUQ, 40 + 0.55 * P.fluidLUQ, 24 + 0.55 * P.fluidLUQ], rot: spleenRot, active: P => P.fluidLUQ > 0.5, clip: [['dome-L', 'inside'], ['abd-cavity', 'inside']] });
+  B.ell('spleen', 'spleen', { c: spleenC, r: [62, 40, 24], rot: spleenRot, clip: [['dome-spleen', 'inside']] });
   B.tube('splenic-hilum', 'blood', [[70, 34, -72], [84, 32, -62], [98, 36, -56]].map(p => P => [p[0], p[1], p[2] - 20 * P.breath]), 3.2);
   const stomachC = P => [56, -30, -44 - 20 * P.breath];
   B.ell('stomach-wall', 'bowel_wall', { c: stomachC, r: [52, 33, 48], rot: [0, 0, -10], clip: [['dome-L', 'inside']] });
@@ -270,6 +270,24 @@ export function buildPatient() {
   loop('sb5', [-52, -22, -184], [20, 10, 11], [0, 0, 40]);
   loop('sb6', [-20, -14, -236], [32, 11, 12], [0, 0, -8]);
   loop('sb7', [32, -18, -228], [26, 10, 11], [0, 0, 22]);
+  // more loops, so the abdomen is crowded as it is: some distended with fluid, some collapsed with a bright mucosal centre
+  loop('sb8', [-62, -34, -140], [26, 10, 11], [0, 0, -35]);
+  loop('sb9', [58, -36, -196], [24, 10, 11], [0, 0, 28]);
+  loop('sb10', [-14, -52, -150], [30, 9, 10], [0, 0, 5]);
+  loop('sb11', [-72, -16, -214], [22, 9, 10], [0, 0, -55]);
+  loop('sb12', [10, -44, -252], [30, 10, 11], [0, 0, 12]);
+  const collapsed = (name, c, r, rot) => {
+    B.ell(`${name}-wall`, 'bowel_wall', { c, r: [r[0] + 4, r[1] + 4, r[2] + 4], rot });
+    B.ell(name, 'bowel_content', { c, r: [r[0] - 2, r[1] - 3, r[2] - 3], rot });
+  };
+  collapsed('cb1', [-44, -50, -172], [22, 8, 9], [0, 0, 20]);
+  collapsed('cb2', [34, -50, -150], [24, 8, 9], [0, 0, -18]);
+  collapsed('cb3', [-6, -22, -190], [20, 8, 9], [0, 0, 70]);
+  collapsed('cb4', [46, -22, -226], [22, 8, 9], [0, 0, -40]);
+  collapsed('cb5', [-36, -30, -240], [20, 8, 9], [0, 0, 35]);
+  collapsed('cb6', [-18, -50, -216], [24, 8, 9], [0, 0, -10]);
+  collapsed('cb7', [24, -28, -250], [18, 8, 9], [0, 0, 55]);
+  collapsed('cb8', [-60, -42, -250], [20, 8, 9], [0, 0, -25]);
 
   // --- 11. pelvis: bladder, prostate, rectum, and fluid
   B.group('pelvis-organs', { c: [0, 0, -320], r: 100 });
@@ -342,8 +360,8 @@ function heartParts(B) {
     // the bright pericardial line, 1 mm outside the fluid
     B.ell(`pcl-${name}`, 'pericardium', { c: cs, r: P => r(P).map(v => v + effIn(P) + 1.6), rot, shell: 1.3 });
   };
-  const rvC = P => [-2, -34 * Math.sqrt(P.rvDil), 14];
-  const rvR = P => [52 * rvs(P), 40 * Math.sqrt(P.rvDil) * (1 - 0.1 * P.sys), 42];
+  const rvC = P => [-4, -36 * Math.sqrt(P.rvDil), 12];
+  const rvR = P => [48 * rvs(P), 32 * Math.sqrt(P.rvDil) * (1 - 0.1 * P.sys), 36];
   const raC = [-50, -38, -2];
   const laC = [-52, 14, -10];
   const raR = P => [26 * rav(P), 27 * rav(P), 28 * rav(P)];
@@ -380,8 +398,8 @@ function heartParts(B) {
   };
   leaflet('mv-ant', [-36, -14], [-25, 6], [-8, -17], P => P.mv);
   leaflet('mv-post', [-36, 22], [-25, 6], [-24, 26], P => P.mv);
-  leaflet('tv-sept', [-34, -25], [-24, -37], [-9, -26], P => P.tv);
-  leaflet('tv-ant', [-34, -50], [-24, -37], [-22, -54], P => P.tv);
+  leaflet('tv-sept', [-27, -26], [-18, -38], [-3, -27], P => P.tv);
+  leaflet('tv-ant', [-27, -50], [-18, -38], [-16, -54], P => P.tv);
 }
 
 // Great vessels in the world frame: the aortic root and arch, descending aorta, the vena cavae and the pulmonary trunk.

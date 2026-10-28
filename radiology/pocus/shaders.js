@@ -330,21 +330,29 @@ void main() {
 export const summaryShader = () => `${HEAD}
 ${PROBE}
 ${NOISE}
+${anatomyGlsl()}
 uniform sampler2D uLine;
 uniform sampler2D uB;
 uniform sampler2D uD;
 uniform float uLabAir;
 uniform float uLabLung;
 uniform float uLabPtx;
+uniform float uLabLiver;
+uniform float uLabSpleen;
 uniform vec3 uSlide;       // how far the lung has slid against the chest wall
 uniform float uBlines;     // 0 to 1, how many lung surface sites throw a B-line
 layout(location = 0) out vec4 outA;
 layout(location = 1) out vec4 outB;
+layout(location = 2) out vec4 outC;
+
+float lnzAt(vec3 p) { return evalAnatomy(p).lnz; }
+
 void main() {
   int k = int(gl_FragCoord.x);
   vec4 L = texelFetch(uLine, ivec2(k, 0), 0);
   float dr = uDepth / float(uNR);
   vec4 res = vec4(-1.0, 0.0, 0.0, 0.0);
+  float labBefore = 0.0;
   if (L.y > 0.5) {
     float prevGas = 0.0;
     for (int i = 0; i < 2048; i++) {
@@ -359,6 +367,7 @@ void main() {
         for (int j = -3; j <= 3; j++) a = max(a, texelFetch(uD, ivec2(k, clamp(i + j, 0, uNR - 1)), 0).z);
         float cls = abs(bb.w - uLabLung) < 0.5 ? 1.0 : (abs(bb.w - uLabPtx) < 0.5 ? 3.0 : 2.0);
         res = vec4(r, a, texelFetch(uD, ivec2(k, i), 0).w, cls);
+        labBefore = texelFetch(uB, ivec2(k, max(i - 3, 0)), 0).w;
         break;
       }
       prevGas = gas;
@@ -392,8 +401,26 @@ void main() {
       res2.x = best;
     }
   }
+  // Mirror: a solid organ against aerated lung reflects almost everything, so the beam turns back into the organ and what it
+  // finds there is drawn behind the interface. Only a smooth organ surface does this: the diaphragm under the liver or spleen.
+  vec4 res3 = vec4(0.0);
+  if (res.x > 0.0 && res.w < 1.5 && (abs(labBefore - uLabLiver) < 0.5 || abs(labBefore - uLabSpleen) < 0.5)) {
+    vec2 o, d;
+    lineGeom(float(k), o, d);
+    vec3 Pp = worldAt(o + d * res.x);
+    vec3 dW = uE * d.x + uN * d.y;
+    const float e = 1.6;
+    vec3 g = vec3(lnzAt(Pp + vec3(e, 0.0, 0.0)) - lnzAt(Pp - vec3(e, 0.0, 0.0)), lnzAt(Pp + vec3(0.0, e, 0.0)) - lnzAt(Pp - vec3(0.0, e, 0.0)), lnzAt(Pp + vec3(0.0, 0.0, e)) - lnzAt(Pp - vec3(0.0, 0.0, e)));
+    if (length(g) > 0.5) {
+      vec3 n = normalize(g);
+      float cosI = abs(dot(dW, n));
+      // grazing incidence sends the beam off sideways, out of the plane, rather than back
+      res3 = vec4(dW - 2.0 * dot(dW, n) * n, smoothstep(0.25, 0.7, cosI));
+    }
+  }
   outA = res;
   outB = res2;
+  outC = res3;
 }`;
 
 // ---- pass: echo (lateral beam, artefacts, envelope) ----
@@ -401,14 +428,18 @@ export const echoShader = () => `${HEAD}
 ${PROBE}
 ${BEAM}
 ${NOISE}
+${anatomyGlsl()}
 uniform sampler2D uD;
 uniform sampler2D uSumA;
 uniform sampler2D uSumB;
+uniform sampler2D uSumC;
 uniform sampler2D uB;
+uniform float uMirror;
 uniform float uSigAxMm;
 uniform float uTime;
 uniform vec3 uSlide;
 uniform float uLungHaze;
+uniform float uCell;
 uniform float uClutter;    // power of the faint veil relative to the surrounding echo
 out vec4 outColor;
 
@@ -493,6 +524,24 @@ void main() {
       art += S.y * 0.5 * bl * exp(-below / 260.0) * (cls < 1.5 ? 1.0 : 0.0);
     }
     env2 += art * art;
+
+    // the mirror image of the organ, behind the interface
+    vec4 Mg = texelFetch(uSumC, ivec2(k, 0), 0);
+    if (Mg.w > 0.0 && below > 0.0 && cls < 1.5 && uMirror > 0.0) {
+      vec2 o, d;
+      lineGeom(float(k), o, d);
+      vec3 Pp = worldAt(o + d * S.x);
+      vec3 Pg = Pp + normalize(Mg.xyz) * below;
+      if (sdBody(Pg) < -2.0) {
+        Mat g = evalAnatomy(Pg);
+        if (g.gas < 0.5) {
+          vec2 sn = cnoise((Pg - g.disp) / max(uCell * 2.4, uSigAxMm * 3.2));
+          float att = 0.2303 * 0.55 * uAttF * below / 10.0;
+          float amp = pow(10.0, g.mu * 0.05) * 0.7071 * length(sn) * 0.55 * Mg.w * exp(-(S.z + att)) * uMirror;
+          env2 += amp * amp;
+        }
+      }
+    }
   }
   float fg = sqrt(beamWidth(uFocus) / w);
   outColor = vec4(sqrt(env2) * fg, 0.0, 0.0, 1.0);
@@ -510,6 +559,7 @@ uniform float uWhite;
 uniform float uNoise;      // receiver noise amplitude relative to liver speckle, before gain
 uniform float uSigAmp;     // transmit power as an amplitude factor
 uniform float uDgcPerMm;   // depth compensation, dB per mm
+uniform float uDgcMax;     // the most it can add, dB
 uniform float uFrameSeed;
 out vec4 outColor;
 
@@ -539,7 +589,7 @@ void main() {
   float noise = uNoise * length(vec2(na, nb)) * 1.2247;
   float a2 = env * env + noise * noise;
   float db = 10.0 * log(max(a2, 1.0e-12)) * 0.4342945;
-  db += uGainDb + uDgcPerMm * r + tgcAt(r / uDepth);
+  db += uGainDb + min(uDgcPerMm * r, uDgcMax) + tgcAt(r / uDepth);
   float v = (db - (uWhite - uDr)) / uDr;
   outColor = vec4(v, 0.0, 0.0, 1.0);
 }`;
@@ -638,4 +688,19 @@ void main() {
   outColor = vec4(col, 1.0);
 }`;
 
-export const LABELS = Object.fromEntries(['gel', 'air', 'lung', 'gas', 'pleural_air'].map(k => [k, TISSUE_INDEX[k]]));
+// ---- M-mode strip ----
+export const mmodeShader = () => `${HEAD}
+uniform sampler2D uStrip;
+uniform float uHead;       // column to show at the right edge, as a fraction of the strip width
+uniform vec3 uTint;
+uniform float uInvert;
+out vec4 outColor;
+void main() {
+  // the newest column is the one just before uHead, so the strip reads oldest to newest from left to right
+  vec2 tc = vec2(uHead - 1.0 + vUv.x * 1.0, 1.0 - vUv.y);
+  float g = texture(uStrip, tc).x;
+  g = mix(g, 1.0 - g, uInvert);
+  outColor = vec4(g * uTint, 1.0);
+}`;
+
+export const LABELS = Object.fromEntries(['gel', 'air', 'lung', 'gas', 'pleural_air', 'liver', 'spleen'].map(k => [k, TISSUE_INDEX[k]]));

@@ -94,9 +94,9 @@ export function hermite(xs, ys, x) {
 // Columns: z, half width A, half depth B, centre y, exponent n.
 export const BODY_KNOTS = {
   z: [-380, -330, -260, -200, -130, -60, 0, 110, 180, 240, 280, 305, 322],
-  A: [165, 170, 168, 155, 148, 152, 158, 165, 175, 188, 150, 85, 55],
-  B: [95, 100, 108, 112, 108, 105, 105, 108, 100, 85, 68, 58, 50],
-  yc: [5, 5, 8, 9, 10, 10, 10, 14, 18, 25, 28, 24, 16],
+  A: [165, 170, 168, 155, 148, 152, 158, 152, 146, 178, 150, 85, 55],
+  B: [95, 100, 108, 112, 108, 105, 105, 103, 96, 85, 68, 58, 50],
+  yc: [5, 5, 8, 9, 10, 10, 10, 16, 20, 25, 28, 24, 16],
   n: [2.4, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4, 2.5, 2.8, 3, 3, 2.4, 2.2],
 };
 
@@ -192,7 +192,7 @@ export function bodyNormal(p, habitus = 0) {
 // ---------- the rib cage ----------
 // Ribs live on a barrel (an ellipse that changes with height) as sloped bands. Rib n has its lateral point at z = ztop - (n-1) * spacing.
 // psi is the angle round the barrel from the back (0) through the side (90) to the front (180).
-export const CAGE = { yc: 8, Ar: 128, Br: 83, zc: -30, kA: 0.001, kB: 0.0007, kYc: 0.02 };
+export const CAGE = { yc: 6, Ar: 128, Br: 86, zc: -30, kA: 0.0006, kB: 0.00055, kYc: -0.012 };
 export const RIB = {
   ztop: 157, spacing: 26, drop: 100, count: 12, psi0: 16,
   // End of the bony rib and of its cartilage, per rib 1..12, in degrees. Ribs 11 and 12 are floating and have no cartilage.

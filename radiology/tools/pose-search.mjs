@@ -13,7 +13,7 @@ const { values: o } = parseArgs({
     from: { type: 'string', default: 'front' }, a: { type: 'string' }, z: { type: 'string' }, want: { type: 'string' }, set: { type: 'string', default: '' },
     probe: { type: 'string', default: 'C5' }, depth: { type: 'string', default: '180' }, phi: { type: 'string', default: '0,30,60,90,120,150' },
     rock: { type: 'string', default: '-30,-15,0,15,30' }, fan: { type: 'string', default: '-20,0,20' }, press: { type: 'string', default: '0,8' }, top: { type: 'string', default: '6' },
-    steps: { type: 'string', default: '5' },
+    steps: { type: 'string', default: '5' }, shadow: { type: 'string', default: '0' },
   },
 });
 const range = (s, n) => { const [lo, hi] = s.split(',').map(Number); return Array.from({ length: n }, (_, i) => lo + ((hi - lo) * i) / (n - 1)); };
@@ -33,7 +33,7 @@ for (const a of range(o.a, n)) for (const z of range(o.z, n)) {
     const frame = poseFrame(pose, P.habitus);
     const view = visibleStructures(res, probe, frame, Number(o.depth), { lines: 28, step: 4, gapMax: compliance(p[2]) });
     if (view.coupled < 14) continue;
-    results.push({ score: scoreView(view, wanted), a, z, phi, rock, fan, press, areas: Object.fromEntries([...view.areas].map(([k, v]) => [k, Math.round(v)])) });
+    results.push({ score: scoreView(view, wanted) - Number(o.shadow) * (view.blocked / Math.max(view.total, 1)), a, z, phi, rock, fan, press, areas: Object.fromEntries([...view.areas].map(([k, v]) => [k, Math.round(v)])) });
   }
 }
 results.sort((x, y) => y.score - x.score);
