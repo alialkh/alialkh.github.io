@@ -6,14 +6,14 @@ import { parseArgs } from 'node:util';
 import { writeFileSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { buildPatient, DEFAULTS, restOf } from '../pocus/patient.js';
-import { resolve, apply3, add3, scale3, cross3, norm3 } from '../pocus/anatomy.js';
+import { resolve } from '../pocus/anatomy.js';
 import { HEART } from '../pocus/patient.js';
 import { TISSUE_INDEX } from '../pocus/tissues.js';
 import { PROBES } from '../pocus/probes.js';
-import { poseFrame, skinPoint, compliance, pickSkin, solvePose } from '../pocus/geometry.js';
-import { visibleStructures, scoreView } from '../pocus/visibility.js';
+import { poseFrame, skinPoint, compliance } from '../pocus/geometry.js';
+import { visibleStructures, scoreView, imbalance } from '../pocus/visibility.js';
 import { WINDOW_SPECS } from '../pocus/windows.js';
-import { ORIENTATIONS, PRESETS } from '../pocus/machine.js';
+import { aimSeeds, aimDirs } from './aim.mjs';
 
 const { values: o } = parseArgs({ options: { only: { type: 'string' }, refine: { type: 'string', default: '120' } } });
 const outFile = fileURLToPath(new URL('../pocus/windows-poses.js', import.meta.url));
@@ -45,6 +45,14 @@ const COARSE = { lines: 28, step: 4 };
 const FINE = { lines: 36, step: 3 };
 const STARTS = 4;
 
+// A signed pull toward the textbook beam and screen-right directions of an aim (the best of its aims counts).
+const AIMS = new Map(WINDOW_SPECS.map(w => [w.id, aimDirs(w)]));
+function aimPenalty(spec, frame) {
+  const dirs = AIMS.get(spec.id);
+  if (!dirs?.length) return 0;
+  return Math.min(...dirs.map(d => 0.5 * (1 - dot(frame.n, d.nW)) + 0.4 * (1 - dot(frame.e, d.eW))));
+}
+
 function evaluatePose(spec, probe, pose, positiveRes, sampling = COARSE) {
   const frame = poseFrame(pose, normal.P.habitus);
   const opts = { ...sampling, gapMax: compliance(pose.p[2]) };
@@ -62,7 +70,10 @@ function evaluatePose(spec, probe, pose, positiveRes, sampling = COARSE) {
   }
   score -= 0.45 * (view.blocked / Math.max(view.total, 1));
   score -= priorPenalty(spec, frame);
-  score -= 0.01 * (Math.abs(pose.fan) + Math.abs(pose.rock)) / 10 + 0.002 * pose.press;
+  if (spec.centred) score -= 0.3 * imbalance(view, spec.need);
+  score -= aimPenalty(spec, frame);
+  // a linear probe lies flat on the chest, so tilting it costs more
+  score -= (probe.type === 'linear' ? 0.05 : 0.01) * (Math.abs(pose.fan) + Math.abs(pose.rock)) / 10 + 0.002 * pose.press;
   return { score, areas: Object.fromEntries([...view.areas].map(([k, v]) => [k, Math.round(v)])), extras };
 }
 
@@ -71,31 +82,6 @@ let seed = 20261028;
 const rnd = () => { seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 
 const range = (r, n) => Array.from({ length: n }, (_, i) => r[0] + ((r[1] - r[0]) * i) / Math.max(n - 1, 1));
-
-// A textbook plane written in the heart's own frame (or the world's) becomes poses: for a grid of targets across the plane, cast the beam
-// back to the skin and solve the hand angles that give that beam direction and screen-right direction. These start the search where a
-// sonographer would, instead of leaving the heart to whichever oblique cut covers the most chambers.
-// aim: { at, n, s } in the heart frame, or { at, nWorld, sWorld }. n is the beam direction, s the direction that should be screen right.
-function aimSeeds(spec, positiveRes) {
-  const mirror = ORIENTATIONS[PRESETS[spec.preset]?.orient]?.flipX ?? false;
-  const seeds = [];
-  for (const aim of spec.aim ?? []) {
-    const nW = aim.nWorld ? norm3(aim.nWorld) : norm3(apply3(HEART.M, aim.n));
-    const sW = aim.sWorld ? norm3(aim.sWorld) : norm3(apply3(HEART.M, aim.s));
-    // a mirrored display shows the probe's e axis on the screen's left
-    const eW = mirror ? scale3(sW, -1) : sW;
-    const b1 = norm3(cross3(nW, eW));
-    const target = add3(HEART.c, apply3(HEART.M, aim.at));
-    for (const i of [-30, -15, 0, 15, 30]) for (const j of [-30, -15, 0, 15, 30]) {
-      const t = add3(add3(target, scale3(b1, i)), scale3(eW, j));
-      const hit = pickSkin(add3(t, scale3(nW, -400)), nW, normal.P.habitus);
-      if (!hit) continue;
-      const sol = solvePose(hit.p, nW, eW, normal.P.habitus, 0);
-      seeds.push({ p: hit.p, phi: sol.phi, fan: sol.fan, rock: sol.rock, press: 0 });
-    }
-  }
-  return seeds;
-}
 
 const results = {};
 try {
@@ -125,7 +111,7 @@ for (const spec of WINDOW_SPECS) {
     }
   }
   const aimed = [];
-  for (const pose of aimSeeds(spec, positiveRes)) {
+  for (const pose of aimSeeds(spec, normal.P.habitus)) {
     const r = evaluatePose(spec, probe, pose, positiveRes);
     if (r) aimed.push({ score: r.score, pose });
   }

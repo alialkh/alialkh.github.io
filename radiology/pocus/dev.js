@@ -1,6 +1,7 @@
 // Development page: renders the simulator from URL parameters so a headless browser can photograph it. Not linked from anywhere.
 //   dev.html?from=right&a=10&z=-70&phi=90&fan=0&rock=0&press=0&depth=180&probe=C5&gain=0&thi=0&frames=2&set=fluidRUQ:12,breath:0.3
-import { Sim } from './sim.js';
+import { Sim, CAL } from './sim.js';
+import { CLUTTER_DB } from './beam.js';
 import { buildPatient, DEFAULTS, restOf } from './patient.js';
 import { resolve } from './anatomy.js';
 import { TISSUE_INDEX } from './tissues.js';
@@ -12,6 +13,9 @@ const num = (k, d) => (q.has(k) ? Number(q.get(k)) : d);
 const log = s => { document.getElementById('log').textContent += `${s}\n`; };
 
 try {
+  // switches for taking a term of the image formation out, to see what each one does (dB, lower is quieter)
+  if (q.has('noise')) CAL.noiseDb = Number(q.get('noise'));
+  if (q.has('clutter')) { CLUTTER_DB.fundamental = Number(q.get('clutter')); CLUTTER_DB.harmonic = Number(q.get('clutter')); }
   const canvas = document.getElementById('c');
   const sim = new Sim(canvas, { lines: num('lines', 192), samples: num('samples', 640) });
   const builder = buildPatient();
@@ -35,7 +39,7 @@ try {
   const cfg = {
     probe, frame, depth, freq, thi: num('thi', 0) > 0, focus: num('focus', depth * 0.45), zones: num('zones', 1),
     gainDb: num('gain', 0), tgc, dr: num('dr', 64), power: num('power', 0), persist: 0, smooth: num('smooth', 0), sharp: num('sharp', 0), map: num('map', 0),
-    gapMax: compliance(pose.p[2]), slide: [0, 0, -18 * P.breath], blines: num('blines', 0), lungHaze: 1, time: 0,
+    gapMax: compliance(pose.p[2]), slide: [0, 0, -18 * P.breath], blines: num('blines', 0), lungHaze: num('haze', 1), time: 0,
   };
   const t0 = performance.now();
   const frames = num('frames', 2);

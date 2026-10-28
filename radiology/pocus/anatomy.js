@@ -192,7 +192,7 @@ export function bodyNormal(p, habitus = 0) {
 // ---------- the rib cage ----------
 // Ribs live on a barrel (an ellipse that changes with height) as sloped bands. Rib n has its lateral point at z = ztop - (n-1) * spacing.
 // psi is the angle round the barrel from the back (0) through the side (90) to the front (180).
-export const CAGE = { yc: 6, Ar: 128, Br: 86, zc: -30, kA: 0.0006, kB: 0.00055, kYc: -0.012 };
+export const CAGE = { yc: 2, Ar: 128, Br: 86, zc: -30, kA: 0.0006, kB: 0.00055, kYc: -0.012 };
 export const RIB = {
   ztop: 157, spacing: 26, drop: 100, count: 12, psi0: 16,
   // End of the bony rib and of its cartilage, per rib 1..12, in degrees. Ribs 11 and 12 are floating and have no cartilage.

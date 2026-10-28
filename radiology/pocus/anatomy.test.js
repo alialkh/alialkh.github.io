@@ -24,7 +24,7 @@ test('every entry resolves to finite numbers and names a real tissue', () => {
 test('the landmarks of the standard exam lie in the right organs', () => {
   const res = make();
   const expect = [
-    [[-70, -5, -60], 'liver'], [[22, -50, -18], 'liver'], [[108, 40, -52], 'spleen'], [[-62, 52, -126], null],
+    [[-70, -5, -60], 'liver'], [[22, -50, -18], 'liver'], [[90, 40, -60], 'spleen'], [[-62, 52, -126], null],
     [[0, -30, -320], 'urine'], [[0, 84, -262], 'bone'], [[8, 40, -120], 'blood'], [[-70, 10, 100], 'lung'],
   ];
   for (const [p, want] of expect) {

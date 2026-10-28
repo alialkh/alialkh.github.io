@@ -134,153 +134,165 @@ export const POSES = {
   "subxiphoid": {
     "pose": {
       "p": [
-        38.2,
-        -104.4,
-        -9.2
+        -5.2,
+        -109.7,
+        -51.3
       ],
-      "phi": 36,
-      "fan": -35.4,
-      "rock": -27.4,
-      "press": 10.4
+      "phi": 27.7,
+      "fan": -50.6,
+      "rock": -2.1,
+      "press": 0
     },
     "areas": {
-      "rv": 849,
-      "sternum": 40,
-      "cartilage": 336,
-      "ra": 549,
-      "aorta": 677,
-      "lung-r": 24,
-      "tricuspid": 26,
-      "lv": 5715,
-      "lung-l": 355,
-      "la": 1064,
-      "mitral": 79
+      "cartilage": 619,
+      "lung-r": 122,
+      "ra": 1435,
+      "aorta": 213,
+      "rv": 839,
+      "la": 1302,
+      "lung-l": 433,
+      "lv": 5789,
+      "mitral": 20,
+      "diaphragm": 156,
+      "liver": 472,
+      "stomach": 776,
+      "rib": 17
     },
     "extras": {
-      "rv": 849,
-      "sternum": 40,
-      "cartilage": 336,
-      "ra": 549,
-      "pericardial-fluid": 3197,
-      "aorta": 1199,
-      "lung-r": 24,
-      "tricuspid": 26,
-      "lv": 5715,
-      "la": 1064,
-      "lung-l": 361,
-      "mitral": 79
+      "cartilage": 619,
+      "lung-r": 134,
+      "pericardial-fluid": 5776,
+      "ra": 1563,
+      "aorta": 320,
+      "rv": 839,
+      "la": 1302,
+      "lv": 5789,
+      "lung-l": 370,
+      "mitral": 20,
+      "liver": 79,
+      "stomach": 183,
+      "rib": 41
     },
-    "score": 0.63
+    "score": 0.74
   },
   "plax": {
     "pose": {
       "p": [
-        86.4,
-        -86.3,
-        47.2
+        74.9,
+        -87.7,
+        58
       ],
-      "phi": 71.4,
-      "fan": 19.7,
-      "rock": -7.7,
-      "press": 0.8
+      "phi": 63.1,
+      "fan": 20.9,
+      "rock": 17,
+      "press": 0
     },
     "areas": {
-      "cartilage": 313,
-      "aorta": 1043,
-      "lung-l": 197,
-      "lv": 4425,
-      "la": 788,
-      "lung-r": 93,
-      "mitral": 55,
-      "diaphragm": 185,
-      "stomach": 1362
+      "cartilage": 493,
+      "aorta": 444,
+      "lung-l": 134,
+      "lv": 4835,
+      "la": 514,
+      "lung-r": 85,
+      "mitral": 22,
+      "diaphragm": 43,
+      "stomach": 3170,
+      "rib": 12
     },
     "extras": {
-      "cartilage": 313,
-      "aorta": 1043,
-      "pericardial-fluid": 3153,
-      "lung-l": 110,
-      "lung-r": 93,
-      "lv": 4425,
-      "la": 788,
-      "mitral": 55,
-      "diaphragm": 29,
-      "stomach": 701
+      "pericardial-fluid": 3873,
+      "cartilage": 493,
+      "aorta": 444,
+      "lung-r": 140,
+      "lv": 4835,
+      "la": 514,
+      "mitral": 22,
+      "lung-l": 66,
+      "stomach": 1965,
+      "rib": 12
     },
-    "score": 0.92
+    "score": 0.8
   },
   "psax": {
     "pose": {
       "p": [
-        1.9,
-        -104.9,
-        -1.6
+        78,
+        -86.9,
+        58
       ],
-      "phi": -42.1,
-      "fan": 19.5,
-      "rock": 0.3,
+      "phi": 150.7,
+      "fan": -28.5,
+      "rock": 19.8,
       "press": 0
     },
     "areas": {
-      "liver": 2391,
-      "gallbladder": 238,
-      "diaphragm": 366,
-      "cartilage": 123,
-      "portal-vein": 250,
-      "stomach": 2540,
-      "rv": 406,
-      "lv": 2339,
-      "lung-l": 148
+      "lung-l": 56,
+      "lv": 3417,
+      "rib": 14,
+      "cartilage": 592,
+      "diaphragm": 285,
+      "stomach": 2178,
+      "rv": 849,
+      "liver": 898,
+      "sternum": 12
     },
     "extras": {
-      "liver": 2177,
-      "gallbladder": 238,
-      "diaphragm": 239,
-      "cartilage": 123,
-      "portal-vein": 250,
-      "stomach": 1713,
-      "pericardial-fluid": 2519,
-      "rv": 406,
-      "lv": 2339
+      "pericardial-fluid": 3149,
+      "lung-l": 73,
+      "lv": 3447,
+      "rib": 14,
+      "cartilage": 592,
+      "spleen": 36,
+      "stomach": 1297,
+      "rv": 849,
+      "liver": 674,
+      "diaphragm": 194,
+      "sternum": 12
     },
-    "score": 0.97
+    "score": 0.81
   },
   "a4c": {
     "pose": {
       "p": [
-        106.3,
-        -90.2,
-        -64.3
+        114.4,
+        -85.4,
+        -68
       ],
-      "phi": 0.1,
-      "fan": -40.2,
-      "rock": -39.7,
-      "press": 0
+      "phi": -178.6,
+      "fan": 40.8,
+      "rock": 17.9,
+      "press": 0.4
     },
     "areas": {
-      "cartilage": 643,
-      "lung-r": 231,
-      "diaphragm": 61,
-      "liver": 324,
-      "rv": 733,
-      "ra": 917,
-      "lv": 4731,
-      "stomach": 367,
-      "lung-l": 97,
-      "la": 1059
+      "rib": 23,
+      "diaphragm": 268,
+      "lung-l": 133,
+      "stomach": 966,
+      "lv": 4557,
+      "la": 627,
+      "ra": 960,
+      "rv": 1125,
+      "liver": 256,
+      "cartilage": 446,
+      "lung-r": 69,
+      "sternum": 17
     },
     "extras": {
-      "cartilage": 643,
-      "pericardial-fluid": 3519,
-      "lung-r": 114,
-      "rv": 733,
-      "ra": 917,
-      "liver": 15,
-      "lv": 4731,
-      "la": 1059,
-      "stomach": 45
+      "rib": 23,
+      "diaphragm": 60,
+      "lung-l": 102,
+      "pericardial-fluid": 4488,
+      "stomach": 201,
+      "lv": 5060,
+      "la": 874,
+      "ra": 960,
+      "rv": 1125,
+      "cartilage": 446,
+      "liver": 10,
+      "lung-r": 23,
+      "sternum": 17
     },
-    "score": 0.89
+    "score": 0.81
   },
   "ivc": {
     "pose": {
@@ -361,42 +373,41 @@ export const POSES = {
   "lung-r": {
     "pose": {
       "p": [
-        -120.3,
-        -56.8,
-        150.6
+        -94.2,
+        -86.8,
+        28.3
       ],
-      "phi": 92.9,
-      "fan": 21.3,
-      "rock": -13,
+      "phi": 76.7,
+      "fan": -7.9,
+      "rock": -0.8,
       "press": 0
     },
     "areas": {
-      "lung-r": 35,
-      "rib": 51
+      "lung-r": 76,
+      "rib": 38,
+      "cartilage": 155
     },
     "extras": {},
-    "score": 0.88
+    "score": 0.81
   },
   "lung-l": {
     "pose": {
       "p": [
-        76.6,
-        -91.6,
-        32.3
+        103.4,
+        -72,
+        118
       ],
-      "phi": 100.8,
-      "fan": -18.9,
-      "rock": -9.9,
-      "press": 1.5
+      "phi": 85.8,
+      "fan": -13.6,
+      "rock": -19.5,
+      "press": 2.8
     },
     "areas": {
-      "rib": 41,
-      "lung-l": 22,
-      "lv": 785,
-      "cartilage": 133
+      "lung-l": 73,
+      "rib": 41
     },
     "extras": {},
-    "score": 0.86
+    "score": 0.81
   },
   "gallbladder": {
     "pose": {

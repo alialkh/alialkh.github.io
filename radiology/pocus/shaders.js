@@ -298,6 +298,7 @@ uniform sampler2D uB;
 uniform sampler2D uScan;
 uniform int uNR;
 uniform float uSigAx;     // pulse sigma in samples
+uniform float uEdge;      // width of the soft edge of every shape, in samples
 out vec4 outColor;
 void main() {
   ivec2 ip = ivec2(gl_FragCoord.xy);
@@ -323,7 +324,10 @@ void main() {
   }
   vec4 bc = texelFetch(uB, ip, 0);
   float Cc = texelFetch(uScan, ip, 0).x - 0.5 * bc.x;
-  outColor = vec4(acc * inversesqrt(w2), sp, Cc);
+  // A step in impedance is spread over uEdge samples by the soft edge, so a pulse shorter than that adds up only part of it. Real
+  // interfaces are sharp, so give back what the pulse would have summed.
+  float edgeGain = max(1.0, uEdge / (2.5066 * sa));
+  outColor = vec4(acc * inversesqrt(w2), sp * edgeGain, Cc);
 }`;
 
 // ---- pass: summary (one row, per line) ----
@@ -441,6 +445,8 @@ uniform vec3 uSlide;
 uniform float uLungHaze;
 uniform float uCell;
 uniform float uClutter;    // power of the faint veil relative to the surrounding echo
+uniform float uDgcPerMm;
+uniform float uDgcMax;
 out vec4 outColor;
 
 void main() {
@@ -474,8 +480,8 @@ void main() {
   bl /= wsum;
   float env2 = dot(iq, iq) + spec * spec;
 
-  // Veil in shadows and cysts: far side lobes carry a little of the echo of lines well away, and the first centimetres are hazy
-  // with reverberation between the face, the skin and the fat.
+  // Veil in shadows and cysts: far side lobes carry a little of the echo of lines well away. (The haze of the first centimetres,
+  // reverberation between the face, the skin and the fat, is added after depth compensation, in the level pass.)
   float wide = 0.0;
   float nw = 0.0;
   for (int m = -12; m <= 12; m++) {
@@ -487,8 +493,6 @@ void main() {
   }
   vec2 hz0 = gpair(ivec3(k, i, 31)) * 0.7;
   env2 += uClutter * (wide / max(nw, 1.0)) * (0.5 + 0.5 * length(hz0));
-  float near = 0.22 * exp(-r / 16.0);
-  env2 += near * near * (0.4 + 0.6 * length(hz0));
 
   // Artefacts that hang off the first air interface of the line: reverberation, B-lines, and the haze of sliding lung.
   vec4 S = texelFetch(uSumA, ivec2(k, 0), 0);
@@ -497,7 +501,7 @@ void main() {
     float sigP = max(uSigAxMm * 1.4, 0.35);
     float cls = S.w;
     float A = S.y * S2.y;
-    float rho = 0.42 * exp(-S.z);
+    float rho = 0.6 * exp(-S.z);
     float mask = 1.0 - clamp(bl * 1.3, 0.0, 1.0);
     float art = 0.0;
     for (int n = 2; n <= 6; n++) {
@@ -516,9 +520,12 @@ void main() {
       vec3 Pb = worldAt(o + d * r);
       float slides = cls < 1.5 ? 1.0 : 0.0;
       vec3 qb = Pb - uSlide * slides;
-      float hazeAmp = S.y * 0.045 * exp(-below / 55.0);
-      if (cls > 1.5 && cls < 2.5) hazeAmp = S.y * 0.16 * exp(-below / 18.0);
-      vec2 hz = cnoise(qb / 0.9);
+      // The haze below an air interface is not echo from tissue, so it is set against the pleural line as displayed: depth
+      // compensation (which lifts what is deeper) is taken back out, leaving a fixed ratio that fades with distance.
+      float comp = pow(10.0, -0.05 * (min(uDgcPerMm * r, uDgcMax) - min(uDgcPerMm * S.x, uDgcMax)));
+      float hazeAmp = S.y * 0.04 * exp(-below / 30.0) * comp;
+      if (cls > 1.5 && cls < 2.5) hazeAmp = S.y * 0.09 * exp(-below / 14.0) * comp;
+      vec2 hz = cnoise(qb / 0.4);
       art += hazeAmp * length(hz) * 0.8 * uLungHaze;
       // B-lines run from the pleural line to the bottom of the screen
       art += S.y * 0.5 * bl * exp(-below / 260.0) * (cls < 1.5 ? 1.0 : 0.0);
@@ -560,6 +567,8 @@ uniform float uNoise;      // receiver noise amplitude relative to liver speckle
 uniform float uSigAmp;     // transmit power as an amplitude factor
 uniform float uDgcPerMm;   // depth compensation, dB per mm
 uniform float uDgcMax;     // the most it can add, dB
+uniform float uVeil;       // amplitude of the near field haze at the face, relative to liver speckle, as displayed
+uniform float uVeilMm;     // how fast it fades with depth, mm
 uniform float uFrameSeed;
 out vec4 outColor;
 
@@ -588,8 +597,12 @@ void main() {
   float nb = (float(h.z & 65535u) + float(h.z >> 16u) + float(h.x >> 16u) + float((h.y >> 8u) & 65535u)) / 65535.0 - 2.0;
   float noise = uNoise * length(vec2(na, nb)) * 1.2247;
   float a2 = env * env + noise * noise;
-  float db = 10.0 * log(max(a2, 1.0e-12)) * 0.4342945;
-  db += uGainDb + min(uDgcPerMm * r, uDgcMax) + tgcAt(r / uDepth);
+  float user = uGainDb + tgcAt(r / uDepth);
+  // Haze from reverberation near the face. It is not echo from tissue, so depth compensation does not lift it: it is a fixed
+  // level on the screen that fades within the first centimetres, and only the user's gain and TGC move it.
+  float veil = uVeil * exp(-r / uVeilMm) * (0.4 + 0.49 * length(vec2(na, nb)));
+  float p = a2 * pow(10.0, 0.1 * (user + min(uDgcPerMm * r, uDgcMax))) + veil * veil * pow(10.0, 0.1 * user);
+  float db = 10.0 * log(max(p, 1.0e-12)) * 0.4342945;
   float v = (db - (uWhite - uDr)) / uDr;
   outColor = vec4(v, 0.0, 0.0, 1.0);
 }`;

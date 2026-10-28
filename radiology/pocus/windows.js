@@ -55,6 +55,7 @@ export const WINDOW_SPECS = [
   {
     id: 'subxiphoid', name: 'Subxiphoid heart', short: 'Subxiphoid', group: 'FAST', probe: 'C5', preset: 'fast', depth: 200,
     prior: [{ role: 'h', axis: 'hZ', w: 1.4 }],
+    centred: true,
     aim: [{ at: [-5, -10, 0], nWorld: [0.25, 0.72, 0.64], sWorld: [0.885, 0.065, -0.419] }],
     positive: { pericardial: 15 }, sees: ['pericardial-fluid'],
     where: 'Under the xiphoid process, with the probe almost flat on the belly, pointing up and toward the left shoulder. Marker to the patient’s right.',
@@ -67,6 +68,7 @@ export const WINDOW_SPECS = [
   {
     id: 'plax', name: 'Parasternal long axis', short: 'PLAX', group: 'Heart', probe: 'P4', preset: 'cardiac', depth: 140,
     prior: [{ role: 'h', axis: 'hY', w: 1.4 }, { role: 'n', axis: 'hZ', w: 0.8 }],
+    centred: true,
     aim: [{ at: [-12, 0, 0], n: [0, 0, -1], s: [-1, 0, 0] }],
     positive: { pericardial: 15 }, sees: ['pericardial-fluid'],
     where: 'Left of the breastbone in the 3rd or 4th space, marker toward the right shoulder.',
@@ -79,6 +81,7 @@ export const WINDOW_SPECS = [
   {
     id: 'psax', name: 'Parasternal short axis', short: 'PSAX', group: 'Heart', probe: 'P4', preset: 'cardiac', depth: 140,
     prior: [{ role: 'h', axis: 'hX', w: 1.4 }, { role: 'n', axis: 'hZ', w: 0.8 }],
+    centred: true,
     aim: [{ at: [5, 0, 0], n: [0, 0, -1], s: [0, 1, 0] }],
     positive: { pericardial: 15 }, sees: ['pericardial-fluid'],
     where: 'The same place as PLAX, with the probe turned a quarter turn clockwise so the marker points to the left shoulder.',
@@ -91,6 +94,7 @@ export const WINDOW_SPECS = [
   {
     id: 'a4c', name: 'Apical four chamber', short: 'A4C', group: 'Heart', probe: 'P4', preset: 'cardiac', depth: 180,
     prior: [{ role: 'h', axis: 'hZ', w: 1.4 }, { role: 'n', axis: 'hX', w: 1 }],
+    centred: true,
     aim: [{ at: [-8, -10, -2], n: [-1, 0, 0], s: [0, 1, 0] }],
     positive: { pericardial: 15 }, sees: ['pericardial-fluid'],
     where: 'On the left side where the heartbeat is felt, in the 5th space, pointing toward the right shoulder. Marker toward the left side.',

@@ -10,10 +10,11 @@ import { structureMap, STRUCTURES } from './patient.js';
 const BLOCKERS = new Set(['bone', 'lung', 'gas', 'pleural_air', 'air'].map(k => TISSUE_INDEX[k]));
 const GEL = TISSUE_INDEX.gel;
 
-// res: the resolved anatomy. Returns { areas, blocked, lines, coupled } where areas maps structure id to mm^2 of image.
+// res: the resolved anatomy. Returns { areas, leftAreas, blocked, total, lines, coupled } where areas maps structure id to mm^2 of image.
 export function visibleStructures(res, probe, frame, depth, { lines = 48, step = 3, gapMax = 12 } = {}) {
   const map = res.structureMap ??= structureMap(res.names);
   const areas = new Map();
+  const leftAreas = new Map(); // the same, for the left half of the lines, to tell how well centred a view is
   let blocked = 0;
   let total = 0;
   let coupled = 0;
@@ -46,11 +47,12 @@ export function visibleStructures(res, probe, frame, depth, { lines = 48, step =
       if (sid >= 0) {
         const id = STRUCTURES[sid].id;
         areas.set(id, (areas.get(id) ?? 0) + area);
+        if (k < lines / 2) leftAreas.set(id, (leftAreas.get(id) ?? 0) + area);
       }
       if (BLOCKERS.has(hit.tissue) && hit.tissue !== GEL) shadow = true;
     }
   }
-  return { areas, blocked, total, lines, coupled };
+  return { areas, leftAreas, blocked, total, lines, coupled };
 }
 
 // Score a view against the structures it should show. Each wanted structure counts up to `need` mm^2, so one huge organ cannot hide a missing one.
@@ -61,3 +63,14 @@ export function scoreView(view, wanted) {
 }
 
 export { TABLE_Y };
+
+// 0 when the wanted structures lie evenly either side of the middle of the sector, 1 when all on one side.
+export function imbalance(view, wanted) {
+  let all = 0;
+  let left = 0;
+  for (const id of Object.keys(wanted)) {
+    all += view.areas.get(id) ?? 0;
+    left += view.leftAreas?.get(id) ?? 0;
+  }
+  return all > 0 ? Math.abs(2 * left - all) / all : 1;
+}

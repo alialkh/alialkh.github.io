@@ -6,7 +6,7 @@ import {
   lineShader, sampleShader, interfaceShader, scanInitShader, scanStepShader, axialShader, summaryShader, echoShader, levelShader, postShader, displayShader, mmodeShader, LABELS,
 } from './shaders.js';
 import { TISSUES, tissueUniform } from './tissues.js';
-import { TEXELS, FLOATS } from './anatomy.js';
+import { TEXELS, FLOATS, DEFAULT_EDGE } from './anatomy.js';
 import { MAX_GROUPS } from './anatomy-glsl.js';
 import { axialSigma, effectiveFrequency, THI, AVERAGE_ALPHA, LATERAL_SCALE, CLUTTER_DB } from './beam.js';
 
@@ -14,6 +14,8 @@ import { axialSigma, effectiveFrequency, THI, AVERAGE_ALPHA, LATERAL_SCALE, CLUT
 export const CAL = {
   specK: 22, // echo of a perfect reflector against liver speckle, as an amplitude ratio
   noiseDb: -74, // receiver noise before gain
+  veil: 0.2,    // near field haze at the face, relative to liver speckle, after depth compensation
+  veilMm: 9,    // and how far it reaches
   dgcMaxDb: 62, // a machine cannot make up for depth without limit
   whiteDb: 32, // the level that shows as white
   lines: 192,
@@ -157,7 +159,7 @@ export class Sim {
     const scanTex = T.scan[cur].texture;
 
     // 5. the pulse
-    this.run(P.axial, T.D, { uNR: NR, uSigAx: sigAxMm / dr }, { uA: T.A.textures[0], uB: T.B.texture, uScan: scanTex });
+    this.run(P.axial, T.D, { uNR: NR, uSigAx: sigAxMm / dr, uEdge: DEFAULT_EDGE / dr }, { uA: T.A.textures[0], uB: T.B.texture, uScan: scanTex });
 
     // 6. first air interface per line
     this.run(P.summary, T.sum, {
@@ -169,6 +171,7 @@ export class Sim {
       ...frameU, ...anat, uSigAxMm: sigAxMm, uTime: cfg.time, uSlide: cfg.slide, uLungHaze: cfg.lungHaze, uMirror: cfg.mirror ?? 1,
       uCell: Math.min(0.45, Math.max(0.1, 1.5 * sigAxMm)),
       uClutter: 10 ** ((thi ? CLUTTER_DB.harmonic : CLUTTER_DB.fundamental) / 10),
+      uDgcPerMm: (2 * AVERAGE_ALPHA * cfg.freq * (thi ? THI.attenuation : 1)) / 10, uDgcMax: CAL.dgcMaxDb,
     }, { uAnat: this.anatomyTex, uD: T.D.texture, uSumA: T.sum.textures[0], uSumB: T.sum.textures[1], uSumC: T.sum.textures[2], uB: T.B.texture });
 
     // 8 and 9. noise, gain, depth compensation, TGC, dynamic range, then smoothing, persistence and the grey map
@@ -196,7 +199,7 @@ export class Sim {
     const attF = cfg.freq * (thi ? THI.attenuation : 1);
     this.run(P.level, T.level, {
       uDepth: cfg.depth, uNR: NR, uGainDb: cfg.gainDb, uTgc: cfg.tgc, uDr: cfg.dr, uWhite: CAL.whiteDb,
-      uNoise: 10 ** (CAL.noiseDb / 20), uSigAmp: 10 ** ((cfg.power + (thi ? THI.signalDb : 0)) / 20),
+      uNoise: 10 ** (CAL.noiseDb / 20), uVeil: CAL.veil, uVeilMm: CAL.veilMm, uSigAmp: 10 ** ((cfg.power + (thi ? THI.signalDb : 0)) / 20),
       uDgcPerMm: (2 * AVERAGE_ALPHA * attF) / 10, uDgcMax: CAL.dgcMaxDb, uFrameSeed: this.frameNo & 0xffffff,
     }, { uEnv: T.E.texture });
     this.run(P.post, T.gray[nextIndex], {

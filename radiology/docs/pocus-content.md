@@ -29,6 +29,8 @@ Moving parameters (`breath`, `sys`, `atria`, `mv`, `tv`, `av`, `pulse`, `peri`) 
 - `need`: structure id to the mm² of image that must show it. A saved image counts as this window when it meets 85 percent of every need.
 - `extra`: structures looked for but not required.
 - `search`: where `tools/make-windows.mjs` looks (side of the body, positions along it, probe angles).
+- `prior`: pulls the search toward the orientation a window should have, written in the heart's frame (`hX` long axis, `hY` septum to lateral wall, `hZ` normal to the four chamber plane) or as a world vector. `role` is the probe axis it applies to (`h` elevation, `n` beam, `e` screen right) and `w` the weight.
+- `aim` (heart windows): the textbook plane as a target point in the heart's frame, a beam direction `n` and the direction `s` that should be screen right. `tools/aim.mjs` turns it into probe poses, which start the search where a sonographer would. `centred` asks the search to put the needed chambers evenly either side of the middle of the sector.
 - `truth(P, lung)` says whether the view reads positive for a case, and so what the right answer to `question` is.
 - Poses are in `windows-poses.js`, written by the tool. Never edit that file by hand. `windows.test.js` checks that every pose still shows its needs, and that the abnormal case shows its extras.
 
