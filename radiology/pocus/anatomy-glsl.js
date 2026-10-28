@@ -280,6 +280,7 @@ Mat evalAnatomy(vec3 p) {
   m.lnz = uTissue[0].x; m.alpha = uTissue[0].y; m.mu = uTissue[0].z; m.het = uTissue[0].w;
   m.septa = uTissue[1].x; m.gas = uTissue[1].y; m.lab = 0.0; m.disp = vec3(0.0);
   int win = -1;
+  int kn = uGCount >= 0 ? 3 : 0;
   for (int g = 0; g < uGCount; g++) {
     vec4 bound = uGBound[g];
     vec3 dd = p - bound.xyz;
@@ -289,18 +290,17 @@ Mat evalAnatomy(vec3 p) {
       vec4 t0 = anat(e, 0);
       int flags = int(t0.z + 0.5);
       if ((flags & ${FLAG.HIDDEN | FLAG.INACTIVE}) != 0) continue;
-      float c = cover(entrySdf(e, p, ctx), t0.w);
-      if (c <= 0.0) continue;
+      // The shape itself, then up to two clips, are all one evaluation of entrySdf. It is written once inside a loop, not three
+      // times in a row, because the graphics driver builds a separate copy of the code for every call and entrySdf is large.
+      // kn is always 3; it is read from a uniform so that the driver cannot unroll the loop back into three copies.
       vec4 t6 = anat(e, 6);
-      int c0 = int(t6.x);
-      if (c0 >= 0) {
-        float cc = cover(entrySdf(c0, p, ctx), anat(c0, 0).w);
-        c *= t6.y > 0.5 ? cc : 1.0 - cc;
-      }
-      int c1 = int(t6.z);
-      if (c1 >= 0 && c > 0.0) {
-        float cc = cover(entrySdf(c1, p, ctx), anat(c1, 0).w);
-        c *= t6.w > 0.5 ? cc : 1.0 - cc;
+      float c = 1.0;
+      for (int k = 0; k < kn; k++) {
+        int id = k == 0 ? e : (k == 1 ? int(t6.x) : int(t6.z));
+        if (id < 0) continue;
+        float cc = cover(entrySdf(id, p, ctx), anat(id, 0).w);
+        if (k == 0) c = cc; else c *= (k == 1 ? t6.y : t6.w) > 0.5 ? cc : 1.0 - cc;
+        if (c <= 0.0) break;
       }
       if (c <= 0.0) continue;
       int tissue = int(t0.y + 0.5);

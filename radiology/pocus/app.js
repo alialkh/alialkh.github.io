@@ -44,7 +44,6 @@ function fail(message) {
 // The loading screen is plain markup in index.html, so it shows before any script has run. These move its bar and its words.
 const bootEl = document.getElementById('boot');
 const bootStarted = performance.now();
-const bootTimer = bootEl ? setInterval(() => { const t = document.getElementById('boot-time'); if (t) t.textContent = `${Math.round((performance.now() - bootStarted) / 1000)} s`; }, 1000) : 0;
 function bootStatus(text, fraction) {
   if (!bootEl) return;
   bootEl.querySelector('#boot-step').textContent = text;
@@ -58,11 +57,38 @@ let bootHidden = false;
 function bootDone() {
   if (!bootEl || bootHidden) return;
   bootHidden = true;
-  clearInterval(bootTimer);
   bootEl.classList.add('done');
   setTimeout(() => bootEl.remove(), 400);
 }
-const nextFrame = () => new Promise(r => requestAnimationFrame(() => r()));
+
+// A small progress card laid over a view while its shaders build.
+function loadingCard(title) {
+  const started = performance.now();
+  const el = h('div', { class: 'view-loading', role: 'status' });
+  el.innerHTML = '<svg class="boot-art" viewBox="0 0 160 124" aria-hidden="true"><path class="boot-fan" d="M80 4 L20 96 A100 100 0 0 0 140 96 Z"/><g class="boot-sweep"><path d="M80 4 L80 110"/></g><path class="boot-face" d="M62 4 H98"/></svg>';
+  const head = h('p', { class: 'view-loading-title' }, title);
+  const step = h('p', { class: 'view-loading-step' }, 'Starting');
+  const fill = h('div');
+  const bar = h('div', { class: 'boot-bar', role: 'progressbar', 'aria-label': title, 'aria-valuemin': '0', 'aria-valuemax': '100', 'aria-valuenow': '0' }, fill);
+  const note = h('p', { class: 'view-loading-note' }, '');
+  el.append(head, step, bar, note);
+  const tick = setInterval(() => { note.textContent = `${Math.round((performance.now() - started) / 1000)} s so far. This can take a while and only happens when the page opens.`; }, 1000);
+  return {
+    el,
+    set(text, fraction) {
+      if (text) step.textContent = text;
+      el.classList.add('has-progress');
+      const pct = Math.round(100 * Math.min(1, fraction));
+      fill.style.width = `${pct}%`;
+      bar.setAttribute('aria-valuenow', String(pct));
+    },
+    hide() {
+      clearInterval(tick);
+      el.classList.add('done');
+      setTimeout(() => el.remove(), 400);
+    },
+  };
+}
 
 async function boot() {
   document.title = 'POCUS simulator · Radiology teaching';
@@ -106,23 +132,20 @@ async function boot() {
     fail(String(e.message ?? e));
     return;
   }
-  try {
-    const parts = { sim: [0, 1], pv: [0, 1] };
-    const report = () => {
-      const done = parts.sim[0] + parts.pv[0];
-      const total = parts.sim[1] + parts.pv[1];
-      bootStatus(`Building the image engine for your graphics card (${done} of ${total})`, 0.05 + 0.85 * (done / total));
-    };
-    await Promise.all([
-      sim.ready((d, t) => { parts.sim = [d, t]; report(); }),
-      pv.ready((d, t) => { parts.pv = [d, t]; report(); }),
-    ]);
-  } catch (e) {
-    fail(String(e.message ?? e));
-    return;
-  }
-  bootStatus('Setting up the patient', 0.92);
-  await nextFrame();
+  // The page is shown at once; each view switches on when its programs are built. Until then the screen and the 3D view carry a
+  // progress card and everything else (cases, exams, the console, the probe controls) already works, because it only changes state.
+  let engineReady = false;
+  let viewReady = false;
+  const screenLoading = loadingCard('Building the ultrasound engine for your graphics card');
+  const viewLoading = loadingCard('Building the 3D view');
+  screenBox.append(screenLoading.el);
+  patientBox.append(viewLoading.el);
+  sim.ready((d, t) => screenLoading.set(`${d} of ${t} programs built`, d / t))
+    .then(() => { engineReady = true; screenLoading.hide(); onEngineReady(); })
+    .catch(e => fail(String(e.message ?? e)));
+  pv.ready((d, t) => viewLoading.set('', d / t))
+    .then(() => { viewReady = true; viewLoading.hide(); dirtyPatientAll(); })
+    .catch(e => fail(String(e.message ?? e)));
 
   // ---------- state ----------
   const builder = buildPatient();
@@ -217,6 +240,7 @@ async function boot() {
 
   document.body.replaceChildren(...(bootEl && !bootHidden ? [bootEl] : []), topbar, h('main', { class: 'workspace' }, patientCol, machineCol, examCol),
     h('footer', { class: 'foot' }, disclaimer(), h('p', { class: 'disclaimer' }, 'A simulation built from a computer model of an adult, not from any patient’s scan. Educational use only.')), keysDialog);
+  bootDone();
 
   // ---------- helpers ----------
   const centreOfFan = () => { const p = PROBES[state.machine.probe]; return [0, p.type === 'linear' ? state.machine.depth / 2 : state.machine.depth / 2]; };
@@ -255,6 +279,7 @@ async function boot() {
   }
 
   function dispatch(action) {
+    if (action.type === 'freeze' && !engineReady) return; // nothing to freeze yet
     if (action.type === 'mline') {
       state.machine = reduce(state.machine, action);
     } else if (action.type === 'zoom') {
@@ -267,7 +292,7 @@ async function boot() {
     }
     dirty.screen = true; dirty.console = true; dirty.patient = true;
     if (state.machine.frozen) {
-      if (action.type !== 'freeze') { sim.reprocess(simConfig(state.machine)); dirty.still = true; }
+      if (action.type !== 'freeze' && engineReady) { sim.reprocess(simConfig(state.machine)); dirty.still = true; }
     } else {
       sceneChanged();
     }
@@ -280,7 +305,7 @@ async function boot() {
 
   function onFreeze() {
     state.cineOffset = 0;
-    if (!state.machine.frozen) { state.cine.reset(); sim.resetCine(); }
+    if (!state.machine.frozen) { state.cine.reset(); if (engineReady) sim.resetCine(); }
     dirty.still = true; dirty.screen = true;
   }
 
@@ -299,6 +324,7 @@ async function boot() {
       }
       case 'auto-tgc': {
         // grey level back to dB on the machine's own scale, then flatten the bands to the second one
+        if (!engineReady) break;
         const { profile } = sim.grayProfile(8);
         const DR = state.machine.dr;
         const db = profile.map(v => (Number.isFinite(v) ? CAL.whiteDb - DR + v * DR : NaN));
@@ -489,11 +515,25 @@ async function boot() {
   let sincePanel = 0;
   const lastSimTimeRef = { v: 0 };
 
-  function simFrame(dtSim) {
-    const m = state.machine;
+  // The patient at this moment: breathing, heartbeat, disease. Only the processor is needed, so it runs even before the GPU is ready.
+  function refreshAnatomy() {
     const P = animate(state.P, state.time, { hr: hr(), rr: state.scenario.vitals.rr });
     state.live = P;
     state.res = resolve(builder, TISSUE_INDEX, P, restOf(P));
+    return P;
+  }
+
+  function onEngineReady() {
+    if (state.mode === 'exam' && state.startedAt && !state.finished) state.startedAt = performance.now();
+    acc = 1;
+    dirty.screen = true; dirty.still = true; dirty.console = true; dirty.panel = true;
+  }
+
+  function dirtyPatientAll() { dirty.patient = true; pv.dirty = true; }
+
+  function simFrame(dtSim) {
+    const m = state.machine;
+    const P = refreshAnatomy();
     sim.setAnatomy(state.res);
     const lung = lungOf(state.scenario);
     const cfg = {
@@ -581,7 +621,12 @@ async function boot() {
       sceneChanged();
     }
     const m = state.machine;
-    if (!m.frozen) {
+    if (!m.frozen && !engineReady) {
+      // the image engine is still building: keep the patient and the probe moving for the 3D view and the in-view list
+      state.time += dt;
+      acc += dt;
+      if (acc >= 0.1 || !state.res) { acc = 0; refreshAnatomy(); dirty.patient = true; }
+    } else if (!m.frozen) {
       state.time += dt;
       acc += dt;
       const interval = 1 / Math.min(30, readouts(m).fr);
@@ -596,7 +641,7 @@ async function boot() {
       }
     }
     if (dirty.still || dirty.screen) {
-      if (state.cine.length) { draw(); bootDone(); }
+      if (engineReady && state.cine.length) draw();
       dirty.still = false;
     }
     if (dirty.screen || (now % 1000 < 40 && !m.frozen)) {
@@ -606,7 +651,7 @@ async function boot() {
     if (dirty.console) { cons.update(state.machine, { tool: state.tool }); dirty.console = false; }
     // the patient view follows the pose and animates at a gentler rate
     sinceStats += dt;
-    if (state.res) {
+    if (state.res && viewReady) {
       if (dirty.patient && (sinceStats > 0.1 || pv.dirty || drag)) {
         pv.setAnatomy(state.res);
         pv.setProbe(frame(), probe(), state.machine.depth);
@@ -659,7 +704,6 @@ async function boot() {
     }
   }
   refreshPanel();
-  bootStatus('Drawing the first image', 0.97);
   requestAnimationFrame(frameLoop);
   window.__pocus = { state, sim, pv, dispatch, command, save, gotoWindow, setCase, setPose, setMode, setExam, answer, finishExam, fit, dirty };
   window.__ready = true;
