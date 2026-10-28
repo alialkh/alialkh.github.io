@@ -11,6 +11,36 @@
   <link rel="stylesheet" href="../core/theme.css">
   <link rel="stylesheet" href="pocus.css">
   <script src="../core/file-warning.js"></script>
+  <link rel="modulepreload" href="../core/dom.js">
+  <link rel="modulepreload" href="../core/keys.js">
+  <link rel="modulepreload" href="../core/shell.js">
+  <link rel="modulepreload" href="anatomy-glsl.js">
+  <link rel="modulepreload" href="anatomy.js">
+  <link rel="modulepreload" href="app.js">
+  <link rel="modulepreload" href="beam.js">
+  <link rel="modulepreload" href="cine.js">
+  <link rel="modulepreload" href="console.js">
+  <link rel="modulepreload" href="exam-panel.js">
+  <link rel="modulepreload" href="exam.js">
+  <link rel="modulepreload" href="geometry.js">
+  <link rel="modulepreload" href="gl.js">
+  <link rel="modulepreload" href="machine.js">
+  <link rel="modulepreload" href="measure.js">
+  <link rel="modulepreload" href="motion.js">
+  <link rel="modulepreload" href="patient-view.js">
+  <link rel="modulepreload" href="patient.js">
+  <link rel="modulepreload" href="probe-panel.js">
+  <link rel="modulepreload" href="probes.js">
+  <link rel="modulepreload" href="scenarios.js">
+  <link rel="modulepreload" href="screen.js">
+  <link rel="modulepreload" href="shaders.js">
+  <link rel="modulepreload" href="sim.js">
+  <link rel="modulepreload" href="tissues.js">
+  <link rel="modulepreload" href="view.js">
+  <link rel="modulepreload" href="visibility.js">
+  <link rel="modulepreload" href="widgets.js">
+  <link rel="modulepreload" href="windows-poses.js">
+  <link rel="modulepreload" href="windows.js">
   <script type="module" src="app.js"></script>
 </head>
 <body>
@@ -24,8 +54,6 @@
       <h1>POCUS simulator</h1>
       <p class="boot-step" id="boot-step" role="status" aria-live="polite">Starting</p>
       <div class="boot-bar" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="boot-fill"></div></div>
-      <p class="boot-note">The image is calculated live on your graphics card, and the card has to build its programs first. This can take a while, and it only happens when the page opens.</p>
-      <p class="boot-time">Time so far: <span id="boot-time">0 s</span></p>
       <p class="disclaimer">Educational use only, not for diagnosis or patient care.</p>
     </div>
   </div>

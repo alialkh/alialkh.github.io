@@ -235,10 +235,15 @@ void main() {
   vec3 P = worldAt(o + d * r);
   vec3 latW = uE * d.y - uN * d.x;
   float sigEl = sliceT(r) / 2.355;
-  Mat m0 = evalAnatomy(P);
-  Mat ml = evalAnatomy(P + latW * 0.35);
-  Mat mp = evalAnatomy(P + uH * sigEl);
-  Mat mm = evalAnatomy(P - uH * sigEl);
+  // The point, a little to the side, and a little either way across the slice. One call in a loop, not four, so the driver builds the
+  // large evaluator once (the count is read from a uniform so that it cannot unroll the loop again).
+  Mat m0, ml, mp, mm;
+  int nm = uGCount >= 0 ? 4 : 0;
+  for (int s = 0; s < nm; s++) {
+    vec3 q = s == 0 ? P : (s == 1 ? P + latW * 0.35 : (s == 2 ? P + uH * sigEl : P - uH * sigEl));
+    Mat m = evalAnatomy(q);
+    if (s == 0) m0 = m; else if (s == 1) ml = m; else if (s == 2) mp = m; else mm = m;
+  }
   vec2 s = 0.6 * scatter(m0, P) + 0.566 * (scatter(mp, P + uH * sigEl) + scatter(mm, P - uH * sigEl));
   float att = m0.alpha * uAttF * (dr / 10.0) * 0.23026;
   float gl = (ml.lnz - m0.lnz) / 0.35;
@@ -414,7 +419,15 @@ void main() {
     vec3 Pp = worldAt(o + d * res.x);
     vec3 dW = uE * d.x + uN * d.y;
     const float e = 1.6;
-    vec3 g = vec3(lnzAt(Pp + vec3(e, 0.0, 0.0)) - lnzAt(Pp - vec3(e, 0.0, 0.0)), lnzAt(Pp + vec3(0.0, e, 0.0)) - lnzAt(Pp - vec3(0.0, e, 0.0)), lnzAt(Pp + vec3(0.0, 0.0, e)) - lnzAt(Pp - vec3(0.0, 0.0, e)));
+    // central differences along x, y and z: six evaluations through one call site (see the sample pass for why)
+    vec3 g = vec3(0.0);
+    int ns = uGCount >= 0 ? 6 : 0;
+    for (int s = 0; s < ns; s++) {
+      int ax = s >> 1;
+      float sg = (s & 1) == 0 ? 1.0 : -1.0;
+      vec3 d = ax == 0 ? vec3(e, 0.0, 0.0) : (ax == 1 ? vec3(0.0, e, 0.0) : vec3(0.0, 0.0, e));
+      g[ax] += sg * lnzAt(Pp + sg * d);
+    }
     if (length(g) > 0.5) {
       vec3 n = normalize(g);
       float cosI = abs(dot(dW, n));

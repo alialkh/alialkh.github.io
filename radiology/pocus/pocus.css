@@ -218,5 +218,12 @@ body { min-height: 100vh; }
 .boot-bar > div { height: 100%; width: 30%; border-radius: 3px; background: var(--accent); animation: boot-slide 1.4s ease-in-out infinite; }
 .boot.has-progress .boot-bar > div { animation: none; transition: width 0.3s ease; }
 @keyframes boot-slide { from { transform: translateX(-110%); } to { transform: translateX(340%); } }
-.boot-time { margin: 0; font-size: var(--fs-xs); color: var(--muted); font-variant-numeric: tabular-nums; }
-.boot-note { margin: 0; font-size: var(--fs-sm); color: var(--muted); line-height: 1.45; }
+
+/* The same card, laid over a view whose shaders are still building. The rest of the page already works. */
+.view-loading { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px; text-align: center; background: var(--scr); transition: opacity 0.35s ease; }
+.view-loading.done { opacity: 0; pointer-events: none; }
+.view-loading .boot-art { width: 84px; margin: 0; }
+.view-loading .boot-bar { width: min(260px, 80%); }
+.view-loading-title { margin: 0; font-size: var(--fs-md); font-weight: 650; color: var(--us-text); }
+.view-loading-step { margin: 0; min-height: 1.3em; font-size: var(--fs-sm); color: var(--us-dim); }
+.view-loading-note { margin: 0; min-height: 2.6em; max-width: 320px; font-size: var(--fs-xs); color: var(--us-dim); line-height: 1.4; }
