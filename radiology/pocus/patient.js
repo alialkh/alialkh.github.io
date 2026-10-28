@@ -193,10 +193,10 @@ export function buildPatient() {
   // --- 8. spleen and stomach
   B.group('luq', { c: [80, -20, -50], r: 130 });
   B.ell('dome-spleen', 'spleen', { c: P => [50, -10, -141 - 26 * P.breath], r: P => [98 - 0.55 * P.fluidLUQ, 100 - 0.55 * P.fluidLUQ, 150 - 0.55 * P.fluidLUQ], hidden: true });
-  const spleenC = P => [108, 40, -52 - 20 * P.breath];
+  const spleenC = P => [102, 38, -56 - 20 * P.breath];
   const spleenRot = { x: [0.1, -0.55, -0.83], y: [0, 1, 0] };
   B.ell('spleen-halo', 'fluid', { c: spleenC, r: P => [62 + 0.55 * P.fluidLUQ, 40 + 0.55 * P.fluidLUQ, 24 + 0.55 * P.fluidLUQ], rot: spleenRot, active: P => P.fluidLUQ > 0.5, clip: [['dome-L', 'inside'], ['abd-cavity', 'inside']] });
-  B.ell('spleen', 'spleen', { c: spleenC, r: [62, 40, 24], rot: spleenRot, clip: [['dome-spleen', 'inside']] });
+  B.ell('spleen', 'spleen', { c: spleenC, r: [66, 44, 30], rot: spleenRot, clip: [['dome-spleen', 'inside'], ['cage', 'inside']] });
   B.tube('splenic-hilum', 'blood', [[70, 34, -72], [84, 32, -62], [98, 36, -56]].map(p => P => [p[0], p[1], p[2] - 20 * P.breath]), 3.2);
   const stomachC = P => [56, -30, -44 - 20 * P.breath];
   B.ell('stomach-wall', 'bowel_wall', { c: stomachC, r: [52, 33, 48], rot: [0, 0, -10], clip: [['dome-L', 'inside']] });
@@ -253,8 +253,8 @@ export function buildPatient() {
     if (gasAt) for (const [i, g] of gasAt.entries()) B.ell(`${name}-gas${i}`, 'gas', { c: P => [g[0], g[1], g[2] - 14 * P.breath], r: g.slice(3), clip: [['abd-cavity', 'inside']] });
   };
   bowelTube('colon-asc', [[-100, 10, -100], [-104, 12, -150], [-100, 12, -205]], 24, 20, 'bowel_content', [[-102, -4, -140, 14, 8, 20], [-100, -2, -190, 12, 7, 14]]);
-  bowelTube('colon-trans', [[-96, -26, -108], [-60, -58, -132], [0, -66, -140], [60, -58, -126], [96, -28, -88]], 21, 17, 'bowel_content', [[-40, -68, -134, 16, 6, 8], [30, -66, -134, 14, 6, 8]]);
-  bowelTube('colon-desc', [[100, 24, -86], [98, 28, -150], [92, 30, -214]], 20, 16, 'bowel_content', [[100, 14, -130, 10, 7, 18]]);
+  bowelTube('colon-trans', [[-96, -26, -108], [-60, -58, -132], [0, -66, -140], [60, -58, -126], [98, -12, -104]], 21, 17, 'bowel_content', [[-40, -68, -134, 16, 6, 8], [30, -66, -134, 14, 6, 8]]);
+  bowelTube('colon-desc', [[102, 20, -108], [98, 28, -150], [92, 30, -214]], 20, 16, 'bowel_content', [[100, 14, -130, 10, 7, 18]]);
   bowelTube('colon-sig', [[92, 30, -214], [50, 16, -270], [10, 22, -310], [4, 50, -318]], 20, 15);
   // small bowel, loops in the centre of the abdomen, with peristalsis
   const loop = (name, c, r, rot) => {
