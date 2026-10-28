@@ -14,6 +14,21 @@
   <script type="module" src="app.js"></script>
 </head>
 <body>
+  <div id="boot" class="boot">
+    <div class="boot-card">
+      <svg class="boot-art" viewBox="0 0 160 124" aria-hidden="true">
+        <path class="boot-fan" d="M80 4 L20 96 A100 100 0 0 0 140 96 Z"/>
+        <g class="boot-sweep"><path d="M80 4 L80 110"/></g>
+        <path class="boot-face" d="M62 4 H98"/>
+      </svg>
+      <h1>POCUS simulator</h1>
+      <p class="boot-step" id="boot-step" role="status" aria-live="polite">Starting</p>
+      <div class="boot-bar" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="boot-fill"></div></div>
+      <p class="boot-note">The image is calculated live on your graphics card, and the card has to build its programs first. This can take a while, and it only happens when the page opens.</p>
+      <p class="boot-time">Time so far: <span id="boot-time">0 s</span></p>
+      <p class="disclaimer">Educational use only, not for diagnosis or patient care.</p>
+    </div>
+  </div>
   <noscript><p>This page needs JavaScript to run the simulator.</p></noscript>
 </body>
 </html>

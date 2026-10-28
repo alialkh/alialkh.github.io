@@ -23,48 +23,79 @@ export function requireContext(canvas) {
   if (!gl) throw new Error('This browser has no WebGL 2, which the ultrasound simulation needs.');
   if (!gl.getExtension('EXT_color_buffer_float')) throw new Error('This device cannot render to floating point textures, which the ultrasound simulation needs.');
   gl.getExtension('OES_texture_float_linear');
+  gl.getExtension('KHR_parallel_shader_compile'); // lets the page ask whether a program is built without waiting for it
   return gl;
 }
 
-function compile(gl, type, src, label) {
+function submit(gl, type, src) {
   const sh = gl.createShader(type);
   gl.shaderSource(sh, src);
   gl.compileShader(sh);
-  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
-    const log = gl.getShaderInfoLog(sh);
-    const lines = src.split('\n').map((l, i) => `${String(i + 1).padStart(4)} ${l}`).join('\n');
-    throw new Error(`Shader ${label} failed to compile:\n${log}\n${lines.split('\n').filter((l, i) => {
-      const m = /ERROR: \d+:(\d+)/.exec(log);
-      return m ? Math.abs(i + 1 - Number(m[1])) < 4 : i < 3;
-    }).join('\n')}`);
-  }
   return sh;
 }
 
+// Reading the result makes the page wait for the driver, so it is only done once the program is built or first needed.
+function verify(gl, sh, src, label) {
+  if (gl.getShaderParameter(sh, gl.COMPILE_STATUS)) return;
+  const log = gl.getShaderInfoLog(sh);
+  const lines = src.split('\n').map((l, i) => `${String(i + 1).padStart(4)} ${l}`).join('\n');
+  throw new Error(`Shader ${label} failed to compile:\n${log}\n${lines.split('\n').filter((l, i) => {
+    const m = /ERROR: \d+:(\d+)/.exec(log);
+    return m ? Math.abs(i + 1 - Number(m[1])) < 4 : i < 3;
+  }).join('\n')}`);
+}
+
 export class Program {
+  // The constructor only hands the source to the driver. Compiling and linking go on in the background, so many programs can be
+  // built at once and the page can keep drawing. finish() collects the result, and runs on its own the first time the program is used.
   constructor(gl, fragment, label = 'program') {
     this.gl = gl;
     this.label = label;
-    const vs = compile(gl, gl.VERTEX_SHADER, FULLSCREEN_VS, `${label}.vs`);
-    const fs = compile(gl, gl.FRAGMENT_SHADER, fragment, `${label}.fs`);
+    this.fragment = fragment;
+    this.vs = submit(gl, gl.VERTEX_SHADER, FULLSCREEN_VS);
+    this.fs = submit(gl, gl.FRAGMENT_SHADER, fragment);
     this.program = gl.createProgram();
-    gl.attachShader(this.program, vs);
-    gl.attachShader(this.program, fs);
+    gl.attachShader(this.program, this.vs);
+    gl.attachShader(this.program, this.fs);
     gl.linkProgram(this.program);
-    if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) throw new Error(`Program ${label} failed to link: ${gl.getProgramInfoLog(this.program)}`);
-    gl.deleteShader(vs);
-    gl.deleteShader(fs);
-    this.uniforms = new Map();
+    this.finished = false;
+    this.reflected = null;
+    this.units = new Map();
+  }
+
+  // True once the driver has built the program, without waiting for it. Without the extension it is always true, and finish() waits.
+  built() {
+    const gl = this.gl;
+    const ext = gl.getExtension('KHR_parallel_shader_compile');
+    return this.finished || !ext || gl.getProgramParameter(this.program, ext.COMPLETION_STATUS_KHR) === true;
+  }
+
+  finish() {
+    if (this.finished) return this;
+    const gl = this.gl;
+    verify(gl, this.vs, FULLSCREEN_VS, `${this.label}.vs`);
+    verify(gl, this.fs, this.fragment, `${this.label}.fs`);
+    if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) throw new Error(`Program ${this.label} failed to link: ${gl.getProgramInfoLog(this.program)}`);
+    gl.deleteShader(this.vs);
+    gl.deleteShader(this.fs);
+    this.vs = this.fs = this.fragment = null;
+    this.reflected = new Map();
     const n = gl.getProgramParameter(this.program, gl.ACTIVE_UNIFORMS);
     for (let i = 0; i < n; i++) {
       const info = gl.getActiveUniform(this.program, i);
       const name = info.name.replace(/\[0\]$/, '');
-      this.uniforms.set(name, { loc: gl.getUniformLocation(this.program, info.name), type: info.type, size: info.size });
+      this.reflected.set(name, { loc: gl.getUniformLocation(this.program, info.name), type: info.type, size: info.size });
     }
-    this.units = new Map();
+    this.finished = true;
+    return this;
+  }
+
+  get uniforms() {
+    return this.finish().reflected;
   }
 
   use() {
+    this.finish();
     this.gl.useProgram(this.program);
     return this;
   }
@@ -104,6 +135,34 @@ export class Program {
       unit++;
     }
     return this;
+  }
+}
+
+// Waits for a set of programs to build, calling onProgress(done, total, label) as each one lands, and lets the page paint in between.
+// With the parallel compile extension the driver works on all of them at once and the page never blocks. Without it each one is
+// collected in turn, one per frame.
+export async function programsReady(programs, onProgress = () => {}) {
+  const frame = () => new Promise(r => requestAnimationFrame(() => r()));
+  const pending = new Set(programs.filter(p => !p.finished));
+  const total = programs.length;
+  const waitingSince = performance.now();
+  let done = total - pending.size;
+  onProgress(done, total, '');
+  while (pending.size) {
+    let collected = false;
+    for (const p of pending) {
+      // a driver that never says it is done would hold the page for ever, so after a minute just wait for the result
+      if (!p.built() && performance.now() - waitingSince < 60000) continue;
+      p.finish();
+      pending.delete(p);
+      done++;
+      collected = true;
+      onProgress(done, total, p.label);
+      // without the extension finish() blocks, so hand the page back after each one
+      if (!p.gl.getExtension('KHR_parallel_shader_compile')) break;
+    }
+    if (pending.size) await frame();
+    else if (collected) await frame();
   }
 }
 

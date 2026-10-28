@@ -1,7 +1,7 @@
 // The B-mode pipeline. One call to frame() simulates one image of the current anatomy under the current probe and machine settings
 // into beam space (one column per scan line), stores it in the cine ring, and display() scan converts a stored frame to the canvas.
 
-import { Program, Target, requireContext, drawFull, dataTexture, updateTexture } from './gl.js';
+import { Program, Target, requireContext, drawFull, dataTexture, updateTexture, programsReady } from './gl.js';
 import {
   lineShader, sampleShader, interfaceShader, scanInitShader, scanStepShader, axialShader, summaryShader, echoShader, levelShader, postShader, displayShader, mmodeShader, LABELS,
 } from './shaders.js';
@@ -85,6 +85,11 @@ export class Sim {
   }
 
   // Upload the resolved anatomy table. Cheap enough to do every frame.
+  // Resolves when every program has been built by the driver, calling onProgress(done, total) on the way. Until then nothing can be drawn.
+  ready(onProgress) {
+    return programsReady(Object.values(this.programs), onProgress);
+  }
+
   setAnatomy(res) {
     const gl = this.gl;
     if (!this.anatomyTex || this.anatomyRows !== res.count) {
