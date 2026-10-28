@@ -8,7 +8,7 @@ import {
 import { TISSUES, tissueUniform } from './tissues.js';
 import { TEXELS, FLOATS } from './anatomy.js';
 import { MAX_GROUPS } from './anatomy-glsl.js';
-import { axialSigma, effectiveFrequency, THI, AVERAGE_ALPHA } from './beam.js';
+import { axialSigma, effectiveFrequency, THI, AVERAGE_ALPHA, LATERAL_SCALE, CLUTTER_DB } from './beam.js';
 
 // Calibration. These fix where the grey levels land and are the only tuning constants of the image.
 export const CAL = {
@@ -127,7 +127,7 @@ export class Sim {
       uFreqEff: effectiveFrequency(freq, thi),
       uAttF: freq * (thi ? THI.attenuation : 1),
       uAperture: probe.aperture, uElevation: probe.elevation, uElevFocus: probe.elevFocus,
-      uFocus: cfg.focus, uZones: cfg.zones,
+      uFocus: cfg.focus, uZones: cfg.zones, uLatScale: LATERAL_SCALE,
     };
     const anat = this.anatomyUniforms;
     const lab = this.labels ??= {
@@ -167,6 +167,7 @@ export class Sim {
     // 7. beam width across lines, artefacts, envelope
     this.run(P.echo, T.E, {
       ...frameU, uSigAxMm: sigAxMm, uTime: cfg.time, uSlide: cfg.slide, uLungHaze: cfg.lungHaze,
+      uClutter: 10 ** ((thi ? CLUTTER_DB.harmonic : CLUTTER_DB.fundamental) / 10),
     }, { uD: T.D.texture, uSumA: T.sum.textures[0], uSumB: T.sum.textures[1], uB: T.B.texture });
 
     // 8. noise, gain, depth compensation, TGC, dynamic range

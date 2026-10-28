@@ -74,3 +74,40 @@ export function orientationName(phi) {
   if (Math.abs(a - 90) < 12) return 'Sagittal';
   return 'Oblique';
 }
+
+// Find the pose at contact point p whose beam points along nWant and whose screen-right axis points as near eWant as the three hand
+// motions allow (rotate, fan, rock). Used to build the standard windows and the "show me" hints. A coarse search, then a local one.
+export function solvePose(p, nWant, eWant, habitus = 0, press = 0) {
+  const nw = norm3(nWant);
+  const ew = eWant ? norm3(eWant) : null;
+  const cost = q => {
+    const f = poseFrame({ p, phi: q[0], fan: q[1], rock: q[2], press }, habitus);
+    let c = 1 - dot3(f.n, nw);
+    if (ew) c += 0.35 * (1 - dot3(f.e, ew));
+    return c;
+  };
+  let best = [0, 0, 0];
+  let bestCost = Infinity;
+  for (let phi = -180; phi < 180; phi += 15) {
+    for (let fan = -60; fan <= 60; fan += 15) {
+      for (let rock = -45; rock <= 45; rock += 15) {
+        const c = cost([phi, fan, rock]);
+        if (c < bestCost) { bestCost = c; best = [phi, fan, rock]; }
+      }
+    }
+  }
+  for (let step = 8; step > 0.05; step *= 0.6) {
+    let improved = true;
+    while (improved) {
+      improved = false;
+      for (let i = 0; i < 3; i++) for (const s of [-step, step]) {
+        const q = best.slice();
+        q[i] += s;
+        const c = cost(q);
+        if (c < bestCost - 1e-9) { bestCost = c; best = q; improved = true; }
+      }
+    }
+  }
+  const phi = ((best[0] + 540) % 360) - 180;
+  return { p, phi, fan: best[1], rock: best[2], press, error: bestCost };
+}

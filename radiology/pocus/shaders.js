@@ -66,6 +66,7 @@ uniform float uElevation;
 uniform float uElevFocus;
 uniform float uFocus;
 uniform int uZones;
+uniform float uLatScale;
 
 const float MIN_FN = 1.6;
 float lamOf(float f) { return 1.54 / f; }
@@ -94,7 +95,7 @@ float beamWidth(float r) {
     best = min(best, txWidth(r, F, uAperture, uFreqEff));
   }
   float rx = rxWidth(r, uAperture, uFreqEff);
-  return best * rx / length(vec2(best, rx));
+  return uLatScale * best * rx / length(vec2(best, rx));
 }
 
 float sliceT(float r) {
@@ -408,6 +409,7 @@ uniform float uSigAxMm;
 uniform float uTime;
 uniform vec3 uSlide;
 uniform float uLungHaze;
+uniform float uClutter;    // power of the faint veil relative to the surrounding echo
 out vec4 outColor;
 
 void main() {
@@ -440,6 +442,22 @@ void main() {
   float spec = sp / wsum;
   bl /= wsum;
   float env2 = dot(iq, iq) + spec * spec;
+
+  // Veil in shadows and cysts: far side lobes carry a little of the echo of lines well away, and the first centimetres are hazy
+  // with reverberation between the face, the skin and the fat.
+  float wide = 0.0;
+  float nw = 0.0;
+  for (int m = -12; m <= 12; m++) {
+    int kk = k + m * 4;
+    if (kk < 0 || kk >= uNL) continue;
+    vec4 d = texelFetch(uD, ivec2(kk, i), 0);
+    wide += dot(d.xy, d.xy) + d.z * d.z;
+    nw += 1.0;
+  }
+  vec2 hz0 = gpair(ivec3(k, i, 31)) * 0.7;
+  env2 += uClutter * (wide / max(nw, 1.0)) * (0.5 + 0.5 * length(hz0));
+  float near = 0.22 * exp(-r / 16.0);
+  env2 += near * near * (0.4 + 0.6 * length(hz0));
 
   // Artefacts that hang off the first air interface of the line: reverberation, B-lines, and the haze of sliding lung.
   vec4 S = texelFetch(uSumA, ivec2(k, 0), 0);

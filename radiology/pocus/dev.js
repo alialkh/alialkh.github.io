@@ -25,7 +25,7 @@ try {
 
   const probe = PROBES[q.get('probe') ?? 'C5'];
   // The probe goes where a ray from the front (or side) meets the skin at a given across position a and height z.
-  const p = skinPoint(num('a', 0), num('z', -60), q.get('from') ?? 'front', P.habitus);
+  const p = q.has('p') ? q.get('p').split(',').map(Number) : skinPoint(num('a', 0), num('z', -60), q.get('from') ?? 'front', P.habitus);
   if (!p) throw new Error('no skin there');
   const pose = { p, phi: num('phi', 0), fan: num('fan', 0), rock: num('rock', 0), press: num('press', 0) };
   const frame = poseFrame(pose, P.habitus);

@@ -12,8 +12,15 @@ export const THI = { resolution: 1.55, attenuation: 1.5, signalDb: -9 };
 
 export const effectiveFrequency = (f, thi) => (thi ? f * THI.resolution : f);
 
-// Axial pulse length. A broadband imaging pulse is about 1.6 cycles long, so the pulse-echo envelope is 0.8 wavelengths wide (FWHM).
-export const axialFwhm = (f, thi) => 0.8 * wavelength(effectiveFrequency(f, thi));
+// Axial pulse length. A B-mode pulse is about 2.2 cycles long, so the pulse-echo envelope is 1.1 wavelengths wide (FWHM).
+export const PULSE_CYCLES = 2.2;
+export const axialFwhm = (f, thi) => (PULSE_CYCLES / 2) * wavelength(effectiveFrequency(f, thi));
+
+// Real systems focus a little worse than the ideal aperture would: apodisation, element directivity and the limits of delay accuracy.
+export const LATERAL_SCALE = 1.3;
+
+// Side lobes, multiple scattering and reverberation put a faint veil into shadows and cysts, in dB below the surrounding echo.
+export const CLUTTER_DB = { fundamental: -33, harmonic: -42 };
 export const axialSigma = (f, thi) => axialFwhm(f, thi) / 2.355;
 
 // Narrowest practical receive f-number. Aperture growth stops there in the near field.
@@ -47,7 +54,7 @@ export function lateralFwhm(r, { focus, zones = 1, aperture, freq, thi = false }
     best = Math.min(best, transmitWidth(r, F, aperture, f));
   }
   const rx = receiveWidth(r, aperture, f);
-  return (best * rx) / Math.hypot(best, rx);
+  return (LATERAL_SCALE * best * rx) / Math.hypot(best, rx);
 }
 
 // Slice thickness (elevation beam width) at range r: a fixed lens focus, so it grows quickly away from it.
