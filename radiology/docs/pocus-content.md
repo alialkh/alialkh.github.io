@@ -26,7 +26,7 @@ Moving parameters (`breath`, `sys`, `atria`, `mv`, `tv`, `av`, `pulse`, `peri`) 
 
 ## Window (`WINDOW_SPECS` in `windows.js`)
 `{ id, name, short, group, probe, preset, depth, where, look, need, extra, search, question, truth }`
-- `need`: structure id to the mm² of image that must show it. A saved image counts as this window when it meets 85 percent of every need.
+- `need`: structure id to the mm² of image that must show it. Each need counts up to 100 percent of its area, and a saved image counts as this window when the average over its needs reaches 85 percent. Needs below 85 percent are listed as missing in the feedback.
 - `extra`: structures looked for but not required.
 - `search`: where `tools/make-windows.mjs` looks (side of the body, positions along it, probe angles).
 - `prior`: pulls the search toward the orientation a window should have, written in the heart's frame (`hX` long axis, `hY` septum to lateral wall, `hZ` normal to the four chamber plane) or as a world vector. `role` is the probe axis it applies to (`h` elevation, `n` beam, `e` screen right) and `w` the weight.
