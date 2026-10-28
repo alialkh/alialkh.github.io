@@ -2,7 +2,7 @@
 // plane as a coloured anatomical cross-section, so a student sees where the beam is going. Dragging the probe on the body and
 // orbiting the camera are handled here; the CPU picks the skin with the same outline function the shader marches.
 
-import { Program, requireContext, drawFull, dataTexture, updateTexture, Target } from './gl.js';
+import { Program, requireContext, drawFull, dataTexture, updateTexture, Target, programsReady } from './gl.js';
 import { anatomyGlsl, MAX_GROUPS } from './anatomy-glsl.js';
 import { TEXELS } from './anatomy.js';
 import { TISSUES, tissueUniform, TISSUE_INDEX } from './tissues.js';
@@ -231,6 +231,10 @@ export class PatientView {
     this.probe = PROBES.C5;
     this.depth = 160;
     this.dirty = true;
+  }
+
+  ready(onProgress) {
+    return programsReady([this.prog], onProgress);
   }
 
   setAnatomy(res) {

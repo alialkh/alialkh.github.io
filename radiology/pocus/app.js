@@ -41,8 +41,32 @@ function fail(message) {
     h('p', { class: 'muted' }, 'It needs a recent browser with WebGL 2 and floating point textures: Chrome, Edge, Firefox or Safari 15 and later on a computer or a recent phone.')), disclaimer()));
 }
 
+// The loading screen is plain markup in index.html, so it shows before any script has run. These move its bar and its words.
+const bootEl = document.getElementById('boot');
+const bootStarted = performance.now();
+const bootTimer = bootEl ? setInterval(() => { const t = document.getElementById('boot-time'); if (t) t.textContent = `${Math.round((performance.now() - bootStarted) / 1000)} s`; }, 1000) : 0;
+function bootStatus(text, fraction) {
+  if (!bootEl) return;
+  bootEl.querySelector('#boot-step').textContent = text;
+  if (fraction != null) {
+    bootEl.classList.add('has-progress');
+    bootEl.querySelector('#boot-fill').style.width = `${Math.round(100 * Math.min(1, fraction))}%`;
+    bootEl.querySelector('[role=progressbar]').setAttribute('aria-valuenow', String(Math.round(100 * Math.min(1, fraction))));
+  }
+}
+let bootHidden = false;
+function bootDone() {
+  if (!bootEl || bootHidden) return;
+  bootHidden = true;
+  clearInterval(bootTimer);
+  bootEl.classList.add('done');
+  setTimeout(() => bootEl.remove(), 400);
+}
+const nextFrame = () => new Promise(r => requestAnimationFrame(() => r()));
+
 async function boot() {
   document.title = 'POCUS simulator · Radiology teaching';
+  bootStatus('Starting', 0.02);
   // ---------- layout ----------
   const screenBox = h('div', { class: 'machine-screen' });
   const patientCanvas = h('canvas', { class: 'patient-canvas', width: 640, height: 400, 'aria-label': 'The patient and the probe' });
@@ -74,12 +98,31 @@ async function boot() {
     onScrub: v => { state.cineOffset = state.cine.length - 1 - v; dirty.still = true; dirty.screen = true; },
   });
   screenBox.append(screen.el);
+  // Both views hand their shaders to the driver now, so the two sets build side by side while the loading screen shows progress.
   try {
     sim = new Sim(screen.canvas, {});
+    pv = new PatientView(patientCanvas);
   } catch (e) {
     fail(String(e.message ?? e));
     return;
   }
+  try {
+    const parts = { sim: [0, 1], pv: [0, 1] };
+    const report = () => {
+      const done = parts.sim[0] + parts.pv[0];
+      const total = parts.sim[1] + parts.pv[1];
+      bootStatus(`Building the image engine for your graphics card (${done} of ${total})`, 0.05 + 0.85 * (done / total));
+    };
+    await Promise.all([
+      sim.ready((d, t) => { parts.sim = [d, t]; report(); }),
+      pv.ready((d, t) => { parts.pv = [d, t]; report(); }),
+    ]);
+  } catch (e) {
+    fail(String(e.message ?? e));
+    return;
+  }
+  bootStatus('Setting up the patient', 0.92);
+  await nextFrame();
 
   // ---------- state ----------
   const builder = buildPatient();
@@ -172,15 +215,8 @@ async function boot() {
     h('div', { class: 'card machine' }, screenBox, cons.el));
   const examCol = h('aside', { class: 'col exam-col', 'aria-label': 'Exam' }, panel.el);
 
-  document.body.replaceChildren(topbar, h('main', { class: 'workspace' }, patientCol, machineCol, examCol),
+  document.body.replaceChildren(...(bootEl && !bootHidden ? [bootEl] : []), topbar, h('main', { class: 'workspace' }, patientCol, machineCol, examCol),
     h('footer', { class: 'foot' }, disclaimer(), h('p', { class: 'disclaimer' }, 'A simulation built from a computer model of an adult, not from any patient’s scan. Educational use only.')), keysDialog);
-
-  try {
-    pv = new PatientView(patientCanvas);
-  } catch (e) {
-    fail(String(e.message ?? e));
-    return;
-  }
 
   // ---------- helpers ----------
   const centreOfFan = () => { const p = PROBES[state.machine.probe]; return [0, p.type === 'linear' ? state.machine.depth / 2 : state.machine.depth / 2]; };
@@ -560,7 +596,7 @@ async function boot() {
       }
     }
     if (dirty.still || dirty.screen) {
-      if (state.cine.length) draw();
+      if (state.cine.length) { draw(); bootDone(); }
       dirty.still = false;
     }
     if (dirty.screen || (now % 1000 < 40 && !m.frozen)) {
@@ -623,6 +659,7 @@ async function boot() {
     }
   }
   refreshPanel();
+  bootStatus('Drawing the first image', 0.97);
   requestAnimationFrame(frameLoop);
   window.__pocus = { state, sim, pv, dispatch, command, save, gotoWindow, setCase, setPose, setMode, setExam, answer, finishExam, fit, dirty };
   window.__ready = true;

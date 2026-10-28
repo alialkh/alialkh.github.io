@@ -201,3 +201,22 @@ body { min-height: 100vh; }
   .fader { height: 5.4rem; }
   .ps-row { grid-template-columns: 3.4rem 1fr 3.4rem; }
 }
+
+/* ---------- loading screen: plain markup in index.html, so it shows before the scripts run ---------- */
+.boot { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 24px; background: var(--bg); transition: opacity 0.35s ease; }
+.boot.done { opacity: 0; pointer-events: none; }
+.boot-card { width: min(440px, 100%); display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.boot-card h1 { margin: 0; font-size: var(--fs-xl, 1.5rem); font-weight: 650; }
+.boot-art { width: 150px; height: auto; margin-bottom: 4px; }
+.boot-fan { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; stroke-linejoin: round; }
+.boot-face { stroke: var(--text); stroke-width: 5; stroke-linecap: round; fill: none; }
+.boot-sweep path { stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; opacity: 0.9; }
+.boot-sweep { transform-origin: 80px 4px; transform-box: view-box; animation: boot-sweep 2.2s ease-in-out infinite alternate; }
+@keyframes boot-sweep { from { transform: rotate(-30deg); } to { transform: rotate(30deg); } }
+.boot-step { margin: 0; min-height: 1.4em; font-size: var(--fs-md); color: var(--text); }
+.boot-bar { width: 100%; height: 6px; border-radius: 3px; background: var(--surface); border: 1px solid var(--border); overflow: hidden; }
+.boot-bar > div { height: 100%; width: 30%; border-radius: 3px; background: var(--accent); animation: boot-slide 1.4s ease-in-out infinite; }
+.boot.has-progress .boot-bar > div { animation: none; transition: width 0.3s ease; }
+@keyframes boot-slide { from { transform: translateX(-110%); } to { transform: translateX(340%); } }
+.boot-time { margin: 0; font-size: var(--fs-xs); color: var(--muted); font-variant-numeric: tabular-nums; }
+.boot-note { margin: 0; font-size: var(--fs-sm); color: var(--muted); line-height: 1.45; }
